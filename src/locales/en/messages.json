@@ -1,0 +1,14 @@
+{
+  "appTitle": {
+    "message": "Libraries"
+  },
+  "unknownPlugin": {
+    "message": "Unknown plugin"
+  },
+  "invalidConfiguration": {
+    "message": "Invalid Configuration"
+  },
+  "invalidConfigurationDescription": {
+    "message": "The library is misconfigured"
+  }
+}

@@ -13,10 +13,13 @@ import { LitElement, html, css } from 'lit';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-left.js';
 import { EventBus } from '../../events/eventbus.js';
 import AppModel from '../../models/app-model.js';
-import {
-  LOCALE_SET, PLUGIN_LOADED, PLUGIN_UNLOADED, SEARCH_UPDATED,
-} from '../../events/events.js';
 import { unloadPlugin } from '../../utils/plugin.js';
+import {
+  LOCALE_SET,
+  PLUGIN_LOADED,
+  PLUGIN_UNLOADED,
+  SEARCH_UPDATED,
+} from '../../events/events.js';
 
 export class Header extends LitElement {
   static properties = {

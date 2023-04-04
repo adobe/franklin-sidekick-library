@@ -18,8 +18,8 @@ import { LIBRARY_LOADED, TOAST } from '../../events/events.js';
 import { loadPlugin } from '../../utils/plugin.js';
 
 const plugins = {
-  blocks: isDev() ? '../../plugins/blocks/blocks.js' : 'https://main--helix-playground--dylandepass.hlx.page/library/plugins/blocks/blocks.js',
-  taxonomy: isDev() ? '../../plugins/taxonomy/taxonomy.js' : 'https://main--helix-playground--dylandepass.hlx.page/library/plugins/taxonomy/taxonomy.js',
+  blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : 'https://main--helix-playground--dylandepass.hlx.page/library/plugins/blocks/blocks.js',
+  taxonomy: isDev() ? '../../src/plugins/taxonomy/taxonomy.js' : 'https://main--helix-playground--dylandepass.hlx.page/library/plugins/taxonomy/taxonomy.js',
 };
 
 export class LibraryList extends LitElement {
@@ -44,6 +44,7 @@ export class LibraryList extends LitElement {
   async onSelect(e) {
     const { value } = e.target;
     const pluginPath = AppModel.appStore.config[value] ?? plugins[value];
+    console.log(pluginPath);
     if (pluginPath) {
       await loadPlugin(AppModel, value, pluginPath);
       return;

@@ -18,8 +18,8 @@ import { LIBRARY_LOADED, TOAST } from '../../events/events.js';
 import { loadPlugin } from '../../utils/plugin.js';
 
 const plugins = {
-  blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : `${AppModel.appStore.host}/library/plugins/blocks/blocks.js`,
-  taxonomy: isDev() ? '../../src/plugins/taxonomy/taxonomy.js' : `${AppModel.appStore.host}/library/plugins/taxonomy/taxonomy.js`,
+  blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : `${AppModel.host}/plugins/blocks/blocks.js`,
+  taxonomy: isDev() ? '../../src/plugins/taxonomy/taxonomy.js' : `${AppModel.host}/plugins/taxonomy/taxonomy.js`,
 };
 
 export class LibraryList extends LitElement {

@@ -116,7 +116,7 @@ export class FranklinLibrary extends LitElement {
 
   async loadLocaleDict(lang) {
     const dict = {};
-    const dictPath = `${AppModel.appStore.webRoot}locales/${lang}/messages.json`;
+    const dictPath = `${AppModel.appStore.webRoot}/locales/${lang}/messages.json`;
     try {
       const res = await fetch(dictPath);
       const messages = await res.json();

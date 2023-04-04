@@ -9,8 +9,17 @@ The franklin library simplifies authoring workflows for users by
 * The `block` plugin provides a list of all blocks and block variations to authors in an intuitive manner and removes the need for authors to have to remember or search for every variation of a block.
 * It can aggregate plugins across multiple inherited projects into a single place.
 
+## How does it work?
+
+The franklin library is an application that customer can connect their sidekick to. When configured, a button will be displayed in the sidekick allowing an author to launch the franklin library. The application itself is hosted of hlx.live and the core application is maintained by the franklin team. 
+
+The library provides a plugin architecture allowing customers to build/load plugins that suit their needs. The application also provides a set of UI components that customers can use to render data within their plugin if they wish. When a plugin is loaded we also attempt to load a css for the plugin which will allow plugin authors to create any UI the please.
+
+
+The library also includes a few plugins that are maintained by the franklin team.
+
 ## Demo
-[Franklin Library](https://main--helix-playground--dylandepass.hlx.page/library/library)
+[Franklin Library](https://main--boilerplate-with-library--dylandepass.hlx.page/library/library?suppressFrame=true)
 
 ## Development
 

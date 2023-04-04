@@ -19,6 +19,6 @@ export default class AppModel {
 
   static init() {
     AppModel.appStore = store(defaultState, 'app');
-    AppModel.appStore.webRoot = isDev() ? './src/' : './';
+    AppModel.appStore.webRoot = isDev() ? './src/' : AppModel.appStore.host;
   }
 }

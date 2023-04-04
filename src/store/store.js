@@ -14,6 +14,7 @@
 import { EventBus } from '../events/eventbus.js';
 
 export const defaultState = {
+  host: 'https://main--franklin-library-host--dylandepass.hlx.live',
   initialized: false,
   activePlugin: undefined,
   activePluginPath: undefined,

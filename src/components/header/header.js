@@ -13,7 +13,9 @@ import { LitElement, html, css } from 'lit';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-left.js';
 import { EventBus } from '../../events/eventbus.js';
 import AppModel from '../../models/app-model.js';
-import { LOCALE_SET, PLUGIN_LOADED, SEARCH_UPDATED } from '../../events/events.js';
+import {
+  LOCALE_SET, PLUGIN_LOADED, PLUGIN_UNLOADED, SEARCH_UPDATED,
+} from '../../events/events.js';
 import { unloadPlugin } from '../../utils/plugin.js';
 
 export class Header extends LitElement {
@@ -73,6 +75,10 @@ export class Header extends LitElement {
 
         this._pluginActive = true;
       }
+    });
+
+    EventBus.instance.addEventListener(PLUGIN_UNLOADED, () => {
+      this.headerTitle = AppModel.appStore.localeDict.appTitle;
     });
 
     EventBus.instance.addEventListener(LOCALE_SET, () => {

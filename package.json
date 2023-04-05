@@ -60,7 +60,8 @@
     "rollup": "^2.60.0",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-esbuild": "^5.0.0",
-    "rollup-plugin-workbox": "^6.2.0"
+    "rollup-plugin-workbox": "^6.2.0",
+    "sinon": "^15.0.3"
   },
   "eslintConfig": {
     "extends": [

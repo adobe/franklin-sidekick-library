@@ -15,6 +15,7 @@ import { ifDefined } from '@spectrum-web-components/base/src/directives.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-copy.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-preview.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-info.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-view-detail.js';
 import '@spectrum-web-components/icon/sp-icon.js';
 import { PREVIEW_CONTENT } from '../../events/events.js';
 
@@ -24,6 +25,7 @@ export class SideNavItem extends SPSideNavItem {
     copy: false,
     preview: false,
     info: '',
+    demo: '',
   };
 
   static get styles() {
@@ -48,12 +50,13 @@ export class SideNavItem extends SPSideNavItem {
   }
 
   get hasActions() {
-    return this.copy || this.preview || this.info;
+    return this.copy || this.preview || this.info || this.demo;
   }
 
   connectedCallback() {
     super.connectedCallback();
     this.info = this.getAttribute('data-info');
+    this.demo = this.getAttribute('data-demo');
   }
 
   onClick() {
@@ -64,6 +67,12 @@ export class SideNavItem extends SPSideNavItem {
   onPreview(e) {
     e.stopPropagation();
     this.dispatchEvent(new CustomEvent(PREVIEW_CONTENT));
+  }
+
+  onDemo(e) {
+    e.stopPropagation();
+    const trigger = this.renderRoot.querySelector('#demoTrigger');
+    trigger?.setAttribute('open', 'click');
   }
 
   render() {
@@ -89,6 +98,19 @@ export class SideNavItem extends SPSideNavItem {
                 <sp-action-button quiet tip slot="trigger">
                   <sp-icon-info slot="icon"></sp-icon-info>
                 </sp-action-button>
+              </overlay-trigger>
+            ` : ''}
+            ${this.demo ? html`
+              <overlay-trigger id="demoTrigger" placement="right" @click=${this.onDemo}>
+                <sp-action-button quiet tip slot="trigger">
+                  <sp-icon-view-detail slot="icon"></sp-icon-view-detail>
+                </sp-action-button>
+                <div
+                    slot="click-content"
+                    style="resize: both;"
+                >
+                    <iframe title="demo" width="400" height="600" frameBorder="0" style="resize: both;overflow:auto;" src=${this.demo}></iframe>
+                </div>
               </overlay-trigger>
             ` : ''}
             ${this.preview ? html`

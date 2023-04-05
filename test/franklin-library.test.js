@@ -20,9 +20,9 @@ describe('FranklinLibrary', () => {
     element = await fixture(html`<franklin-library></franklin-library>`);
   });
 
-  it('renders a h1', () => {
-    const h1 = element.shadowRoot.querySelector('.container');
-    expect(h1).to.exist;
+  it('renders container', async () => {
+    const container = element.shadowRoot.querySelector('.container');
+    await expect(container).to.not.be.null;
   });
 
   it('passes the a11y audit', async () => {

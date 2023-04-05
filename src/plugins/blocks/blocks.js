@@ -184,6 +184,8 @@ async function decorate(container, data, query) {
         childNavItem.setAttribute('data-info', blockDescription);
       }
 
+      childNavItem.setAttribute('data-demo', block.path);
+
       childNavItem.addEventListener('click', () => {
         const table = getTable(pageBlock, getBlockName(pageBlock), block.path);
         const blob = new Blob([table], { type: 'text/html' });

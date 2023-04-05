@@ -34,21 +34,32 @@ export async function getExtendedLibrary(href) {
 export async function combineLibraries(base, supplied) {
   const library = {};
 
-  base[':names'].forEach((key) => {
-    library[key] = base[key].data;
-  });
-
-  if (supplied) {
-    supplied[':names'].forEach((key) => {
-      if (library[key]) {
-        library[key].push(...supplied[key].data);
-        return;
-      }
-
-      library[key] = supplied[key].data;
+  if (base[':type'] === 'multi-sheet') {
+    base[':names'].forEach((key) => {
+      library[key] = base[key].data;
     });
+  } else {
+    library.blocks = base.data;
   }
 
+  if (supplied) {
+    if (supplied[':type'] === 'multi-sheet') {
+      supplied[':names'].forEach((key) => {
+        if (library[key]) {
+          library[key].push(...supplied[key].data);
+          return;
+        }
+
+        library[key] = supplied[key].data;
+      });
+    } else {
+      if (library.blocks === undefined) {
+        library.blocks = [];
+      }
+
+      library.blocks.push(...supplied.data);
+    }
+  }
   return library;
 }
 
@@ -56,7 +67,7 @@ export function isDev() {
   return window.libraryDev;
 }
 
-export async function loadLibary(appModel, config) {
+export async function loadLibrary(appModel, config) {
   const { appStore } = appModel;
   let { libraries } = appModel;
 

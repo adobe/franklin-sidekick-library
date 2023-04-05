@@ -38,7 +38,7 @@ import { createTag } from './utils/dom.js';
 import {
   LOCALE_SET, PLUGIN_LOADED, PLUGIN_UNLOADED, TOAST,
 } from './events/events.js';
-import { loadLibary } from './utils/library.js';
+import { loadLibrary } from './utils/library.js';
 
 export class FranklinLibrary extends LitElement {
   static styles = css`
@@ -156,7 +156,7 @@ export class FranklinLibrary extends LitElement {
 
     if (!this.configured) return;
 
-    await loadLibary(
+    await loadLibrary(
       AppModel,
       this.config,
     );
@@ -184,8 +184,7 @@ export class FranklinLibrary extends LitElement {
 
   render() {
     return html`
-      <sp-theme theme="spectrum" color="dark" scale="">
-        <sp-icons-medium></sp-icons-medium>
+      <sp-theme theme="spectrum" color="dark" scale="medium">
         <main>
           <library-header></library-header>
           <sp-divider size="s"></sp-divider>

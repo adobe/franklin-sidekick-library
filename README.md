@@ -9,6 +9,12 @@ The franklin library simplifies authoring workflows for users by
 * The `block` plugin provides a list of all blocks and block variations to authors in an intuitive manner and removes the need for authors to have to remember or search for every variation of a block.
 * It can aggregate plugins across multiple inherited projects into a single place.
 
+## Status
+[![codecov](https://img.shields.io/codecov/c/github/dylandepass/franklin-library.svg)](https://codecov.io/gh/dylandepass/franklin-library)
+[![GitHub license](https://img.shields.io/github/license/dylandepass/franklin-library.svg)](https://github.com/dylandepass/franklin-library/blob/master/LICENSE.txt)
+[![GitHub issues](https://img.shields.io/github/issues/dylandepass/franklin-library.svg)](https://github.com/dylandepass/franklin-library/issues)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
 ## How does it work?
 
 The franklin library is an application that customer can connect their sidekick to. When configured, a button will be displayed in the sidekick allowing an author to launch the franklin library. The application itself is hosted of hlx.live and the core application is maintained by the franklin team. 

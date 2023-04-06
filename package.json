@@ -6,8 +6,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "lint": "eslint --ext .js,.html . --ignore-path .gitignore && prettier \"**/*.js\" --check --ignore-path .gitignore",
-    "format": "eslint --ext .js,.html . --fix --ignore-path .gitignore && prettier \"**/*.js\" --write --ignore-path .gitignore",
+    "lint": "eslint .",
+    "format": "eslint . --fix",
     "test": "web-test-runner --coverage",
     "test:watch": "web-test-runner --watch",
     "storybook": "npm run analyze -- --exclude dist && web-dev-server -c .storybook/server.mjs",

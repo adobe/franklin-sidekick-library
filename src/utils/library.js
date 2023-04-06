@@ -81,6 +81,7 @@ export async function loadLibrary(appModel, config) {
     appStore.libraries = libraries;
     EventBus.instance.dispatchEvent(new CustomEvent(LIBRARY_LOADED));
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('unable to load library', error);
   }
 }

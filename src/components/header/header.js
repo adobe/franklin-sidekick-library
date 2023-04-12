@@ -146,7 +146,7 @@ export class Header extends LitElement {
       </div>
       <div>
         ${this._pluginActive && this.searchEnabled ? html`
-          <sp-action-button quiet toggles @click=${this.activateSearch}>
+          <sp-action-button id="searchButton" quiet toggles @click=${this.activateSearch}>
             <sp-icon-search slot="icon"></sp-icon-search>
           </sp-action-button>` : ''}
       </div>

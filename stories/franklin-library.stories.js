@@ -49,6 +49,20 @@ export const Default = {
   },
 };
 
+export const NoConfig = {
+  render: () => {
+    const library = document.createElement('franklin-library');
+    return library;
+  },
+  play: async () => {
+    const library = document.querySelector('franklin-library');
+    await waitFor(() => {
+      expect(library).toBeInTheDocument();
+    });
+    await waitFor(() => expect(recursiveQuery(library, 'illustrated-message')).toBeVisible());
+  },
+};
+
 export const SingleSheet = {
   render: () => {
     const library = document.createElement('franklin-library');
@@ -144,6 +158,92 @@ export const UnknownPlugin = {
         const toast = recursiveQuery(library, 'sp-toast');
         expect(toast).toBeInTheDocument();
         expect(toast.getAttribute('variant')).toEqual('negative');
+      }, 1000);
+    });
+  },
+};
+
+export const UnloadPlugin = {
+  render: () => {
+    const library = document.createElement('franklin-library');
+    library.config = {
+      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json',
+    };
+    return library;
+  },
+  play: async () => {
+    const library = document.querySelector('franklin-library');
+    testBaseLibrary(library);
+
+    const sideNav = recursiveQuery(library, 'nav');
+    waitFor(() => expect(sideNav).toBeInTheDocument()).then(() => {
+      const slot = sideNav.querySelector('slot');
+
+      setTimeout(async () => {
+        const items = slot.assignedElements();
+        expect(items.length).toEqual(1);
+        const item = items[0];
+        userEvent.click(item);
+
+        const plugin = recursiveQuery(library, 'plugin-renderer');
+        await waitFor(() => {
+          const pluginItems = recursiveQueryAll(plugin, 'sp-sidenav-item');
+          expect([...pluginItems].length).toEqual(12);
+
+          const pluginTitle = recursiveQuery(library, '.title span');
+          expect(pluginTitle.textContent).toEqual('Blocks');
+
+          setTimeout(() => {
+            const backButton = recursiveQuery(library, 'sp-action-button');
+            userEvent.click(backButton);
+
+            setTimeout(() => {
+              const backTitle = recursiveQuery(library, '.title span');
+              expect(backTitle.textContent).toEqual('Libraries');
+            }, 2000);
+          }, 2000);
+        });
+      }, 1000);
+    });
+  },
+};
+
+export const Search = {
+  render: () => {
+    const library = document.createElement('franklin-library');
+    library.config = {
+      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json',
+    };
+    return library;
+  },
+  play: async () => {
+    const library = document.querySelector('franklin-library');
+    testBaseLibrary(library);
+
+    const sideNav = recursiveQuery(library, 'nav');
+    waitFor(() => expect(sideNav).toBeInTheDocument()).then(() => {
+      const slot = sideNav.querySelector('slot');
+
+      setTimeout(async () => {
+        const items = slot.assignedElements();
+        const item = items[0];
+        userEvent.click(item);
+        expect(items.length).toEqual(1);
+
+        await waitFor(() => {
+          const searchButton = recursiveQuery(library, '#searchButton');
+          userEvent.click(searchButton);
+
+          const searchField = recursiveQuery(library, 'sp-search');
+          expect(searchField).toBeVisible();
+
+          setTimeout(async () => {
+            const input = recursiveQuery(searchField, 'input');
+            await userEvent.type(input, 'back{enter}', {
+              delay: 100,
+            });
+          }, 1000);
+        });
       }, 1000);
     });
   },

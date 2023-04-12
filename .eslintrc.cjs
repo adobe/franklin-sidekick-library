@@ -12,14 +12,14 @@
 
 module.exports = {
   root: true,
-  extends: ['@open-wc/eslint-config', '@adobe/helix'],
+  extends: ['@open-wc/eslint-config', '@adobe/helix', 'plugin:storybook/recommended'],
   rules: {
     'no-use-before-define': 'off',
     'class-methods-use-this': 'off',
     'no-constructor-return': 'off',
     'import/no-extraneous-dependencies': 'off',
     'lit-a11y/anchor-is-valid': 'off',
-    'lit-a11y/click-events-have-key-events': 'off',
+    'lit-a11y/click-events-have-key-events': 'off'
   },
-  overrides: [],
+  overrides: []
 };

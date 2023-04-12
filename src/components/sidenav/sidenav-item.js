@@ -17,6 +17,7 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-preview.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-info.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-view-detail.js';
 import '@spectrum-web-components/icon/sp-icon.js';
+import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js';
 import { PREVIEW_CONTENT } from '../../events/events.js';
 
 export class SideNavItem extends SPSideNavItem {
@@ -87,7 +88,7 @@ export class SideNavItem extends SPSideNavItem {
         <slot name="icon"></slot>
         ${this.label}
         <slot></slot>
-        ${this.disclosureArrow ? html`<sp-icon size="s" name="ui:Chevron100"></sp-icon>` : ''}
+        ${this.disclosureArrow ? html`<sp-icon-chevron-right slot="icon"></sp-icon-chevron-right>` : ''}
         ${this.hasActions ? html`
           <div class='actions'>
             ${this.info ? html`

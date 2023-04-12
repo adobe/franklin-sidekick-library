@@ -9,9 +9,8 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import { html } from 'lit';
 import {
-  within, waitFor, userEvent, waitForElementToBeRemoved,
+  waitFor, userEvent,
 } from '@storybook/testing-library';
 import { expect } from '@storybook/jest';
 import '../src/app.js';
@@ -58,8 +57,7 @@ export const SingleSheet = {
     };
     return library;
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
     const library = document.querySelector('franklin-library');
     testBaseLibrary(library);
 
@@ -94,8 +92,7 @@ export const MultiSheet = {
     };
     return library;
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
     const library = document.querySelector('franklin-library');
     await waitFor(() => expect(library).toBeInTheDocument());
     testBaseLibrary(library);

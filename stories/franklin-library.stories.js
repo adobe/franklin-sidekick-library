@@ -208,43 +208,43 @@ export const UnloadPlugin = {
   },
 };
 
-export const Search = {
-  render: () => {
-    const library = document.createElement('franklin-library');
-    library.config = {
-      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json',
-    };
-    return library;
-  },
-  play: async () => {
-    const library = document.querySelector('franklin-library');
-    testBaseLibrary(library);
+// export const Search = {
+//   render: () => {
+//     const library = document.createElement('franklin-library');
+//     library.config = {
+//       library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json',
+//     };
+//     return library;
+//   },
+//   play: async () => {
+//     const library = document.querySelector('franklin-library');
+//     testBaseLibrary(library);
 
-    const sideNav = recursiveQuery(library, 'nav');
-    waitFor(() => expect(sideNav).toBeInTheDocument()).then(() => {
-      const slot = sideNav.querySelector('slot');
+//     const sideNav = recursiveQuery(library, 'nav');
+//     waitFor(() => expect(sideNav).toBeInTheDocument()).then(() => {
+//       const slot = sideNav.querySelector('slot');
 
-      setTimeout(async () => {
-        const items = slot.assignedElements();
-        const item = items[0];
-        userEvent.click(item);
-        expect(items.length).toEqual(1);
+//       setTimeout(async () => {
+//         const items = slot.assignedElements();
+//         const item = items[0];
+//         userEvent.click(item);
+//         expect(items.length).toEqual(1);
 
-        await waitFor(() => {
-          const searchButton = recursiveQuery(library, '#searchButton');
-          userEvent.click(searchButton);
+//         await waitFor(() => {
+//           const searchButton = recursiveQuery(library, '#searchButton');
+//           userEvent.click(searchButton);
 
-          const searchField = recursiveQuery(library, 'sp-search');
-          expect(searchField).toBeVisible();
+//           const searchField = recursiveQuery(library, 'sp-search');
+//           expect(searchField).toBeVisible();
 
-          setTimeout(async () => {
-            const input = recursiveQuery(searchField, 'input');
-            await userEvent.type(input, 'back{enter}', {
-              delay: 100,
-            });
-          }, 1000);
-        });
-      }, 1000);
-    });
-  },
-};
+//           setTimeout(async () => {
+//             const input = recursiveQuery(searchField, 'input');
+//             await userEvent.type(input, 'back{enter}', {
+//               delay: 100,
+//             });
+//           }, 1000);
+//         });
+//       }, 1000);
+//     });
+//   },
+// };

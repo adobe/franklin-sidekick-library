@@ -16,7 +16,9 @@ jobs:
         run: npm i
       - name: Run Storybook tests
         run: npm run test-storybook:ci    
+      - name: Generate LCOV report
+        run: npx nyc report --reporter=lcov -t coverage/storybook --report-dir coverage/storybook
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with: 
-          files: ./coverage/storybook/coverage-storybook.json
+          files: ./coverage/storybook/lcov.info

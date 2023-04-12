@@ -15,4 +15,8 @@ jobs:
       - name: Install dependencies
         run: npm i
       - name: Run Storybook tests
-        run: npm run test-storybook:ci
+        run: npm run test-storybook:ci    
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with: 
+          files: ./coverage/storybook/coverage-storybook.json

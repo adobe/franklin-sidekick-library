@@ -13,15 +13,23 @@
 import { EventBus } from '../events/eventbus.js';
 import { LIBRARY_LOADED } from '../events/events.js';
 
-export async function fetchLibrary(path) {
-  const resp = await fetch(path);
+export async function fetchLibrary(href) {
+  const { searchParams } = new URL(window.location.href);
+  const suppliedLibrary = searchParams.get('library');
+  const library = suppliedLibrary || `${href}`;
+
+  const resp = await fetch(library);
   if (!resp.ok) return null;
   return resp.json();
 }
 
 export async function getExtendedLibrary(href) {
-  if (href) {
-    return fetchLibrary(href);
+  const { searchParams } = new URL(window.location.href);
+  const extendedLibrary = searchParams.get('extends');
+  const library = extendedLibrary || href;
+
+  if (library) {
+    return fetchLibrary(library);
   }
 
   return Promise.resolve();

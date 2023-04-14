@@ -18,8 +18,13 @@ import {
 } from '@open-wc/testing';
 
 import '../src/app.js';
+import { stub } from 'sinon';
 import { recursiveQuery, simulateTyping } from './test-utils.js';
 import AppModel from '../src/models/app-model.js';
+
+const singleSheetPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json';
+const multiSheetPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json';
+const unknownPluginPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-unknown-plugin.json';
 
 describe('FranklinLibrary', () => {
   beforeEach(() => {
@@ -50,7 +55,7 @@ describe('FranklinLibrary', () => {
   it('loads single sheet', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json',
+      library: singleSheetPath,
     };
 
     await fixture(library);
@@ -65,10 +70,54 @@ describe('FranklinLibrary', () => {
     expect([...items].length).to.equal(1);
   });
 
+  it('loads supplied sheet', async () => {
+    const urlParams = new URLSearchParams();
+    urlParams.append('library', singleSheetPath);
+    const searchStub = stub(URLSearchParams.prototype, 'entries');
+    searchStub.onCall(0).returns(urlParams);
+
+    const library = document.createElement('franklin-library');
+
+    await fixture(library);
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-sidenav-item'),
+      'Element did not render children',
+    );
+
+    const sideNav = recursiveQuery(library, 'sp-sidenav');
+    const items = sideNav.querySelectorAll('sp-sidenav-item');
+    expect([...items].length).to.equal(1);
+    searchStub.restore();
+  });
+
+  it('loads supplied sheet with supplied extends', async () => {
+    const urlParams = new URLSearchParams();
+    urlParams.append('library', singleSheetPath);
+    urlParams.append('extends', multiSheetPath);
+
+    const searchStub = stub(URLSearchParams.prototype, 'entries');
+    searchStub.onCall(0).returns(urlParams);
+
+    const library = document.createElement('franklin-library');
+
+    await fixture(library);
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-sidenav-item'),
+      'Element did not render children',
+    );
+
+    const sideNav = recursiveQuery(library, 'sp-sidenav');
+    const items = sideNav.querySelectorAll('sp-sidenav-item');
+    expect([...items].length).to.equal(2);
+    searchStub.restore();
+  });
+
   it('loads multi sheet', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json',
+      library: multiSheetPath,
     };
 
     await fixture(library);
@@ -86,8 +135,8 @@ describe('FranklinLibrary', () => {
   it('loads extended library', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json',
-      extends: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-unknown-plugin.json',
+      library: multiSheetPath,
+      extends: unknownPluginPath,
     };
 
     await fixture(library);
@@ -105,7 +154,7 @@ describe('FranklinLibrary', () => {
   it('unknown plugin', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-unknown-plugin.json',
+      library: unknownPluginPath,
     };
 
     await fixture(library);
@@ -128,7 +177,7 @@ describe('FranklinLibrary', () => {
   it('unload plugin', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json',
+      library: singleSheetPath,
     };
 
     await fixture(library);
@@ -170,7 +219,7 @@ describe('FranklinLibrary', () => {
   it('should search', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json',
+      library: multiSheetPath,
     };
 
     await fixture(library);

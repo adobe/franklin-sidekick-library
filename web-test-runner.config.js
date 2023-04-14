@@ -24,7 +24,7 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   /** Filter out lit dev mode logs */
   filterBrowserLogs(log) {
     for (const arg of log.args) {
-      if (typeof arg === 'string' && filteredLogs.some((l) => arg.includes(l))) {
+      if (typeof arg === 'string' && filteredLogs.some(l => arg.includes(l))) {
         return false;
       }
     }

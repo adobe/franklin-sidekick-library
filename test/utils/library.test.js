@@ -326,7 +326,9 @@ describe('Library Util Tests', () => {
             ok: true,
             json: () => Promise.resolve(baseLibrary),
           });
-        } else if (url === config.extends) {
+        }
+
+        if (url === config.extends) {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(extendedLibrary),

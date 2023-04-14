@@ -24,7 +24,7 @@ const plugins = {
 
 export class LibraryList extends LitElement {
   static properties = {
-    libraries: [],
+    libraries: undefined,
   };
 
   static styles = css`
@@ -60,7 +60,7 @@ export class LibraryList extends LitElement {
   renderLibraries() {
     if (this.libraries) {
       return Object.keys(this.libraries).map(
-        (key) => html`<sp-sidenav-item value=${key} disclosureArrow="true">${capitalize(key)}</sidenav-item>`,
+        key => html`<sp-sidenav-item value=${key} disclosureArrow="true" data-testid="library-item">${capitalize(key)}</sidenav-item>`,
       );
     }
 
@@ -69,7 +69,7 @@ export class LibraryList extends LitElement {
 
   render() {
     return html`<div class="home">
-      <sp-sidenav @click=${this.onSelect}>
+      <sp-sidenav @click=${this.onSelect} data-testid=${this.libraries ? 'libraries-loaded' : ''}>
        ${this.renderLibraries()}
       </sp-sidenav>
     </div>`;

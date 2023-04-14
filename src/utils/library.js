@@ -13,12 +13,8 @@
 import { EventBus } from '../events/eventbus.js';
 import { LIBRARY_LOADED } from '../events/events.js';
 
-export async function fetchLibrary(domain) {
-  const { searchParams } = new URL(window.location.href);
-  const suppliedLibrary = searchParams.get('library');
-  const library = suppliedLibrary || `${domain}`;
-
-  const resp = await fetch(library);
+export async function fetchLibrary(path) {
+  const resp = await fetch(path);
   if (!resp.ok) return null;
   return resp.json();
 }
@@ -28,7 +24,7 @@ export async function getExtendedLibrary(href) {
     return fetchLibrary(href);
   }
 
-  return undefined;
+  return Promise.resolve();
 }
 
 export async function combineLibraries(base, supplied) {
@@ -73,10 +69,8 @@ export async function loadLibrary(appModel, config) {
 
   appStore.config = config;
   try {
-    const [baseLibrary, extendedLibrary] = await Promise.all([
-      fetchLibrary(config.library),
-      getExtendedLibrary(appStore.config.extends),
-    ]);
+    const baseLibrary = await fetchLibrary(config.library);
+    const extendedLibrary = await getExtendedLibrary(appStore.config.extends);
     libraries = await combineLibraries(baseLibrary, extendedLibrary);
     appStore.libraries = libraries;
     EventBus.instance.dispatchEvent(new CustomEvent(LIBRARY_LOADED));

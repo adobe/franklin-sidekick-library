@@ -42,7 +42,7 @@ describe('PluginRenderer', () => {
   it('renders a root container when a plugin is loaded', async () => {
     AppModel.init();
     const el = await fixture(html`<plugin-renderer></plugin-renderer>`);
-    expect(el.shadowRoot.querySelector('.root')).to.not.exist;
+    expect(el.shadowRoot.querySelector('.plugin-root')).to.not.exist;
     AppModel.appStore.activePlugin = {
       title: 'Blocks',
       searchEnabled: true,
@@ -52,7 +52,7 @@ describe('PluginRenderer', () => {
 
     const pluginLoadedEvent = new CustomEvent(PLUGIN_LOADED);
     EventBus.instance.dispatchEvent(pluginLoadedEvent);
-    expect(el.shadowRoot.querySelector('.root')).to.exist;
+    expect(el.shadowRoot.querySelector('.plugin-root')).to.exist;
   });
 
   describe('connectedCallback', () => {
@@ -75,12 +75,12 @@ describe('PluginRenderer', () => {
       expect(loadPluginStylesheetSpy.calledOnce).to.be.true;
     });
 
-    it('should listen for PLUGIN_LOADED event and add root div element with .root class', () => {
+    it('should listen for PLUGIN_LOADED event and add root div element with .plugin-root class', () => {
       EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_LOADED));
-      const root = element.renderRoot.querySelector('.root');
+      const root = element.renderRoot.querySelector('.plugin-root');
       expect(root).to.exist;
       expect(root.tagName).to.equal('DIV');
-      expect(root.classList.contains('root')).to.be.true;
+      expect(root.classList.contains('plugin-root')).to.be.true;
     });
 
     it('should listen for PLUGIN_LOADED event and call decorate method with root element', () => {
@@ -89,12 +89,12 @@ describe('PluginRenderer', () => {
       expect(decorateSpy.calledOnce).to.be.true;
     });
 
-    it('should listen for PLUGIN_UNLOADED event and remove root div element with .root class', () => {
+    it('should listen for PLUGIN_UNLOADED event and remove root div element with .plugin-root class', () => {
       const root = document.createElement('div');
-      root.classList.add('root');
+      root.classList.add('.plugin-root');
       element.renderRoot.appendChild(root);
       EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_UNLOADED));
-      const removedRoot = element.renderRoot.querySelector('.root');
+      const removedRoot = element.renderRoot.querySelector('.plugin-root');
       expect(removedRoot).not.to.exist;
     });
 

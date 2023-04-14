@@ -124,6 +124,7 @@ export class FranklinLibrary extends LitElement {
         dict[key] = messages[key].message;
       });
     } catch (e) {
+      /* istanbul ignore next */
       console.error(`failed to fetch dictionary from ${dictPath}`); // eslint-disable-line no-console
     }
 

@@ -10,15 +10,10 @@
     "format": "eslint . --fix",
     "test": "web-test-runner --coverage",
     "test:watch": "web-test-runner --watch",
-    "storybook": "storybook dev -p 6006",
-    "storybook:build": "npm run analyze -- --exclude dist && build-storybook",
-    "test-storybook": "test-storybook --coverage",
-    "test-storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"npm run build-storybook --quiet && npx http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && npm run test-storybook\"",
     "build": "rimraf dist && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
     "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
-    "start": "web-dev-server",
-    "build-storybook": "storybook build"
+    "start": "web-dev-server"
   },
   "dependencies": {
     "@spectrum-web-components/action-button": "0.10.14",
@@ -35,41 +30,26 @@
     "@spectrum-web-components/theme": "0.14.13",
     "@spectrum-web-components/toast": "^0.11.14",
     "@spectrum-web-components/tooltip": "^0.11.15",
-    "@storybook/addon-interactions": "^7.0.2",
     "lit": "^2.0.2"
   },
   "devDependencies": {
     "@adobe/eslint-config-helix": "2.0.2",
-    "@babel/preset-env": "^7.16.4",
     "@custom-elements-manifest/analyzer": "^0.4.17",
     "@open-wc/building-rollup": "^2.0.2",
     "@open-wc/eslint-config": "^9.2.1",
     "@open-wc/testing": "^3.1.6",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "@storybook/addon-coverage": "^0.0.8",
-    "@storybook/addon-essentials": "^7.0.2",
-    "@storybook/addon-links": "^7.0.2",
-    "@storybook/blocks": "^7.0.2",
-    "@storybook/builder-vite": "^7.0.2",
-    "@storybook/jest": "^0.1.0",
-    "@storybook/test-runner": "^0.10.0",
-    "@storybook/testing-library": "^0.1.0",
-    "@storybook/web-components": "^7.0.2",
-    "@storybook/web-components-vite": "^7.0.2",
     "@web/dev-server": "^0.1.34",
     "@web/dev-server-rollup": "^0.4.0",
-    "@web/dev-server-storybook": "^0.5.4",
     "@web/rollup-plugin-html": "^1.11.0",
     "@web/rollup-plugin-import-meta-assets": "^1.0.7",
     "@web/test-runner": "^0.14.0",
     "babel-plugin-template-html-minifier": "^4.1.0",
     "concurrently": "7.4.0",
     "deepmerge": "^4.2.2",
-    "eslint": "^8.31.0",
+    "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-storybook": "^0.6.11",
-    "husky": "^4.3.8",
     "http-server": "14.1.1",
     "lint-staged": "^10.5.4",
     "prettier": "^2.4.1",
@@ -80,8 +60,8 @@
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-workbox": "^6.2.0",
+    "shadow-dom-testing-library": "^1.10.0",
     "sinon": "^15.0.3",
-    "storybook": "^7.0.2",
     "wait-on": "6.0.1"
   },
   "eslintConfig": {
@@ -105,8 +85,5 @@
       "prettier --write"
     ]
   },
-  "customElements": "custom-elements.json",
-  "nyc": {
-    "exclude": "**/stories/**"
-  }
+  "customElements": "custom-elements.json"
 }

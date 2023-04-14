@@ -141,7 +141,7 @@ export class Header extends LitElement {
         <span>${this.headerTitle}</span>
         <sp-search
           @input=${this.onSearch}
-          @submit=${(e) => e.preventDefault()}
+          @submit=${e => e.preventDefault()}
         ></sp-search>
       </div>
       <div>

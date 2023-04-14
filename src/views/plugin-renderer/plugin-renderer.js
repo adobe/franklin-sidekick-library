@@ -43,7 +43,7 @@ export class PluginRenderer extends LitElement {
       display: flex;
     }
 
-    .root {
+    .plugin-root {
       height: 100%;
       overflow-y: auto;
     }
@@ -52,7 +52,7 @@ export class PluginRenderer extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     EventBus.instance.addEventListener(PLUGIN_LOADED, () => {
-      const root = createTag('div', { class: 'root' });
+      const root = createTag('div', { class: 'plugin-root', 'data-testid': 'plugin-root' });
       this.renderRoot.prepend(root);
 
       this.loadPluginStylesheet();
@@ -66,12 +66,14 @@ export class PluginRenderer extends LitElement {
     });
 
     EventBus.instance.addEventListener(PLUGIN_UNLOADED, () => {
-      const root = this.renderRoot.querySelector('.root');
-      root.remove();
+      const root = this.renderRoot.querySelector('.plugin-root');
+      if (root) {
+        root.remove();
+      }
     });
 
     EventBus.instance.addEventListener(SEARCH_UPDATED, () => {
-      const root = this.renderRoot.querySelector('.root');
+      const root = this.renderRoot.querySelector('.plugin-root');
       if (root) {
         root.innerHTML = '';
         AppModel.appStore.activePlugin.decorate(
@@ -93,11 +95,11 @@ export class PluginRenderer extends LitElement {
   }
 
   displayLoader() {
-    this.progressContainer.value.classList.add('visible');
+    this.progressContainer.value?.classList.add('visible');
   }
 
   hideLoader() {
-    this.progressContainer.value.classList.remove('visible');
+    this.progressContainer.value?.classList.remove('visible');
   }
 
   sendToast(event) {
@@ -107,7 +109,7 @@ export class PluginRenderer extends LitElement {
   render() {
     return html`
       <div class="progress-container" ${ref(this.progressContainer)}>
-        <sp-progress-circle indeterminate></sp-progress-circle>
+        <sp-progress-circle indeterminate label="loading plugin"></sp-progress-circle>
       </div>
     `;
   }

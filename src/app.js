@@ -133,7 +133,25 @@ export class FranklinLibrary extends LitElement {
   }
 
   isValidConfig(config) {
-    return !!((config && config.library));
+    // Was the config set via a property?
+    if (config?.library) {
+      return true;
+    }
+
+    const { searchParams } = new URL(window.location.href);
+    const params = {};
+
+    for (const [key, value] of searchParams.entries()) {
+      params[key] = value;
+    }
+
+    // Config is only valid if it contains a library
+    if (params.library) {
+      this.config = params;
+      return true;
+    }
+
+    return false;
   }
 
   async connectedCallback() {
@@ -151,9 +169,9 @@ export class FranklinLibrary extends LitElement {
       }
     });
 
-    this.loadLocaleDict('en');
-
     this.configured = this.isValidConfig(this.config);
+
+    this.loadLocaleDict('en');
 
     if (!this.configured) return;
 

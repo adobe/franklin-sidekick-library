@@ -43,7 +43,9 @@ export class LibraryList extends LitElement {
 
   async onSelect(e) {
     const { value } = e.target;
-    const pluginPath = AppModel.appStore.config[value] ?? plugins[value];
+    const { config } = AppModel.appStore;
+
+    const pluginPath = config[value] ?? plugins[value];
     if (pluginPath) {
       await loadPlugin(AppModel, value, pluginPath);
       return;

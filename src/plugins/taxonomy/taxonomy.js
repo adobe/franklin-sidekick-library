@@ -21,7 +21,7 @@ function getFilteredTags(data, query) {
     return data;
   }
 
-  return data.filter((item) => item.tag.toLowerCase().includes(query.toLowerCase()));
+  return data.filter(item => item.tag.toLowerCase().includes(query.toLowerCase()));
 }
 
 async function decorate(container, data, query) {
@@ -31,8 +31,9 @@ async function decorate(container, data, query) {
         <sp-menu
             label="Select tags"
             selects="multiple"
+            data-testid="taxonomy"
             >
-            ${getFilteredTags(data, query).map((item) => /* html */`<sp-menu-item value="${item.tag}" ${selectedTags.includes(item.tag) ? 'selected' : ''}>${item.tag}</sp-menu-item>`).join('')}
+            ${getFilteredTags(data, query).map(item => /* html */`<sp-menu-item value="${item.tag}" ${selectedTags.includes(item.tag) ? 'selected' : ''}>${item.tag}</sp-menu-item>`).join('')}
         </sp-menu>
         <sp-divider size="s"></sp-divider>
         <div class="footer">

@@ -25,7 +25,7 @@ export const findAllDeep = (parent, selectors, depth = null) => {
       // check for selectors in shadowRoot
       recordResult(_parent.shadowRoot.querySelectorAll(selectors));
       // look for nested components with shadowRoots
-      for (const child of [..._parent.shadowRoot.querySelectorAll('*')].filter((i) => i.shadowRoot)) {
+      for (const child of [..._parent.shadowRoot.querySelectorAll('*')].filter(i => i.shadowRoot)) {
         // make sure we haven't hit our depth limit
         if (depth === null || currentDepth < depth) {
           recursiveSeek(child);

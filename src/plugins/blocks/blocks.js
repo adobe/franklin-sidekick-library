@@ -31,13 +31,13 @@ function getAuthorName(block) {
   if (!blockSib) return null;
   if (authorNameTags.includes(blockSib.nodeName)) {
     return blockSib.textContent;
-  } else {
-    const nextSib = blockSib.previousElementSibling;
-    if (!nextSib) return null;
-    if (authorNameTags.includes(nextSib.nodeName)) {
-      return nextSib.textContent;
-    }
   }
+  const nextSib = blockSib.previousElementSibling;
+  if (!nextSib) return null;
+  if (authorNameTags.includes(nextSib.nodeName)) {
+    return nextSib.textContent;
+  }
+
   return null;
 }
 
@@ -107,7 +107,7 @@ function isMatchingBlock(pageBlock, query) {
   const tagsString = getBlockTags(pageBlock);
   if (!query || !tagsString) return false;
   const searchTokens = query.split(' ');
-  return searchTokens.every((token) => tagsString.toLowerCase().includes(token.toLowerCase()));
+  return searchTokens.every(token => tagsString.toLowerCase().includes(token.toLowerCase()));
 }
 
 function renderNoResults() {
@@ -133,11 +133,10 @@ function renderNoResults() {
     `;
 }
 
-async function fetchBlock(path) {
+export async function fetchBlock(path) {
   if (!window.blocks) {
     window.blocks = {};
   }
-
   if (!window.blocks[path]) {
     const resp = await fetch(`${path}.plain.html`);
     if (!resp.ok) return;
@@ -156,15 +155,14 @@ function onPreview(event, path) {
   window.open(path, '_blockpreview');
 }
 
-async function decorate(container, data, query) {
+export async function decorate(container, data, query) {
   container.dispatchEvent(new CustomEvent('DisplayLoader'));
-  const sideNav = createTag('sp-sidenav', { variant: 'multilevel' });
-
+  const sideNav = createTag('sp-sidenav', { variant: 'multilevel', 'data-testid': 'blocks' });
   for (const block of data) {
     const blockVariant = createTag('sp-sidenav-item', { label: block.name, preview: true });
     sideNav.append(blockVariant);
 
-    blockVariant.addEventListener('Preview', (e) => onPreview(e, block.path));
+    blockVariant.addEventListener('Preview', e => onPreview(e, block.path));
 
     const doc = await fetchBlock(block.path);
     const pageBlocks = doc.body.querySelectorAll('div[class]');
@@ -177,7 +175,7 @@ async function decorate(container, data, query) {
       const blockName = getAuthorName(pageBlock) || getBlockName(pageBlock);
       const blockDescription = getBlockDescription(pageBlock);
 
-      const childNavItem = createTag('sp-sidenav-item', { label: blockName });
+      const childNavItem = createTag('sp-sidenav-item', { label: blockName, 'data-testid': 'item' });
       blockVariant.append(childNavItem);
 
       if (blockDescription) {

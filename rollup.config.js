@@ -18,6 +18,7 @@ import html from '@web/rollup-plugin-html';
 import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import esbuild from 'rollup-plugin-esbuild';
 import copy from 'rollup-plugin-copy';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 const baseConfig = createBasicConfig();
 
@@ -28,6 +29,7 @@ export default merge(baseConfig, {
     entryFileNames: 'library.js',
     chunkFileNames: '[name].js',
     exports: 'named',
+    sourcemap: true,
   },
   preserveEntrySignatures: false,
   plugins: [
@@ -42,6 +44,7 @@ export default merge(baseConfig, {
       minify: true,
       target: ['chrome64', 'firefox67', 'safari11.1'],
     }),
+    sourcemaps(),
     copy({
       targets: [{ src: 'src/plugins/**/*', dest: './dist' },
         { src: 'src/utils/dom.js', dest: './dist' },

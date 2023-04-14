@@ -124,7 +124,7 @@ export class Header extends LitElement {
     return html`<div class="search">
       <div>
         ${this._pluginActive ? html`
-              <sp-action-button quiet @click=${this.onBack}>
+              <sp-action-button quiet @click=${this.onBack} id="back-button">
                 <sp-icon-chevron-left slot="icon"></sp-icon-chevron-left>
               </sp-action-button>
               ` : html`
@@ -146,7 +146,7 @@ export class Header extends LitElement {
       </div>
       <div>
         ${this._pluginActive && this.searchEnabled ? html`
-          <sp-action-button id="searchButton" quiet toggles @click=${this.activateSearch}>
+          <sp-action-button id="search-button" quiet toggles @click=${this.activateSearch}>
             <sp-icon-search slot="icon"></sp-icon-search>
           </sp-action-button>` : ''}
       </div>

@@ -68,12 +68,6 @@ export class SideNavItem extends SPSideNavItem {
     this.dispatchEvent(new CustomEvent(PREVIEW_CONTENT));
   }
 
-  onDemo(e) {
-    e.stopPropagation();
-    const trigger = this.renderRoot.querySelector('#demoTrigger');
-    trigger?.setAttribute('open', 'click');
-  }
-
   render() {
     return html`
       <a

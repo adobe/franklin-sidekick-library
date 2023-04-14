@@ -48,3 +48,25 @@ export const recursiveQueryAll = (element, selector) => findAllDeep(
   selector,
   10,
 );
+
+export function simulateTyping(inputElement, text) {
+  const delay = 100; // Delay between each character typing
+  const textArr = text.split(''); // Convert the text into an array of characters
+  let i = 0;
+
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      // Simulate typing by setting the value of the input
+      // element to the characters up to the current index
+      // eslint-disable-next-line no-param-reassign
+      inputElement.value = textArr.slice(0, i + 1).join('');
+
+      // Increment the index and check if we've typed all the characters
+      // eslint-disable-next-line no-plusplus
+      if (++i === textArr.length) {
+        clearInterval(interval); // Stop the interval timer
+        resolve(); // Resolve the Promise when finished typing
+      }
+    }, delay);
+  });
+}

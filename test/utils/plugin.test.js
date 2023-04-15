@@ -14,7 +14,7 @@ import sinon from 'sinon';
 import { expect } from '@open-wc/testing';
 
 import { loadPlugin, unloadPlugin } from '../../src/utils/plugin.js';
-import { PLUGIN_LOADED, PLUGIN_UNLOADED } from '../../src/events/events.js';
+import { APP_EVENTS } from '../../src/events/events.js';
 import { EventBus } from '../../src/events/eventbus.js';
 
 describe('Plugin Util Tests', () => {
@@ -37,7 +37,7 @@ describe('Plugin Util Tests', () => {
       const eventSpy = sinon.spy();
       const path = '../../src/plugins/blocks/blocks.js';
       const importedPlugin = { default: { title: 'Blocks' } };
-      EventBus.instance.addEventListener(PLUGIN_LOADED, eventSpy);
+      EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, eventSpy);
       await loadPlugin(appModel, 'blocks', path);
       expect(appModel.appStore.pluginData).to.equal(appModel.appStore.libraries.blocks);
       expect(appModel.appStore.activePluginPath).to.equal(path);
@@ -49,7 +49,7 @@ describe('Plugin Util Tests', () => {
   describe('unloadPlugin', () => {
     it('should unload the plugin and update appStore correctly', () => {
       const eventSpy = sinon.spy();
-      EventBus.instance.addEventListener(PLUGIN_UNLOADED, eventSpy);
+      EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, eventSpy);
       unloadPlugin(appModel);
       expect(appModel.appStore.pluginData).equals(undefined);
       expect(appModel.appStore.activePluginPath).equals(undefined);

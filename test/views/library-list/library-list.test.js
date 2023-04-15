@@ -16,7 +16,7 @@ import { html, fixture, expect } from '@open-wc/testing';
 import { stub } from 'sinon';
 import '../../../src/views/library-list/library-list.js';
 import { EventBus } from '../../../src/events/eventbus.js';
-import { LIBRARY_LOADED } from '../../../src/events/events.js';
+import { APP_EVENTS } from '../../../src/events/events.js';
 
 describe('LibraryList', () => {
   let component;
@@ -30,7 +30,7 @@ describe('LibraryList', () => {
       const addEventListenerSpy = stub(EventBus.instance, 'addEventListener');
       component.connectedCallback();
 
-      expect(addEventListenerSpy).to.have.been.calledOnceWith(LIBRARY_LOADED);
+      expect(addEventListenerSpy).to.have.been.calledOnceWith(APP_EVENTS.LIBRARY_LOADED);
       addEventListenerSpy.restore();
     });
   });

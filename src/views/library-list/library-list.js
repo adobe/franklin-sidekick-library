@@ -14,7 +14,7 @@ import AppModel from '../../models/app-model.js';
 import { EventBus } from '../../events/eventbus.js';
 import { isDev } from '../../utils/library.js';
 import { capitalize } from '../../utils/dom.js';
-import { LIBRARY_LOADED, TOAST } from '../../events/events.js';
+import { APP_EVENTS, PLUGIN_EVENTS } from '../../events/events.js';
 import { loadPlugin } from '../../utils/plugin.js';
 
 const plugins = {
@@ -36,7 +36,7 @@ export class LibraryList extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    EventBus.instance.addEventListener(LIBRARY_LOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.LIBRARY_LOADED, () => {
       this.libraries = AppModel.appStore.libraries;
     });
   }
@@ -51,7 +51,7 @@ export class LibraryList extends LitElement {
       return;
     }
 
-    EventBus.instance.dispatchEvent(new CustomEvent(TOAST, {
+    EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, {
       detail: {
         variant: 'negative',
         message: AppModel.appStore.localeDict.unknownPlugin,

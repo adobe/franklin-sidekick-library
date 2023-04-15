@@ -75,8 +75,15 @@ function getTable(block, name, path) {
   );
   const table = document.createElement('table');
   table.setAttribute('border', '1');
+
+  const backgroundColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--sk-table-bg-color') || '#ff8012';
+
+  const foregroundColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--sk-table-fg-color') || '#ffffff';
+
   const headerRow = document.createElement('tr');
-  headerRow.append(createTag('td', { colspan: maxCols, style: 'background-color:#ff8012; color: #ffffff;  height:23px;' }, name));
+  headerRow.append(createTag('td', { colspan: maxCols, style: `background-color: ${backgroundColor}; color: ${foregroundColor};  height:23px;` }, name));
   table.append(headerRow);
   rows.forEach((row) => {
     const tr = document.createElement('tr');
@@ -156,7 +163,7 @@ function onPreview(event, path) {
 }
 
 export async function decorate(container, data, query) {
-  container.dispatchEvent(new CustomEvent('DisplayLoader'));
+  container.dispatchEvent(new CustomEvent('ShowLoader'));
   const sideNav = createTag('sp-sidenav', { variant: 'multilevel', 'data-testid': 'blocks' });
   for (const block of data) {
     const blockVariant = createTag('sp-sidenav-item', { label: block.name, preview: true });

@@ -10,12 +10,18 @@
  * governing permissions and limitations under the License.
  */
 
-export const LIBRARY_LOADED = 'LibraryLoaded';
-export const PLUGIN_LOADED = 'PluginLoaded';
-export const PLUGIN_UNLOADED = 'PluginUnloaded';
-export const SEARCH_UPDATED = 'SearchUpdated';
-export const DISPLAY_LOADER = 'DisplayLoader';
-export const LOCALE_SET = 'LocaleSet';
-export const HIDE_LOADER = 'HideLoader';
-export const PREVIEW_CONTENT = 'Preview';
-export const TOAST = 'Toast';
+export const APP_EVENTS = {
+  TOAST: 'Toast',
+  LIBRARY_LOADED: 'LibraryLoaded',
+  PLUGIN_LOADED: 'PluginLoaded',
+  PLUGIN_UNLOADED: 'PluginUnloaded',
+  PREVIEW_CONTENT: 'Preview',
+  LOCALE_SET: 'LocaleSet',
+  SEARCH_UPDATED: 'SearchUpdated',
+};
+
+export const PLUGIN_EVENTS = {
+  TOAST: 'Toast',
+  SHOW_LOADER: 'ShowLoader',
+  HIDE_LOADER: 'HideLoader',
+};

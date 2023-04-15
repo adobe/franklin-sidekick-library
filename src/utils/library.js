@@ -11,7 +11,7 @@
  */
 
 import { EventBus } from '../events/eventbus.js';
-import { LIBRARY_LOADED } from '../events/events.js';
+import { APP_EVENTS } from '../events/events.js';
 
 export async function fetchLibrary(href) {
   const resp = await fetch(href);
@@ -73,7 +73,7 @@ export async function loadLibrary(appModel, config) {
     const extendedLibrary = await getExtendedLibrary(config.extends);
     libraries = await combineLibraries(baseLibrary, extendedLibrary);
     appStore.libraries = libraries;
-    EventBus.instance.dispatchEvent(new CustomEvent(LIBRARY_LOADED));
+    EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.LIBRARY_LOADED));
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('unable to load library', error);

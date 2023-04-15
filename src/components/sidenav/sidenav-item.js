@@ -18,7 +18,7 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-info.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-view-detail.js';
 import '@spectrum-web-components/icon/sp-icon.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js';
-import { PREVIEW_CONTENT } from '../../events/events.js';
+import { APP_EVENTS } from '../../events/events.js';
 
 export class SideNavItem extends SPSideNavItem {
   static properties = {
@@ -65,7 +65,7 @@ export class SideNavItem extends SPSideNavItem {
 
   onPreview(e) {
     e.stopPropagation();
-    this.dispatchEvent(new CustomEvent(PREVIEW_CONTENT));
+    this.dispatchEvent(new CustomEvent(APP_EVENTS.PREVIEW_CONTENT));
   }
 
   render() {

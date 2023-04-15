@@ -11,7 +11,7 @@
  */
 
 import { EventBus } from '../events/eventbus.js';
-import { PLUGIN_LOADED, PLUGIN_UNLOADED } from '../events/events.js';
+import { APP_EVENTS } from '../events/events.js';
 
 export async function loadPlugin(appModel, name, path) {
   const { appStore } = appModel;
@@ -19,7 +19,7 @@ export async function loadPlugin(appModel, name, path) {
   appStore.pluginData = appStore.libraries[name];
   appStore.activePluginPath = path;
   appStore.activePlugin = importedPlugin.default;
-  EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_LOADED));
+  EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
 }
 
 export async function unloadPlugin(appModel) {
@@ -27,5 +27,5 @@ export async function unloadPlugin(appModel) {
   appStore.activePlugin = undefined;
   appStore.pluginData = undefined;
   appStore.activePluginPath = undefined;
-  EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_UNLOADED));
+  EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_UNLOADED));
 }

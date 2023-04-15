@@ -13,11 +13,7 @@ import { LitElement, html, css } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { createTag } from '../../utils/dom.js';
 import { EventBus } from '../../events/eventbus.js';
-import {
-  DISPLAY_LOADER,
-  HIDE_LOADER,
-  PLUGIN_LOADED, PLUGIN_UNLOADED, SEARCH_UPDATED, TOAST,
-} from '../../events/events.js';
+import { APP_EVENTS, PLUGIN_EVENTS } from '../../events/events.js';
 import AppModel from '../../models/app-model.js';
 
 export class PluginRenderer extends LitElement {
@@ -51,28 +47,27 @@ export class PluginRenderer extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    EventBus.instance.addEventListener(PLUGIN_LOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
       const root = createTag('div', { class: 'plugin-root', 'data-testid': 'plugin-root' });
       this.renderRoot.prepend(root);
 
       this.loadPluginStylesheet();
 
-      root.addEventListener(DISPLAY_LOADER, this.displayLoader.bind(this));
+      root.addEventListener(PLUGIN_EVENTS.SHOW_LOADER, this.displayLoader.bind(this));
+      root.addEventListener(PLUGIN_EVENTS.TOAST, this.sendToast);
+      root.addEventListener(PLUGIN_EVENTS.HIDE_LOADER, this.hideLoader.bind(this));
 
       AppModel.appStore.activePlugin.decorate(root, AppModel.appStore.pluginData);
-
-      root.addEventListener(TOAST, this.sendToast);
-      root.addEventListener(HIDE_LOADER, this.hideLoader.bind(this));
     });
 
-    EventBus.instance.addEventListener(PLUGIN_UNLOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
       const root = this.renderRoot.querySelector('.plugin-root');
       if (root) {
         root.remove();
       }
     });
 
-    EventBus.instance.addEventListener(SEARCH_UPDATED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.SEARCH_UPDATED, () => {
       const root = this.renderRoot.querySelector('.plugin-root');
       if (root) {
         root.innerHTML = '';
@@ -103,7 +98,7 @@ export class PluginRenderer extends LitElement {
   }
 
   sendToast(event) {
-    EventBus.instance.dispatchEvent(new CustomEvent(TOAST, { detail: event.detail }));
+    EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, { detail: event.detail }));
   }
 
   render() {

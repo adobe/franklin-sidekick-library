@@ -19,7 +19,7 @@ import {
   fetchLibrary, combineLibraries, loadLibrary, isDev,
 } from '../../src/utils/library.js';
 import { EventBus } from '../../src/events/eventbus.js';
-import { LIBRARY_LOADED } from '../../src/events/events.js';
+import { APP_EVENTS } from '../../src/events/events.js';
 
 const multiSheetResponse = {
   blocks: {
@@ -281,7 +281,7 @@ describe('Library Util Tests', () => {
         json: () => Promise.resolve(multiSheetResponse),
       });
 
-      EventBus.instance.addEventListener(LIBRARY_LOADED, eventSpy);
+      EventBus.instance.addEventListener(APP_EVENTS.LIBRARY_LOADED, eventSpy);
 
       await loadLibrary(appModel, config);
 
@@ -335,7 +335,7 @@ describe('Library Util Tests', () => {
           });
         }
       };
-      EventBus.instance.addEventListener(LIBRARY_LOADED, eventSpy);
+      EventBus.instance.addEventListener(APP_EVENTS.LIBRARY_LOADED, eventSpy);
 
       await loadLibrary(appModel, config);
 

@@ -16,7 +16,7 @@ import { html, fixture, expect } from '@open-wc/testing';
 import '../../../src/views/plugin-renderer/plugin-renderer.js';
 import { spy } from 'sinon';
 import {
-  PLUGIN_LOADED, PLUGIN_UNLOADED, SEARCH_UPDATED, TOAST,
+  APP_EVENTS,
 } from '../../../src/events/events.js';
 import { EventBus } from '../../../src/events/eventbus.js';
 import AppModel from '../../../src/models/app-model.js';
@@ -50,7 +50,7 @@ describe('PluginRenderer', () => {
     };
     AppModel.appStore.activePluginPath = '../../src/plugins/blocks/blocks.js';
 
-    const pluginLoadedEvent = new CustomEvent(PLUGIN_LOADED);
+    const pluginLoadedEvent = new CustomEvent(APP_EVENTS.PLUGIN_LOADED);
     EventBus.instance.dispatchEvent(pluginLoadedEvent);
     expect(el.shadowRoot.querySelector('.plugin-root')).to.exist;
   });
@@ -71,12 +71,12 @@ describe('PluginRenderer', () => {
 
     it('should listen for PLUGIN_LOADED event and call loadPluginStylesheet method', () => {
       const loadPluginStylesheetSpy = spy(element, 'loadPluginStylesheet');
-      EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_LOADED));
+      EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
       expect(loadPluginStylesheetSpy.calledOnce).to.be.true;
     });
 
     it('should listen for PLUGIN_LOADED event and add root div element with .plugin-root class', () => {
-      EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_LOADED));
+      EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
       const root = element.renderRoot.querySelector('.plugin-root');
       expect(root).to.exist;
       expect(root.tagName).to.equal('DIV');
@@ -85,7 +85,7 @@ describe('PluginRenderer', () => {
 
     it('should listen for PLUGIN_LOADED event and call decorate method with root element', () => {
       const decorateSpy = spy(AppModel.appStore.activePlugin, 'decorate');
-      EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_LOADED));
+      EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
       expect(decorateSpy.calledOnce).to.be.true;
     });
 
@@ -93,15 +93,15 @@ describe('PluginRenderer', () => {
       const root = document.createElement('div');
       root.classList.add('.plugin-root');
       element.renderRoot.appendChild(root);
-      EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_UNLOADED));
+      EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_UNLOADED));
       const removedRoot = element.renderRoot.querySelector('.plugin-root');
       expect(removedRoot).not.to.exist;
     });
 
     it('should listen for SEARCH_UPDATED event and call decorate method with root element, plugin data, and search query', () => {
       const decorateSpy = spy(AppModel.appStore.activePlugin, 'decorate');
-      EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_LOADED));
-      EventBus.instance.dispatchEvent(new CustomEvent(SEARCH_UPDATED));
+      EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
+      EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.SEARCH_UPDATED));
       expect(decorateSpy.calledTwice).to.be.true;
     });
   });
@@ -110,7 +110,7 @@ describe('PluginRenderer', () => {
       const pluginRenderer = await fixture(html`<plugin-renderer></plugin-renderer>`);
       const toastDetail = { message: 'Hello, world!' };
       const toastSpy = spy(pluginRenderer, 'sendToast');
-      pluginRenderer.addEventListener(TOAST, toastSpy);
+      pluginRenderer.addEventListener(APP_EVENTS.TOAST, toastSpy);
 
       pluginRenderer.sendToast({ detail: toastDetail });
 

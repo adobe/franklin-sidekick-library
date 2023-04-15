@@ -16,7 +16,7 @@ import { html, fixture, expect } from '@open-wc/testing';
 import '../../src/views/plugin-renderer/plugin-renderer.js';
 import sinon from 'sinon';
 import { decorate } from '../../src/plugins/blocks/blocks.js';
-import { PLUGIN_LOADED, TOAST } from '../../src/events/events.js';
+import { APP_EVENTS, PLUGIN_EVENTS } from '../../src/events/events.js';
 import { EventBus } from '../../src/events/eventbus.js';
 import AppModel from '../../src/models/app-model.js';
 
@@ -34,7 +34,7 @@ describe('Blocks Plugin', () => {
       };
       AppModel.appStore.activePluginPath = '../../src/plugins/blocks/blocks.js';
 
-      const pluginLoadedEvent = new CustomEvent(PLUGIN_LOADED);
+      const pluginLoadedEvent = new CustomEvent(APP_EVENTS.PLUGIN_LOADED);
       EventBus.instance.dispatchEvent(pluginLoadedEvent);
     });
 
@@ -81,7 +81,7 @@ describe('Blocks Plugin', () => {
       expect(blocks[0].getAttribute('label')).to.equal('Cards');
       expect(blocks[0].getAttribute('expanded')).to.exist;
 
-      container.addEventListener(TOAST, eventSpy);
+      container.addEventListener(PLUGIN_EVENTS.TOAST, eventSpy);
 
       const blockItem = blocks[1];
       blockItem.dispatchEvent(new Event('click'));

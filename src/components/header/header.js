@@ -14,12 +14,7 @@ import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-left.js';
 import { EventBus } from '../../events/eventbus.js';
 import AppModel from '../../models/app-model.js';
 import { unloadPlugin } from '../../utils/plugin.js';
-import {
-  LOCALE_SET,
-  PLUGIN_LOADED,
-  PLUGIN_UNLOADED,
-  SEARCH_UPDATED,
-} from '../../events/events.js';
+import { APP_EVENTS } from '../../events/events.js';
 
 export class Header extends LitElement {
   static properties = {
@@ -67,7 +62,7 @@ export class Header extends LitElement {
   connectedCallback() {
     super.connectedCallback();
 
-    EventBus.instance.addEventListener(PLUGIN_LOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
       if (AppModel.appStore.activePlugin) {
         const { title, searchEnabled } = AppModel.appStore.activePlugin;
         this.headerTitle = title;
@@ -80,11 +75,11 @@ export class Header extends LitElement {
       }
     });
 
-    EventBus.instance.addEventListener(PLUGIN_UNLOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
       this.headerTitle = AppModel.appStore.localeDict.appTitle;
     });
 
-    EventBus.instance.addEventListener(LOCALE_SET, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.LOCALE_SET, () => {
       this.headerTitle = AppModel.appStore.localeDict.appTitle;
     });
   }
@@ -117,7 +112,7 @@ export class Header extends LitElement {
 
   onSearch(event) {
     AppModel.appStore.searchQuery = event.target.value;
-    EventBus.instance.dispatchEvent(new CustomEvent(SEARCH_UPDATED));
+    EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.SEARCH_UPDATED));
   }
 
   render() {

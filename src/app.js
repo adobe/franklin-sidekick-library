@@ -11,7 +11,9 @@
  */
 import { LitElement, html, css } from 'lit';
 import '@spectrum-web-components/theme/sp-theme.js';
-import '@spectrum-web-components/theme/src/themes.js';
+import '@spectrum-web-components/theme/theme-dark.js';
+import '@spectrum-web-components/theme/theme-light.js';
+import '@spectrum-web-components/theme/scale-medium.js';
 import '@spectrum-web-components/sidenav/sp-sidenav.js';
 import '@spectrum-web-components/icons/sp-icons-medium.js';
 import '@spectrum-web-components/action-button/sp-action-button.js';
@@ -35,12 +37,16 @@ import './views/plugin-renderer/plugin-renderer.js';
 import AppModel from './models/app-model.js';
 import { EventBus } from './events/eventbus.js';
 import { createTag } from './utils/dom.js';
-import {
-  LOCALE_SET, PLUGIN_LOADED, PLUGIN_UNLOADED, TOAST,
-} from './events/events.js';
+import { APP_EVENTS } from './events/events.js';
 import { loadLibrary } from './utils/library.js';
 
+export { PLUGIN_EVENTS } from './events/events.js';
+
 export class FranklinLibrary extends LitElement {
+  static properties = {
+    theme: undefined,
+  };
+
   static styles = css`
     * {
       box-sizing: border-box;
@@ -129,7 +135,7 @@ export class FranklinLibrary extends LitElement {
     }
 
     AppModel.appStore.localeDict = dict;
-    EventBus.instance.dispatchEvent(new CustomEvent(LOCALE_SET));
+    EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.LOCALE_SET));
   }
 
   isValidConfig(config) {
@@ -156,9 +162,15 @@ export class FranklinLibrary extends LitElement {
 
   async connectedCallback() {
     super.connectedCallback();
+    this.getTheme();
     AppModel.init();
 
-    EventBus.instance.addEventListener(LOCALE_SET, () => {
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+      this.theme = e.matches ? 'dark' : 'light';
+    });
+
+    EventBus.instance.addEventListener(APP_EVENTS.LOCALE_SET, () => {
       this.requestUpdate();
       if (!this.configured) {
         const message = createTag('illustrated-message', {
@@ -183,17 +195,17 @@ export class FranklinLibrary extends LitElement {
     const home = this.renderRoot.querySelector('library-list');
     const library = this.renderRoot.querySelector('plugin-renderer');
 
-    EventBus.instance.addEventListener(PLUGIN_LOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
       home?.classList.add('inset');
       library?.classList.add('inset');
     });
 
-    EventBus.instance.addEventListener(PLUGIN_UNLOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
       home?.classList.remove('inset');
       library?.classList.remove('inset');
     });
 
-    EventBus.instance.addEventListener(TOAST, (e) => {
+    EventBus.instance.addEventListener(APP_EVENTS.TOAST, (e) => {
       const toastContainer = this.renderRoot.querySelector('.toast-container');
       const toast = createTag('sp-toast', { open: true, variant: e.detail.variant ?? 'positive', timeout: 200 });
       toast.textContent = e.detail.message ?? 'Done';
@@ -201,9 +213,13 @@ export class FranklinLibrary extends LitElement {
     });
   }
 
+  getTheme() {
+    this.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
   render() {
     return html`
-      <sp-theme theme="spectrum" color="dark" scale="medium">
+      <sp-theme theme="spectrum" color=${this.theme} scale="medium">
         <main>
           <library-header></library-header>
           <sp-divider size="s"></sp-divider>

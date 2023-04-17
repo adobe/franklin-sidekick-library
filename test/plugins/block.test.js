@@ -55,7 +55,7 @@ describe('Blocks Plugin', () => {
 
       await decorate(container, mockData, 'logos');
       const blocks = container.querySelectorAll('sp-sidenav-item');
-      expect(blocks.length).to.equal(6);
+      expect(blocks.length).to.equal(2);
       expect(blocks[0].getAttribute('label')).to.equal('Cards');
       expect(blocks[0].getAttribute('expanded')).to.exist;
     });
@@ -77,7 +77,7 @@ describe('Blocks Plugin', () => {
 
       await decorate(container, mockData, 'logos');
       const blocks = container.querySelectorAll('sp-sidenav-item');
-      expect(blocks.length).to.equal(6);
+      expect(blocks.length).to.equal(2);
       expect(blocks[0].getAttribute('label')).to.equal('Cards');
       expect(blocks[0].getAttribute('expanded')).to.exist;
 

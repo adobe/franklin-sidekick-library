@@ -274,7 +274,7 @@ describe('Library Util Tests', () => {
     it('should fetch the base library and set it in the app store', async () => {
       const eventSpy = sinon.spy();
       const appModel = { appStore: {}, libraries: {} };
-      const config = { library: 'https://example.com/library.json' };
+      const config = { base: 'https://example.com/library.json' };
 
       window.fetch = () => Promise.resolve({
         ok: true,
@@ -313,7 +313,7 @@ describe('Library Util Tests', () => {
       const eventSpy = sinon.spy();
       const appModel = { appStore: {}, libraries: {} };
       const config = {
-        library: 'https://example.com/library.json',
+        base: 'https://example.com/library.json',
         extends: 'https://example.com/extended-library.json',
       };
 
@@ -321,7 +321,7 @@ describe('Library Util Tests', () => {
       const extendedLibrary = singleSheetResponse;
 
       window.fetch = (url) => {
-        if (url === config.library) {
+        if (url === config.base) {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(baseLibrary),

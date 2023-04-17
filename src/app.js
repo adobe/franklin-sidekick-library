@@ -140,7 +140,7 @@ export class FranklinLibrary extends LitElement {
 
   isValidConfig(config) {
     // Was the config set via a property?
-    if (config?.library) {
+    if (config?.base) {
       return true;
     }
 
@@ -152,11 +152,13 @@ export class FranklinLibrary extends LitElement {
     }
 
     // Config is only valid if it contains a library
-    if (params.library) {
+    if (params.base) {
       this.config = params;
       return true;
     }
 
+    // eslint-disable-next-line no-console
+    console.error('Missing base configuration');
     return false;
   }
 

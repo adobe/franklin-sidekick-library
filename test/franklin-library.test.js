@@ -55,7 +55,7 @@ describe('FranklinLibrary', () => {
   it('loads single sheet', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: singleSheetPath,
+      base: singleSheetPath,
     };
 
     await fixture(library);
@@ -72,7 +72,7 @@ describe('FranklinLibrary', () => {
 
   it('loads supplied sheet', async () => {
     const urlParams = new URLSearchParams();
-    urlParams.append('library', singleSheetPath);
+    urlParams.append('base', singleSheetPath);
     const searchStub = stub(URLSearchParams.prototype, 'entries');
     searchStub.onCall(0).returns(urlParams);
 
@@ -93,7 +93,7 @@ describe('FranklinLibrary', () => {
 
   it('loads supplied sheet with supplied extends', async () => {
     const urlParams = new URLSearchParams();
-    urlParams.append('library', singleSheetPath);
+    urlParams.append('base', singleSheetPath);
     urlParams.append('extends', multiSheetPath);
 
     const searchStub = stub(URLSearchParams.prototype, 'entries');
@@ -117,7 +117,7 @@ describe('FranklinLibrary', () => {
   it('loads multi sheet', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: multiSheetPath,
+      base: multiSheetPath,
     };
 
     await fixture(library);
@@ -135,7 +135,7 @@ describe('FranklinLibrary', () => {
   it('loads extended library', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: multiSheetPath,
+      base: multiSheetPath,
       extends: unknownPluginPath,
     };
 
@@ -154,7 +154,7 @@ describe('FranklinLibrary', () => {
   it('unknown plugin', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: unknownPluginPath,
+      base: unknownPluginPath,
     };
 
     await fixture(library);
@@ -177,7 +177,7 @@ describe('FranklinLibrary', () => {
   it('unload plugin', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: singleSheetPath,
+      base: singleSheetPath,
     };
 
     await fixture(library);
@@ -219,7 +219,7 @@ describe('FranklinLibrary', () => {
   it('should search', async () => {
     const library = document.createElement('franklin-library');
     library.config = {
-      library: multiSheetPath,
+      base: multiSheetPath,
     };
 
     await fixture(library);

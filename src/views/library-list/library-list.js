@@ -47,7 +47,18 @@ export class LibraryList extends LitElement {
 
     const pluginPath = config[value] ?? plugins[value];
     if (pluginPath) {
-      await loadPlugin(AppModel, value, pluginPath);
+      try {
+        await loadPlugin(AppModel, value, pluginPath);
+      } catch (error) {
+        EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, {
+          detail: {
+            variant: 'negative',
+            message: error.message,
+          },
+        }));
+        // eslint-disable-next-line no-console
+        console.error(`Error loading plugin ${value}: ${error.message}`);
+      }
       return;
     }
 

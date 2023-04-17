@@ -31,31 +31,27 @@ export async function combineLibraries(base, supplied) {
   const library = {};
 
   if (base[':type'] === 'multi-sheet') {
-    base[':names'].forEach((key) => {
+    for (const key of base[':names']) {
       library[key] = base[key].data;
-    });
+    }
   } else {
     library.blocks = base.data;
   }
 
   if (supplied) {
     if (supplied[':type'] === 'multi-sheet') {
-      supplied[':names'].forEach((key) => {
+      for (const key of supplied[':names']) {
         if (library[key]) {
           library[key].push(...supplied[key].data);
-          return;
+        } else {
+          library[key] = supplied[key].data;
         }
-
-        library[key] = supplied[key].data;
-      });
-    } else {
-      if (library.blocks === undefined) {
-        library.blocks = [];
       }
-
-      library.blocks.push(...supplied.data);
+    } else {
+      library.blocks = [...(library.blocks || []), ...supplied.data];
     }
   }
+
   return library;
 }
 
@@ -69,7 +65,7 @@ export async function loadLibrary(appModel, config) {
 
   appStore.config = config;
   try {
-    const baseLibrary = await fetchLibrary(config.library);
+    const baseLibrary = await fetchLibrary(config.base);
     const extendedLibrary = await getExtendedLibrary(config.extends);
     libraries = await combineLibraries(baseLibrary, extendedLibrary);
     appStore.libraries = libraries;

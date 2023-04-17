@@ -9,17 +9,6 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-/*
- * Copyright 2023 Adobe. All rights reserved.
- * This file is licensed to you under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License. You may obtain a copy
- * of the License at http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
- * OF ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- */
 
 /* eslint-disable no-await-in-loop, no-param-reassign, consistent-return */
 
@@ -101,13 +90,14 @@ function getTable(block, name, path) {
 }
 
 function getBlockTags(block) {
+  const blockName = getAuthorName(block) || getBlockName(block);
   if (block.nextElementSibling?.className !== 'library-metadata') {
-    return getBlockName(block);
+    return blockName;
   }
   const libraryMetadata = getMetadata(block.nextElementSibling);
   return libraryMetadata?.searchtags?.text
-    ? `${libraryMetadata?.searchtags?.text} ${getBlockName(block)}`
-    : getBlockName(block);
+    ? `${libraryMetadata?.searchtags?.text} ${blockName}`
+    : blockName;
 }
 
 function isMatchingBlock(pageBlock, query) {
@@ -201,6 +191,8 @@ export async function decorate(container, data, query) {
       if (query) {
         if (isMatchingBlock(pageBlock, query)) {
           blockVariant.setAttribute('expanded', true);
+        } else {
+          blockVariant.removeChild(childNavItem);
         }
       }
     });

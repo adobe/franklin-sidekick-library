@@ -26,7 +26,7 @@ export default merge(baseConfig, {
   input: 'index.html',
   output: {
     format: 'es',
-    entryFileNames: 'library.js',
+    entryFileNames: 'index.js',
     chunkFileNames: '[name].js',
     exports: 'named',
     sourcemap: true,

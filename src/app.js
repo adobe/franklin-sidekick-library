@@ -247,7 +247,7 @@ class FranklinLibrary extends LitElement {
           <div class="container">
             ${this.configured ? html`
               <library-list></library-list>
-              <plugin-renderer appStore=${AppModel.appStore}></plugin-renderer>            
+              <plugin-renderer></plugin-renderer>            
             ` : ''}
           </div>
           <div class="toast-container"></div>

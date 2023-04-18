@@ -13,8 +13,6 @@
 import merge from 'deepmerge';
 import { createBasicConfig } from '@open-wc/building-rollup';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import html from '@web/rollup-plugin-html';
 import { importMetaAssets } from '@web/rollup-plugin-import-meta-assets';
 import esbuild from 'rollup-plugin-esbuild';
 import copy from 'rollup-plugin-copy';
@@ -23,7 +21,7 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 const baseConfig = createBasicConfig();
 
 export default merge(baseConfig, {
-  input: 'index.html',
+  input: 'src/app.js',
   output: {
     format: 'es',
     entryFileNames: 'index.js',
@@ -31,12 +29,8 @@ export default merge(baseConfig, {
     exports: 'named',
     sourcemap: true,
   },
-  preserveEntrySignatures: false,
+  preserveEntrySignatures: true,
   plugins: [
-    /** Enable using HTML as rollup entrypoint */
-    html({
-      minify: false,
-    }),
     /** Resolve bare module imports */
     nodeResolve(),
     /** Minify JS, compile JS to a lower language target */
@@ -54,25 +48,5 @@ export default merge(baseConfig, {
     }),
     /** Bundle assets references via import.meta.url */
     importMetaAssets(),
-    /** Minify html and css tagged template literals */
-    babel({
-      plugins: [
-        [
-          require.resolve('babel-plugin-template-html-minifier'),
-          {
-            modules: { lit: ['html', { name: 'css', encapsulation: 'style' }] },
-            failOnError: false,
-            strictCSS: true,
-            htmlMinifier: {
-              collapseWhitespace: true,
-              conservativeCollapse: true,
-              removeComments: true,
-              caseSensitive: true,
-              minifyCSS: true,
-            },
-          },
-        ],
-      ],
-    }),
   ],
 });

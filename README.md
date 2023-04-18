@@ -1,26 +1,18 @@
 # Sidekick Library
-
-This repository contains the Library plugin for the [franklin sidekick](https://github.com/adobe/helix-sidekick-extension).
-
-The library simplifies authoring workflows for users by
-
-* Providing an extended surface for the franklin sidekick to display plugins that aid authors when writing content.
-* Includes a `blocks` plugin that aggregates all the blocks (and there variations) for a franklin site into a single spot for authors to select from.
-* It can aggregate libraries across multiple inherited projects into a single library.
-
-## Status
 [![codecov](https://img.shields.io/codecov/c/github/dylandepass/franklin-library.svg)](https://codecov.io/gh/dylandepass/franklin-library)
 [![GitHub license](https://img.shields.io/github/license/dylandepass/franklin-library.svg)](https://github.com/dylandepass/franklin-library/blob/master/LICENSE.txt)
 [![GitHub issues](https://img.shields.io/github/issues/dylandepass/franklin-library.svg)](https://github.com/dylandepass/franklin-library/issues)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-## How does it work?
+This repository contains the Library plugin for the [franklin sidekick](https://github.com/adobe/helix-sidekick-extension).
 
-The library can aggregate different data into a single application to aid authors when writing content for Franklin. It comes with a single `blocks` plugin that displays a list of all blocks and block variations to authors in an intuitive manner and removes the need for authors to have to remember or search for every variation of a block.
+## What is the Sidekick Library?
 
-The library appication itself and the blocks plugin are hosted on `hlx.live` and is maintained by the franklin team. Customers are free to write their own plugins for the library or even write their own `blocks` plugin.
+The Sidekick Library is a tool that can aggregate different data into a single application to aid authors when writing content for Franklin. It comes with a blocks plugin that displays a list of all blocks and block variations to authors in an intuitive manner, removing the need for authors to remember or search for every variation of a block.
 
-To intergrate with the sidekick library, customers need to create a spreadsheet that will define the plugins used along with any data required by the plugin to render.
+The Sidekick Library and the blocks plugin are hosted on `hlx.live` and maintained by the Franklin team. Customers are free to write their own plugins for the library or even write their own blocks plugin.
+
+To integrate with the Sidekick Library, customers need to create a spreadsheet that will define the plugins used along with any data required by the plugin to render.
 
 ## How to use the Sidekick Library?
 
@@ -28,7 +20,7 @@ The sidekick library is an application hosted on `hlx.live` that customers can a
 
 ```json
 {
-  "project": "Boilerplate with Library",
+  "project": "Example",
   "plugins": [
     {
       "id": "library",
@@ -43,7 +35,7 @@ The sidekick library is an application hosted on `hlx.live` that customers can a
 }
 ```
 
-The library is configured via the url parameters
+The library is configured via the url parameters:
 
 | Parameter Name | Value                            | Description                                                                                                                     | Required |
 |----------------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
@@ -53,47 +45,42 @@ The library is configured via the url parameters
 
 > The sidekick config must be checked into the `main` branch in order to for the plugin to appear in the sidekick.
 
-### Library sheet setup
+### Library Sheet Setup
 
-#### Create a directory to store all of the library content
+1. Create a directory in sharepoint or gdrive (under the mountpoint) where you want to store the content for the library. For example, create a directory called `sidekick` (or any other name) in the root of the mountpoint. For the next steps it will be assumed the directory is called `sidekick`.
+2. In order to use the Sidekick Library, you need to create a workbook (an Excel file) in the sidekick directory called `library` (or any other name). Each sheet in the workbook represents a plugin that will be loaded by the Sidekick Library. The name of the sheet determines the name of the plugin that will be loaded. Any content contained in the sheet will be passed to the corresponding plugin. This allows you to customize the behavior of the Sidekick Library to suit your needs.
+3. When you create a sheet in the `library` workbook, you should name it according to the plugin you want to load, with `helix-` prepended to the name. For example, if you want to load a plugin called `tags`, you would create a sheet named `helix-tags`.
 
-In the root of the sites mountpoint, create a directory called `sidekick` (or any other name). For these steps it will be assumed the directory is called `sidekick`.
+Since this sheet will be loaded by the Sidekick Library from the `hlx.live` origin, the `access-control-allow-origin` header must be returned with the sheet. You will also need to return this header on any content loaded by the sidekick library. So it's best to set this header on the `sidekick` directory and any of it's child directories. See [Custom Reponse Headers](https://www.hlx.live/docs/custom-headers) for more info how to set this up.
 
-#### Create the library workbook
+### Block library setup
 
-Create a workbook in the `sidekick` directory called `library`. Each sheet in the workbook is a plugin that will be loaded by the library. The name of the plugin to be loaded is determined by the name of the sheet. Any content contained in the sheet will be passed to the plugin.
-
-> The sheet name needs to be prepended with `helix-` (example `helix-blocks`). 
-
-Since this sheet will be loaded by the sidekick library from the `hlx.live` origin, the `access-control-allow-origin` header must be returned with the sheet. See [Custom Reponse Headers](https://www.hlx.live/docs/custom-headers) for more info how to set this up.
-
-## Block library setup
-
-1. Create a document called `columns` and inside the directory created above and define all the variations of the columns block ([Example](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/columns?view-doc-source=true))
-2. Preview the `columns` document.
-3. In the library workbook, create a sheet in the library workbook called `helix-blocks`.
-4. In the `helix-blocks` sheet, create two columns, `name` and `path`.
-5. For each block set you want to appear in the block library, create a new row with the `name` of the block and the `path` to the document containing all the block variations.
-6. Preview and publish the `library` sheet.
+1. Create a directory inside the `sidekick` directory where you will store all the block variations. For example, you could create a directory called `blocks` inside `sidekick`.
+2. Inside the `blocks` directory, create a Word document called `columns` and provide examples of all the variations of the `columns` block ([Example](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/columns?view-doc-source=true)).
+3. Preview the `columns` document.
+4. Within the library workbook, add a new sheet and name it helix-blocks.
+5. Inside the helix-blocks sheet, create two columns named name and path.
+6. To include a block set in the block library, add a new row to the helix-blocks sheet and specify the name of the block in the first column and the absolute path to the document that defines the block variations in the second column. For instance, if you want to add a columns block, you could create a row with the name "Columns" and the path "https://main--mysite--myowner.hlx.page/sidekick/blocks/columns".
+7. Preview and publish the `library` workbook.
 
 ## Demo
-[Franklin Library](https://main--boilerplate-with-library--dylandepass.hlx.page/library/library?suppressFrame=true)
+[Franklin Library](https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library?base=https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json)
 
 ## Development
 
-### Build
+### Install Dependencies
 
 ```bash
 $ npm install
 ```
 
-### Start
+### Start Development Server
 
 ```bash
 $ npm run start
 ```
 
-### Test
+### Run Tests
 
 ```bash
 $ npm test

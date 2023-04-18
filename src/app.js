@@ -45,7 +45,7 @@ import { loadLibrary } from './utils/library.js';
 
 export { PLUGIN_EVENTS } from './events/events.js';
 
-class FranklinLibrary extends LitElement {
+class SidekickLibrary extends LitElement {
   static properties = {
     theme: undefined,
   };
@@ -257,4 +257,4 @@ class FranklinLibrary extends LitElement {
   }
 }
 
-customElements.define('franklin-library', FranklinLibrary);
+customElements.define('sidekick-library', SidekickLibrary);

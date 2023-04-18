@@ -31,18 +31,18 @@ describe('FranklinLibrary', () => {
     window.libraryDev = true;
   });
   it('renders container', async () => {
-    const element = await fixture(html`<franklin-library></franklin-library>`);
+    const element = await fixture(html`<sidekick-library></sidekick-library>`);
     const container = element.shadowRoot.querySelector('.container');
     await expect(container).to.not.be.null;
   });
 
   it('passes the a11y audit', async () => {
-    const element = await fixture(html`<franklin-library></franklin-library>`);
+    const element = await fixture(html`<sidekick-library></sidekick-library>`);
     await expect(element).shadowDom.to.be.accessible();
   });
 
   it('error message when no config', async () => {
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
 
     await fixture(library);
 
@@ -53,7 +53,7 @@ describe('FranklinLibrary', () => {
   });
 
   it('loads single sheet', async () => {
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
     library.config = {
       base: singleSheetPath,
     };
@@ -76,7 +76,7 @@ describe('FranklinLibrary', () => {
     const searchStub = stub(URLSearchParams.prototype, 'entries');
     searchStub.onCall(0).returns(urlParams);
 
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
 
     await fixture(library);
 
@@ -99,7 +99,7 @@ describe('FranklinLibrary', () => {
     const searchStub = stub(URLSearchParams.prototype, 'entries');
     searchStub.onCall(0).returns(urlParams);
 
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
 
     await fixture(library);
 
@@ -115,7 +115,7 @@ describe('FranklinLibrary', () => {
   });
 
   it('loads multi sheet', async () => {
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
     library.config = {
       base: multiSheetPath,
     };
@@ -133,7 +133,7 @@ describe('FranklinLibrary', () => {
   });
 
   it('loads extended library', async () => {
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
     library.config = {
       base: multiSheetPath,
       extends: unknownPluginPath,
@@ -152,7 +152,7 @@ describe('FranklinLibrary', () => {
   });
 
   it('unknown plugin', async () => {
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
     library.config = {
       base: unknownPluginPath,
     };
@@ -175,7 +175,7 @@ describe('FranklinLibrary', () => {
   });
 
   it('unload plugin', async () => {
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
     library.config = {
       base: singleSheetPath,
     };
@@ -217,7 +217,7 @@ describe('FranklinLibrary', () => {
   });
 
   it('should search', async () => {
-    const library = document.createElement('franklin-library');
+    const library = document.createElement('sidekick-library');
     library.config = {
       base: multiSheetPath,
     };

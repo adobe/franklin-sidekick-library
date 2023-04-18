@@ -11,14 +11,24 @@
  */
 
 import { EventBus } from '../events/eventbus.js';
-import { APP_EVENTS } from '../events/events.js';
+import { APP_EVENTS, PLUGIN_EVENTS } from '../events/events.js';
 
+/**
+ * Fetches a library JSON from a URL
+ * @param {String} href The url to the library JSON
+ * @returns The library JSON
+ */
 export async function fetchLibrary(href) {
   const resp = await fetch(href);
-  if (!resp.ok) return null;
+  if (!resp.ok) throw new Error('unable to load library JSON');
   return resp.json();
 }
 
+/**
+ * Fetches an extended library (if defined)
+ * @param {String} href The url to the extended library
+ * @returns The extended library JSON
+ */
 export async function getExtendedLibrary(href) {
   if (href) {
     return fetchLibrary(href);
@@ -27,6 +37,12 @@ export async function getExtendedLibrary(href) {
   return Promise.resolve();
 }
 
+/**
+ * Combines a base library and an extended library
+ * @param {Object} base The base library JSON
+ * @param {Object} supplied The extended library JSON
+ * @returns The combined library JSON
+ */
 export async function combineLibraries(base, supplied) {
   const library = {};
 
@@ -55,10 +71,19 @@ export async function combineLibraries(base, supplied) {
   return library;
 }
 
+/**
+ * Are we currently running in dev mode?
+ * @returns True if yes
+ */
 export function isDev() {
   return window.libraryDev;
 }
 
+/**
+ * Loads the provided libraries
+ * @param {AppModel} appModel The app model
+ * @param {Object} config The config data
+ */
 export async function loadLibrary(appModel, config) {
   const { appStore } = appModel;
   let { libraries } = appModel;
@@ -71,7 +96,14 @@ export async function loadLibrary(appModel, config) {
     appStore.libraries = libraries;
     EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.LIBRARY_LOADED));
   } catch (error) {
+    EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, {
+      detail: {
+        variant: 'negative',
+        message: appModel.appStore.localeDict.errorLoadingLibraryJSON,
+      },
+    }));
+
     // eslint-disable-next-line no-console
-    console.error('unable to load library', error);
+    console.error('Unable to load library', error);
   }
 }

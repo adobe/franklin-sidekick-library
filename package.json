@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@spectrum-web-components/action-button": "0.10.14",
+    "@spectrum-web-components/button-group": "^0.10.10",
     "@spectrum-web-components/divider": "0.6.7",
     "@spectrum-web-components/icon": "0.12.9",
     "@spectrum-web-components/icons": "0.9.6",
@@ -42,7 +43,6 @@
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@web/dev-server": "^0.1.34",
     "@web/dev-server-rollup": "^0.4.0",
-    "@web/rollup-plugin-html": "^1.11.0",
     "@web/rollup-plugin-import-meta-assets": "^1.0.7",
     "@web/test-runner": "^0.14.0",
     "babel-plugin-template-html-minifier": "^4.1.0",

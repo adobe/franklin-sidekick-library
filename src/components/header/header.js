@@ -77,6 +77,15 @@ export class Header extends LitElement {
 
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
       this.headerTitle = AppModel.appStore.localeDict.appTitle;
+      this._pluginActive = false;
+      this.searchEnabled = false;
+      this._searchActivated = false;
+
+      const title = this.renderRoot.querySelector('.title');
+      title?.classList.remove('search-active');
+
+      const searchInput = this.renderRoot.querySelector('sp-search');
+      searchInput.value = '';
     });
 
     EventBus.instance.addEventListener(APP_EVENTS.LOCALE_SET, () => {
@@ -85,15 +94,7 @@ export class Header extends LitElement {
   }
 
   onBack() {
-    this._pluginActive = false;
-    this.searchEnabled = false;
-    this._searchActivated = false;
     unloadPlugin(AppModel);
-    const title = this.renderRoot.querySelector('.title');
-    title?.classList.remove('search-active');
-
-    const searchInput = this.renderRoot.querySelector('sp-search');
-    searchInput.value = '';
   }
 
   activateSearch() {

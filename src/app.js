@@ -26,8 +26,11 @@ import '@spectrum-web-components/progress-circle/sp-progress-circle.js';
 import '@spectrum-web-components/illustrated-message/sp-illustrated-message.js';
 import '@spectrum-web-components/icons-workflow/icons/sp-icon-search.js';
 import '@spectrum-web-components/button/sp-button.js';
+import '@spectrum-web-components/button-group/sp-button-group.js';
 import '@spectrum-web-components/icon/sp-icon.js';
 import '@spectrum-web-components/menu/sp-menu.js';
+import '@spectrum-web-components/menu/sp-menu-group.js';
+import '@spectrum-web-components/menu/sp-menu-divider.js';
 import './components/menu-item/menu-item.js';
 import './components/sidenav/sidenav-item.js';
 import './components/header/header.js';
@@ -42,7 +45,7 @@ import { loadLibrary } from './utils/library.js';
 
 export { PLUGIN_EVENTS } from './events/events.js';
 
-export class FranklinLibrary extends LitElement {
+class FranklinLibrary extends LitElement {
   static properties = {
     theme: undefined,
   };
@@ -108,15 +111,14 @@ export class FranklinLibrary extends LitElement {
     }
 
     .toast-container {
-      width: 100%;
       display: flex;
       justify-content: center;
     }
 
     sp-toast {
       position: absolute;
+      width: 90%;
       bottom: 10px;
-      margin: 0 auto;
     }
   `;
 
@@ -172,14 +174,25 @@ export class FranklinLibrary extends LitElement {
       this.theme = e.matches ? 'dark' : 'light';
     });
 
+    EventBus.instance.addEventListener(APP_EVENTS.TOAST, (e) => {
+      const toastContainer = this.renderRoot.querySelector('.toast-container');
+      const toast = createTag('sp-toast', { open: true, variant: e.detail.variant ?? 'positive', timeout: 200 });
+      toast.textContent = e.detail.message ?? 'Done';
+      toastContainer.append(toast);
+
+      toast.addEventListener('close', () => {
+        toastContainer?.removeChild(toast);
+      });
+
+      if (AppModel.appStore.libraries.length === 0) {
+        this.renderIllustratedMessage();
+      }
+    });
+
     EventBus.instance.addEventListener(APP_EVENTS.LOCALE_SET, () => {
       this.requestUpdate();
       if (!this.configured) {
-        const message = createTag('illustrated-message', {
-          heading: AppModel.appStore.localeDict.invalidConfiguration,
-          description: AppModel.appStore.localeDict.invalidConfigurationDescription,
-        });
-        this.renderRoot.querySelector('.container')?.append(message);
+        this.renderIllustratedMessage();
       }
     });
 
@@ -206,13 +219,19 @@ export class FranklinLibrary extends LitElement {
       home?.classList.remove('inset');
       library?.classList.remove('inset');
     });
+  }
 
-    EventBus.instance.addEventListener(APP_EVENTS.TOAST, (e) => {
-      const toastContainer = this.renderRoot.querySelector('.toast-container');
-      const toast = createTag('sp-toast', { open: true, variant: e.detail.variant ?? 'positive', timeout: 200 });
-      toast.textContent = e.detail.message ?? 'Done';
-      toastContainer.append(toast);
+  renderIllustratedMessage() {
+    const {
+      invalidConfiguration,
+      invalidConfigurationDescription,
+    } = AppModel.appStore.localeDict;
+
+    const message = createTag('illustrated-message', {
+      heading: invalidConfiguration,
+      description: invalidConfigurationDescription,
     });
+    this.renderRoot.querySelector('.container')?.append(message);
   }
 
   getTheme() {
@@ -228,7 +247,7 @@ export class FranklinLibrary extends LitElement {
           <div class="container">
             ${this.configured ? html`
               <library-list></library-list>
-              <plugin-renderer></plugin-renderer>            
+              <plugin-renderer appStore=${AppModel.appStore}></plugin-renderer>            
             ` : ''}
           </div>
           <div class="toast-container"></div>

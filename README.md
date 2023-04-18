@@ -63,6 +63,90 @@ Since this sheet will be loaded by the Sidekick Library from the `hlx.live` orig
 6. To include a block set in the block library, add a new row to the helix-blocks sheet and specify the name of the block in the first column and the absolute path to the document that defines the block variations in the second column. For instance, if you want to add a columns block, you could create a row with the name "Columns" and the path "https://main--mysite--myowner.hlx.page/sidekick/blocks/columns".
 7. Preview and publish the `library` workbook.
 
+## Building a Plugin
+
+Developing a plugin is similar to constructing a block in Franklin. Once a user tries to load the plugin, the sidekick library will trigger the `decorate()` method on your plugin. This method receives the container to render the plugin in and any data that included in the plugins sheet.
+
+```js
+/**
+ * Called when a user tries to load the plugin
+ * @param {HTMLElement} container The container to render the plugin in
+ * @param {Object} data The data contained in the plugin sheet
+ * @param {String} query If search is active, the current search query
+ */
+export async function decorate(container, data, query) {
+  // Render your plugin
+}
+```
+
+> The `decorate()` function must be exported from the plugin.
+
+### Plugin default export & search
+
+The default export from a plugin allows plugin authors to set the plugin name that appears in the header when the plugin is loaded and also to enable the search functionality that comes as part of the sidekick library.
+
+```js
+export default {
+  title: 'Tags',
+  searchEnabled: true,
+};
+```
+
+If the `searchEnabled` property is set to true the search icon will appear in the library header when the plugin is loaded. If the users enters a search query this `decorate()` function of the plugin will be called again with the search string passed in the `query` parameter of the `decorate()` function.
+
+### Plugin web components
+
+Plugin authors can utilize a select set of web components from [Spectrum](https://opensource.adobe.com/spectrum-web-components/index.html) that is included by the sidekick library when developing their plugin.
+
+The available components from Spectrum are
+
+| Component              | Documentation Link                                                                           |
+|------------------------|----------------------------------------------------------------------------------------------|
+| sp-tooltip             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/tooltip/)             |
+| sp-sidenav-item        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/sidenav-item/)        |
+| sp-sidenav             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/sidenav/)             |
+| sp-search              | [Docs](https://opensource.adobe.com/spectrum-web-components/components/search/)              |
+| sp-menu-item           | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
+| sp-menu-group          | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
+| sp-menu-divider        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
+| sp-menu                | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
+| sp-illustrated-message | [Docs](https://opensource.adobe.com/spectrum-web-components/components/illustrated-message/) |
+| sp-divider             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/divider/)             |
+| sp-divider             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/divider/)             |
+| sp-button-group        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/button-group/)        |
+| sp-button              | [Docs](https://opensource.adobe.com/spectrum-web-components/components/button/)              |
+| sp-action-button       | [Docs](https://opensource.adobe.com/spectrum-web-components/components/action-button/)       |
+| overlay-trigger        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/overlay-trigger/)     |
+
+### Plugin Events
+
+Plugin authors can dispatch events from their plugin to the sidekick library in order to display a loader or to show a toast message.
+
+#### Toast Messages
+
+```js
+import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/index.js';
+
+export async function decorate(container, data, query) {
+  // Show a toast message
+  container.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST,  { detail: { message: 'Toast Shown!', variant: 'positive | negative' } }))
+}
+```
+
+#### Show and Hide Loader
+
+```js
+import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/index.js';
+
+export async function decorate(container, data, query) {
+  // Show loader
+  container.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.SHOW_LOADER))
+  ...
+  // Hide loader
+  container.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.HIDE_LOADER))
+}
+```
+
 ## Demo
 [Franklin Library](https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library?base=https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json)
 

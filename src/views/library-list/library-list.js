@@ -15,11 +15,10 @@ import { EventBus } from '../../events/eventbus.js';
 import { isDev } from '../../utils/library.js';
 import { capitalize } from '../../utils/dom.js';
 import { APP_EVENTS, PLUGIN_EVENTS } from '../../events/events.js';
-import { loadPlugin } from '../../utils/plugin.js';
+import { loadPlugin, unloadPlugin } from '../../utils/plugin.js';
 
 const plugins = {
   blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : `${AppModel.host}/plugins/blocks/blocks.js`,
-  taxonomy: isDev() ? '../../src/plugins/taxonomy/taxonomy.js' : `${AppModel.host}/plugins/taxonomy/taxonomy.js`,
 };
 
 export class LibraryList extends LitElement {
@@ -53,9 +52,12 @@ export class LibraryList extends LitElement {
         EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, {
           detail: {
             variant: 'negative',
-            message: error.message,
+            message: AppModel.appStore.localeDict.errorLoadingPlugin,
           },
         }));
+
+        unloadPlugin(AppModel);
+
         // eslint-disable-next-line no-console
         console.error(`Error loading plugin ${value}: ${error.message}`);
       }

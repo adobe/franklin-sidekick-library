@@ -1,7 +1,7 @@
-# Sidekick Library
-[![codecov](https://img.shields.io/codecov/c/github/dylandepass/franklin-library.svg)](https://codecov.io/gh/dylandepass/franklin-library)
-[![GitHub license](https://img.shields.io/github/license/dylandepass/franklin-library.svg)](https://github.com/dylandepass/franklin-library/blob/master/LICENSE.txt)
-[![GitHub issues](https://img.shields.io/github/issues/dylandepass/franklin-library.svg)](https://github.com/dylandepass/franklin-library/issues)
+# Franklin Sidekick Library
+[![codecov](https://img.shields.io/codecov/c/github/dylandepass/franklin-sidekick-library.svg)](https://codecov.io/gh/dylandepass/franklin-sidekick-library)
+[![GitHub license](https://img.shields.io/github/license/dylandepass/franklin-sidekick-library.svg)](https://github.com/dylandepass/franklin-sidekick-library/blob/master/LICENSE.txt)
+[![GitHub issues](https://img.shields.io/github/issues/dylandepass/franklin-sidekick-library.svg)](https://github.com/dylandepass/franklin-sidekick-library/issues)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 This repository contains the Library plugin for the [franklin sidekick](https://github.com/adobe/helix-sidekick-extension).
@@ -147,8 +147,13 @@ export async function decorate(container, data, query) {
 }
 ```
 
+### Example plugin
+
+[Tags Plugin](https://github.com/dylandepass/boilerplate-with-library/blob/main/tools/sidekick/plugins/tags/tags.js)
+[Plugin API Example](https://github.com/dylandepass/boilerplate-with-library/blob/main/tools/sidekick/plugins/api-test/api-test.js)
+
 ## Demo
-[Franklin Library](https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library?base=https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json)
+[Franklin Library](https://main--franklin-sidekick-library-host--dylandepass.hlx.live/tools/sidekick/library?base=https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json)
 
 ## Development
 

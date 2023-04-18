@@ -152,6 +152,12 @@ function onPreview(event, path) {
   window.open(path, '_blockpreview');
 }
 
+/**
+ * Called when a user tries to load the plugin
+ * @param {HTMLElement} container The container to render the plugin in
+ * @param {Object} data The data contained in the plugin sheet
+ * @param {String} query If search is active, the current search query
+ */
 export async function decorate(container, data, query) {
   container.dispatchEvent(new CustomEvent('ShowLoader'));
   const sideNav = createTag('sp-sidenav', { variant: 'multilevel', 'data-testid': 'blocks' });
@@ -215,5 +221,4 @@ export async function decorate(container, data, query) {
 export default {
   title: 'Blocks',
   searchEnabled: true,
-  decorate,
 };

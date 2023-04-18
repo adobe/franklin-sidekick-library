@@ -13,19 +13,31 @@
 import { EventBus } from '../events/eventbus.js';
 import { APP_EVENTS } from '../events/events.js';
 
+/**
+ * Loads a plugin into the application
+ * @param {AppModel} appModel The app model
+ * @param {String} name The name of the plugin
+ * @param {String} path The path to the plugin
+ */
 export async function loadPlugin(appModel, name, path) {
   const { appStore } = appModel;
   const importedPlugin = await import(path);
   appStore.pluginData = appStore.libraries[name];
   appStore.activePluginPath = path;
   appStore.activePlugin = importedPlugin.default;
+  appStore.activePluginDecorate = importedPlugin.decorate;
   EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
 }
 
+/**
+ * Unloads a plugin from the application
+ * @param {AppModel} appModel The app model
+ */
 export async function unloadPlugin(appModel) {
   const { appStore } = appModel;
   appStore.activePlugin = undefined;
   appStore.pluginData = undefined;
   appStore.activePluginPath = undefined;
+  appStore.activePluginDecorate = undefined;
   EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_UNLOADED));
 }

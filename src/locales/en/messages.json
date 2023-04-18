@@ -10,5 +10,11 @@
   },
   "invalidConfigurationDescription": {
     "message": "The library is misconfigured"
+  },
+  "errorLoadingPlugin": {
+    "message": "Error loading plugin"
+  },
+  "errorLoadingLibraryJSON": {
+    "message": "Error loading library JSON"
   }
 }

@@ -11,6 +11,14 @@
  */
 
 /* eslint-disable no-param-reassign */
+
+/**
+ * Creates an HTML tag
+ * @param {String} tag The tag to create
+ * @param {Object} attributes The attributes to add to the tag
+ * @param {Element} html An html element to set as it's content
+ * @returns The new element
+ */
 export function createTag(tag, attributes, html) {
   const el = document.createElement(tag);
   if (html) {
@@ -34,11 +42,20 @@ export function createTag(tag, attributes, html) {
   return el;
 }
 
+/**
+ * Copies to the clipboard
+ * @param {Blob} blob The data
+ */
 export function createCopy(blob) {
   const data = [new ClipboardItem({ [blob.type]: blob })];
   navigator.clipboard.write(data);
 }
 
+/**
+ * Parses a metadata block
+ * @param {HTMLElement} el The metadata HTML element
+ * @returns The metadata
+ */
 export const getMetadata = el => [...el.childNodes].reduce((rdx, row) => {
   if (row.children) {
     const key = row.children[0].textContent.trim().toLowerCase();
@@ -50,7 +67,7 @@ export const getMetadata = el => [...el.childNodes].reduce((rdx, row) => {
 }, {});
 
 /**
- * Loads a CSS file.
+ * Loads a CSS file into a shadow DOM
  * @param {string} href The path to the CSS file
  */
 export function loadCSS(href, callback) {
@@ -68,6 +85,11 @@ export function loadCSS(href, callback) {
   }
 }
 
+/**
+ * Capitalizes the first letter of a string
+ * @param {String} str The string
+ * @returns The capitalized string
+ */
 export function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }

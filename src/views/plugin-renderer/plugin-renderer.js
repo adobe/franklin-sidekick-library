@@ -57,12 +57,14 @@ export class PluginRenderer extends LitElement {
       root.addEventListener(PLUGIN_EVENTS.TOAST, this.sendToast);
       root.addEventListener(PLUGIN_EVENTS.HIDE_LOADER, this.hideLoader.bind(this));
 
-      AppModel.appStore.activePlugin.decorate(root, AppModel.appStore.pluginData);
+      AppModel.appStore.activePluginDecorate(root, AppModel.appStore.pluginData);
     });
 
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
       const root = this.renderRoot.querySelector('.plugin-root');
       if (root) {
+        // Hide if left loading
+        this.hideLoader();
         root.remove();
       }
     });
@@ -71,7 +73,7 @@ export class PluginRenderer extends LitElement {
       const root = this.renderRoot.querySelector('.plugin-root');
       if (root) {
         root.innerHTML = '';
-        AppModel.appStore.activePlugin.decorate(
+        AppModel.appStore.activePluginDecorate(
           root,
           AppModel.appStore.pluginData,
           AppModel.appStore.searchQuery,

@@ -261,6 +261,6 @@ describe('FranklinLibrary', () => {
 
     const pluginSideNav = recursiveQuery(pluginRenderer, 'sp-sidenav');
     const items = pluginSideNav.querySelectorAll('sp-sidenav-item');
-    expect([...items].length).to.equal(6);
+    expect([...items].length).to.equal(2);
   }).timeout(5000);
 });

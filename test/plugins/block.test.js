@@ -30,8 +30,8 @@ describe('Blocks Plugin', () => {
       AppModel.appStore.activePlugin = {
         title: 'Blocks',
         searchEnabled: true,
-        decorate: () => {},
       };
+      AppModel.appStore.activePluginDecorate = () => {};
       AppModel.appStore.activePluginPath = '../../src/plugins/blocks/blocks.js';
 
       const pluginLoadedEvent = new CustomEvent(APP_EVENTS.PLUGIN_LOADED);

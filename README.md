@@ -4,7 +4,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/dylandepass/franklin-sidekick-library.svg)](https://github.com/dylandepass/franklin-sidekick-library/issues)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-This repository contains the Library plugin for the [franklin sidekick](https://github.com/adobe/helix-sidekick-extension).
+This repository contains the Library plugin for the [Franklin Sidekick](https://github.com/adobe/helix-sidekick-extension).
+
+[DEMO](https://main--boilerplate-with-library--dylandepass.hlx.page/sidekick/library?suppressFrame=true)
 
 ## What is the Sidekick Library?
 
@@ -61,7 +63,7 @@ Below is an example URL that sets the base libray, and extended library and a cu
 
 The Sidekick library comes with a single `blocks` plugin.
 
-![Blocks plugin Demo](https://i.imgur.com/mWi3ymr.gifv)
+![Blocks plugin Demo](https://i.imgur.com/mWi3ymr.gif)
 
 ### Blocks Plugin Setup
 
@@ -72,6 +74,22 @@ The Sidekick library comes with a single `blocks` plugin.
 5. Inside the helix-blocks sheet, create two columns named name and path.
 6. To include a block set in the block library, add a new row to the helix-blocks sheet and specify the name of the block in the first column and the absolute path to the document that defines the block variations in the second column. For instance, if you want to add a columns block, you could create a row with the name "Columns" and the path "https://main--mysite--myowner.hlx.page/sidekick/blocks/columns".
 7. Preview and publish the `library` workbook.
+
+#### Authoring block names and descriptions.
+
+By default the block name and variation will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label. This can be customized by preceeding the block with an `h2`, when this is done the value fo the `h2` will be used instead. 
+
+If the block is preceeded with a paragraph, that text will be treated as a description of the  block and will appear in as a tooltip on the block item.
+
+Example block with custom name and description
+
+**Content**
+
+![Authored name](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/media_1e460e31cfc2a6f198bae6bc772f4371bd228f493.png?width=2000&format=webply&optimize=medium)
+
+**Display**
+
+![Rendered result](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/media_1b69e1fdc3fb71b453a1ddf22560174deb3093185.png?width=2000&format=webply&optimize=medium)
 
 ## Building a Plugin
 
@@ -93,7 +111,7 @@ export async function decorate(container, data, query) {
 
 ### Plugin default export & search
 
-The default export from a plugin allows plugin authors to set the plugin name that appears in the header when the plugin is loaded and also to enable the search functionality that comes as part of the sidekick library.
+The default export from a plugin allows authors have the ability to customize the plugin name displayed in the header upon loading, as well as activate the search functionality within the sidekick library.
 
 ```js
 export default {
@@ -102,11 +120,11 @@ export default {
 };
 ```
 
-If the `searchEnabled` property is set to true the search icon will appear in the library header when the plugin is loaded. If the users enters a search query this `decorate()` function of the plugin will be called again with the search string passed in the `query` parameter of the `decorate()` function.
+When the `searchEnabled` property is true, the library header will display a search icon upon loading the plugin. If the user initiates a search by entering a query, the `decorate()` function of the plugin will be triggered again, this time with the search string passed in the query parameter of the `decorate()` function.
 
 ### Plugin web components
 
-Plugin authors can utilize a select set of web components from [Spectrum](https://opensource.adobe.com/spectrum-web-components/index.html) that is included by the sidekick library when developing their plugin.
+Plugin authors can utilize a select set of web components from [Spectrum](https://opensource.adobe.com/spectrum-web-components/index.html) when building a custom plugin.
 
 The available components from Spectrum are
 
@@ -129,7 +147,7 @@ The available components from Spectrum are
 
 ### Plugin Events
 
-Plugin authors can dispatch events from their plugin to the sidekick library in order to display a loader or to show a toast message.
+Plugin authors can dispatch events from their plugin to the parent sidekick library in order to display a loader or to show a toast message.
 
 #### Toast Messages
 
@@ -159,6 +177,7 @@ export async function decorate(container, data, query) {
 ### Example plugin
 
 [Tags Plugin](https://github.com/dylandepass/boilerplate-with-library/blob/main/tools/sidekick/plugins/tags/tags.js)
+
 [Plugin API Example](https://github.com/dylandepass/boilerplate-with-library/blob/main/tools/sidekick/plugins/api-test/api-test.js)
 
 ## Demo

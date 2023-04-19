@@ -67,7 +67,7 @@ The sidekick library is populate with your plugins and content using a sheet.
 
 The Sidekick library comes with a single `blocks` plugin.
 
-![Blocks plugin Demo](https://i.imgur.com/mWi3ymr.gif)
+![block-library](https://user-images.githubusercontent.com/3231084/233149458-f56d6b23-abca-4bea-9129-833d3418211f.gif)
 
 ### Blocks Plugin Setup
 

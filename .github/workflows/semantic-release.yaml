@@ -1,0 +1,23 @@
+---
+
+name: Semantic Release
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  release:
+    runs-on: [ubuntu-latest]
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v3
+      - name: GIT USER CONFIG
+        run: |
+          git config user.name GitHub-Actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com # Config user name and email for lerna publish commit
+      - run: npm install          
+      - run: npm run build
+      - run: npm run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

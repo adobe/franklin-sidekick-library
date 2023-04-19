@@ -249,7 +249,7 @@ describe('FranklinLibrary', () => {
     const input = recursiveQuery(library, 'sp-search');
 
     await aTimeout(1000);
-    await simulateTyping(input, 'logos');
+    await simulateTyping(input, 'Authored Name');
     input.dispatchEvent(new Event('input'));
 
     const pluginRenderer = recursiveQuery(library, 'plugin-renderer');

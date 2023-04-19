@@ -47,13 +47,13 @@ describe('Blocks Plugin', () => {
       expect(blocks.length).to.equal(6);
       expect(blocks[0].getAttribute('label')).to.equal('Cards');
       expect(blocks[1].getAttribute('label')).to.equal('cards');
-      expect(blocks[2].getAttribute('label')).to.equal('Cards with Logos');
+      expect(blocks[2].getAttribute('label')).to.equal('Cards (Authored Name)');
     });
 
     it('should expand a block if it matches the query', async () => {
       const mockData = [{ name: 'Cards', path: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards' }];
 
-      await decorate(container, mockData, 'logos');
+      await decorate(container, mockData, 'Authored Name');
       const blocks = container.querySelectorAll('sp-sidenav-item');
       expect(blocks.length).to.equal(2);
       expect(blocks[0].getAttribute('label')).to.equal('Cards');
@@ -75,7 +75,7 @@ describe('Blocks Plugin', () => {
       const eventSpy = sinon.spy();
       const mockData = [{ name: 'Cards', path: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards' }];
 
-      await decorate(container, mockData, 'logos');
+      await decorate(container, mockData, 'Authored Name');
       const blocks = container.querySelectorAll('sp-sidenav-item');
       expect(blocks.length).to.equal(2);
       expect(blocks[0].getAttribute('label')).to.equal('Cards');

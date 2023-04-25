@@ -161,14 +161,17 @@ function onPreview(event, path) {
 export async function decorate(container, data, query) {
   container.dispatchEvent(new CustomEvent('ShowLoader'));
   const sideNav = createTag('sp-sidenav', { variant: 'multilevel', 'data-testid': 'blocks' });
-  for (const block of data) {
+
+  // Create an array of promises for each block
+  const promises = data.map(async (block) => {
     const blockVariant = createTag('sp-sidenav-item', { label: block.name, preview: true });
     sideNav.append(blockVariant);
 
     blockVariant.addEventListener('Preview', e => onPreview(e, block.path));
 
-    const doc = await fetchBlock(block.path);
-    const pageBlocks = doc.body.querySelectorAll('div[class]');
+    const docPromise = fetchBlock(block.path); // Store the promise
+
+    const pageBlocks = (await docPromise).body.querySelectorAll('div[class]');
 
     pageBlocks.forEach((pageBlock) => {
       // don't display the library-metadata block used to set the block search tags
@@ -207,7 +210,12 @@ export async function decorate(container, data, query) {
     if (query && !blockVariant.getAttribute('expanded')) {
       blockVariant.remove();
     }
-  }
+
+    return docPromise; // Return the promise
+  });
+
+  // Wait for all promises to resolve
+  const docs = await Promise.all(promises);
 
   // Show blocks and hide loader
   container.append(sideNav);

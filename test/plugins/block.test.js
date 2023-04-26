@@ -50,6 +50,35 @@ describe('Blocks Plugin', () => {
       expect(blocks[2].getAttribute('label')).to.equal('Cards (Authored Name)');
     });
 
+    it('should render any valid path and ignore any invalid path', async () => {
+      const mockData = [
+        { name: 'Columns', path: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/path-does-not-exist' },
+        { name: 'Cards', path: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards' }];
+
+      await decorate(container, mockData, null);
+
+      const blocks = container.querySelectorAll('sp-sidenav-item');
+      expect(blocks.length).to.equal(6);
+      expect(blocks[0].getAttribute('label')).to.equal('Cards');
+      expect(blocks[1].getAttribute('label')).to.equal('cards');
+      expect(blocks[2].getAttribute('label')).to.equal('Cards (Authored Name)');
+    });
+
+    it('should render a toast & empty results message if loading all blocks failed', async () => {
+      const eventSpy = sinon.spy();
+      const mockData = [{ name: 'Cards', path: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/path-does-not-exist' }];
+
+      container.addEventListener(PLUGIN_EVENTS.TOAST, eventSpy);
+      await decorate(container, mockData, null);
+
+      const blocks = container.querySelectorAll('sp-sidenav-item');
+      expect(blocks.length).to.equal(0);
+
+      expect(eventSpy.calledOnce).to.be.true;
+      container.querySelector('.message-container');
+      expect(container.querySelector('.message-container')).to.be.visible;
+    });
+
     it('should expand a block if it matches the query', async () => {
       const mockData = [{ name: 'Cards', path: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards' }];
 

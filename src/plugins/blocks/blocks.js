@@ -107,12 +107,11 @@ function isMatchingBlock(pageBlock, query) {
   return searchTokens.every(token => tagsString.toLowerCase().includes(token.toLowerCase()));
 }
 
-function renderNoResults() {
+function renderNoResults(message) {
   return /* html */`
     <div class="message-container">
         <sp-illustrated-message
         heading="No results"
-        description="Try another search"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -164,54 +163,65 @@ export async function decorate(container, data, query) {
 
   // Create an array of promises for each block
   const promises = data.map(async (block) => {
-    const blockVariant = createTag('sp-sidenav-item', { label: block.name, preview: true });
-    sideNav.append(blockVariant);
-
-    blockVariant.addEventListener('Preview', e => onPreview(e, block.path));
-
     const docPromise = fetchBlock(block.path); // Store the promise
 
-    const pageBlocks = (await docPromise).body.querySelectorAll('div[class]');
-
-    pageBlocks.forEach((pageBlock) => {
-      // don't display the library-metadata block used to set the block search tags
-      if (pageBlock.className === 'library-metadata') {
-        return;
-      }
-      const blockName = getAuthorName(pageBlock) || getBlockName(pageBlock);
-      const blockDescription = getBlockDescription(pageBlock);
-
-      const childNavItem = createTag('sp-sidenav-item', { label: blockName, 'data-testid': 'item' });
-      blockVariant.append(childNavItem);
-
-      if (blockDescription) {
-        childNavItem.setAttribute('data-info', blockDescription);
+    try {
+      const res = await docPromise;
+      if(!res) {
+        throw new Error(`An error occurred fetching ${block.name}`);
       }
 
-      childNavItem.addEventListener('click', () => {
-        const table = getTable(pageBlock, getBlockName(pageBlock), block.path);
-        const blob = new Blob([table], { type: 'text/html' });
-        createCopy(blob);
+      const pageBlocks = res.body.querySelectorAll('div[class]');
 
-        // Show toast
-        container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
+      const blockVariant = createTag('sp-sidenav-item', { label: block.name, preview: true });
+      sideNav.append(blockVariant);
+
+      blockVariant.addEventListener('Preview', e => onPreview(e, block.path));
+
+      pageBlocks.forEach((pageBlock) => {
+        // don't display the library-metadata block used to set the block search tags
+        if (pageBlock.className === 'library-metadata') {
+          return;
+        }
+        const blockName = getAuthorName(pageBlock) || getBlockName(pageBlock);
+        const blockDescription = getBlockDescription(pageBlock);
+
+        const childNavItem = createTag('sp-sidenav-item', { label: blockName, 'data-testid': 'item' });
+        blockVariant.append(childNavItem);
+
+        if (blockDescription) {
+          childNavItem.setAttribute('data-info', blockDescription);
+        }
+
+        childNavItem.addEventListener('click', () => {
+          const table = getTable(pageBlock, getBlockName(pageBlock), block.path);
+          const blob = new Blob([table], { type: 'text/html' });
+          createCopy(blob);
+
+          // Show toast
+          container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
+        });
+
+        if (query) {
+          if (isMatchingBlock(pageBlock, query)) {
+            blockVariant.setAttribute('expanded', true);
+          } else {
+            blockVariant.removeChild(childNavItem);
+          }
+        }
       });
 
-      if (query) {
-        if (isMatchingBlock(pageBlock, query)) {
-          blockVariant.setAttribute('expanded', true);
-        } else {
-          blockVariant.removeChild(childNavItem);
-        }
+      // Is we are searching and no blockVariants matched, remove the block
+      if (query && !blockVariant.getAttribute('expanded')) {
+        blockVariant.remove();
       }
-    });
 
-    // Is we are searching and no blockVariants matched, remove the block
-    if (query && !blockVariant.getAttribute('expanded')) {
-      blockVariant.remove();
-    }
-
-    return docPromise; // Return the promise
+      return docPromise; // Return the promise
+    } catch(e) {
+      console.error(e.message);
+      console.log('sending toast');
+      container.dispatchEvent(new CustomEvent('Toast', { detail: { message: e.message, variant: 'negative' } }));
+    }   
   });
 
   // Wait for all promises to resolve

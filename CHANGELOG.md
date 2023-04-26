@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.0.0...v1.0.1) (2023-04-26)
+
+
+### Bug Fixes
+
+* demo gif [skip ci] ([fab412a](https://github.com/adobe/franklin-sidekick-library/commit/fab412a234ec1ed714b4289ff6fe960f13ff2c42))
+* updates fixes ([#18](https://github.com/adobe/franklin-sidekick-library/issues/18)) ([51854da](https://github.com/adobe/franklin-sidekick-library/commit/51854da249dc119b1179e3fd7b505bc0c018f936))
+
 # 1.0.0 (2023-04-19)
 
 

@@ -107,7 +107,7 @@ function isMatchingBlock(pageBlock, query) {
   return searchTokens.every(token => tagsString.toLowerCase().includes(token.toLowerCase()));
 }
 
-function renderNoResults(message) {
+function renderNoResults() {
   return /* html */`
     <div class="message-container">
         <sp-illustrated-message
@@ -167,7 +167,7 @@ export async function decorate(container, data, query) {
 
     try {
       const res = await docPromise;
-      if(!res) {
+      if (!res) {
         throw new Error(`An error occurred fetching ${block.name}`);
       }
 
@@ -217,15 +217,15 @@ export async function decorate(container, data, query) {
       }
 
       return docPromise; // Return the promise
-    } catch(e) {
+    } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e.message);
-      console.log('sending toast');
       container.dispatchEvent(new CustomEvent('Toast', { detail: { message: e.message, variant: 'negative' } }));
-    }   
+    }
   });
 
   // Wait for all promises to resolve
-  const docs = await Promise.all(promises);
+  await Promise.all(promises);
 
   // Show blocks and hide loader
   container.append(sideNav);

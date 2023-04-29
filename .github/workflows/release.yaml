@@ -1,5 +1,8 @@
 name: Release (Sidekick Library)
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   release:

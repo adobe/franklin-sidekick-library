@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.1.0...v1.1.1) (2023-05-02)
+
+
+### Bug Fixes
+
+* update host origin to hlx.live ([#20](https://github.com/adobe/franklin-sidekick-library/issues/20)) ([8465176](https://github.com/adobe/franklin-sidekick-library/commit/846517677c37e01591a468e1b92a0b2e20f58751))
+
 # [1.1.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.0.1...v1.1.0) (2023-05-02)
 
 

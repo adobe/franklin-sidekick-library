@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.0.1...v1.1.0) (2023-05-02)
+
+
+### Features
+
+* add release workflow ([#19](https://github.com/adobe/franklin-sidekick-library/issues/19)) ([1665ffb](https://github.com/adobe/franklin-sidekick-library/commit/1665ffb0af1778c3c3bdcf405e29e1d99d9f8fad))
+
 ## [1.0.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.0.0...v1.0.1) (2023-04-26)
 
 

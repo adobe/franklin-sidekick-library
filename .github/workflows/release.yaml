@@ -1,0 +1,40 @@
+name: Release (Sidekick Library)
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: "${{ !contains(github.event.head_commit.message, '[skip ci]') }}"
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm run build
+      - name: Checkout target repo
+        uses: actions/checkout@v3
+        with:
+          repository: adobe/helix-website
+          ref: main
+          path: _target
+      - name: Copy files from source to target repo
+        run: |
+          cp -r dist/* _target/tools/sidekick/library/
+      - name: Create branch commit and pull request in target repo
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: "chore(sidekick library): new release candidate [skip ci]"
+          token: ${{ secrets.PAT }}
+          path: _target
+          base: main
+          branch: sidekick-library-rc
+          branch-suffix: short-commit-hash
+          delete-branch: true
+          title: Sidekick Library RC
+          body: This PR has been auto-generated from https://github.com/adobe/franklin-sidekick-library.

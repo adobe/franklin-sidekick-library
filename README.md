@@ -43,6 +43,10 @@ The Sidekick library comes with a `blocks` plugin.
 6. Next we need to add a row for our `columns` block. Add the name of the block in the first column and the url to the document that defines the block variations in the second column. For instance, if you want to add the `columns` block, you could create a row with the name `Columns` and the path `https://main--mysite--myowner.hlx.page/tools/sidekick/blocks/columns`.
 7. Preview and publish the `library` workbook.
 
+### Example `library.xlsx`
+
+![Library.xlsx](https://github.com/adobe/franklin-sidekick-library/assets/3231084/5f645ab8-cc30-4cd6-932b-94024d01713b)
+
 #### (Optional) Authoring block names and descriptions.
 
 By default the block name and variation will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label. This can be customized by preceeding the block with an `h2`, when this is done the value fo the `h2` will be used instead. 
@@ -74,7 +78,7 @@ The final step is to add the library plugin to the sidekick config file at `tool
       "environments": [ "edit" ],
       "isPalette": true,
       "paletteRect": "top: auto; bottom: 20px; left: 20px; height: 398px; width: 360px;",
-      "url": "https://hlx.live/tools/sidekick/library?base=PATH_TO_LIBRARY_JSON",
+      "url": "https://hlx.live/tools/sidekick/library?base=URL_TO_LIBRARY_JSON",
       "includePaths": [ "**.docx**" ]
     }
   ]
@@ -83,7 +87,7 @@ The final step is to add the library plugin to the sidekick config file at `tool
 
 The `url` property of the plugin configuration is what tells the sidekick where to load the plugin from. In the example above we are telling the sidekick to load the library plugin from `hlx.live` and configuring it using URL parameters.
 
-Change the `PATH_TO_LIBRARY_JSON` to point to the `library` workbook created above. For example, assuming your library is at `https://main--repo1--company.hlx.live/tools/sidekick/library.json` you would set the `url` of the library plugin to `https://hlx.live/tools/sidekick/library?base=https://main--repo1--company.hlx.live/tools/sidekick/library.json`
+Change the `URL_TO_LIBRARY_JSON` to point to the `library` workbook created above. For example, assuming your library is at `https://main--repo1--company.hlx.live/tools/sidekick/library.json` you would set the `url` of the library plugin to `https://hlx.live/tools/sidekick/library?base=https://main--repo1--company.hlx.live/tools/sidekick/library.json`
 
 ### Supported configuration parameters
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
@@ -99,6 +103,10 @@ Below is an example URL that sets the base libray, an extended library and a cus
 > The sidekick config must be checked into the `main` branch in order to for the plugin to appear in the sidekick.
 
 > If the `tools/sidekick/config.json` file does not exist in your github repository, it must be created. For more information on sidekick plugin configuration options, see the [docs](https://github.com/adobe/helix-sidekick-extension/blob/main/docs/API.md#Plugin).
+
+### Limitations
+
+Currently the sidekick library is not able to work with sites behind authentication.
 
 ## Building a Plugin
 

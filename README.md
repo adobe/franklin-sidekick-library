@@ -43,6 +43,10 @@ The Sidekick library comes with a `blocks` plugin.
 6. Next we need to add a row for our `columns` block. Add the name of the block in the first column and the url to the document that defines the block variations in the second column. For instance, if you want to add the `columns` block, you could create a row with the name `Columns` and the path `https://main--mysite--myowner.hlx.page/tools/sidekick/blocks/columns`.
 7. Preview and publish the `library` workbook.
 
+### Example `library.xlsx`
+
+![Library.xlsx](https://github.com/adobe/franklin-sidekick-library/assets/3231084/5f645ab8-cc30-4cd6-932b-94024d01713b)
+
 #### (Optional) Authoring block names and descriptions.
 
 By default the block name and variation will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label. This can be customized by preceeding the block with an `h2`, when this is done the value fo the `h2` will be used instead. 

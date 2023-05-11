@@ -19,7 +19,7 @@ import { APP_EVENTS, PLUGIN_EVENTS } from '../events/events.js';
  * @returns The library JSON
  */
 export async function fetchLibrary(href) {
-  const resp = await fetch(href);
+  const resp = await fetch(href, { credentials: 'include' });
   if (!resp.ok) throw new Error('unable to load library JSON');
   return resp.json();
 }

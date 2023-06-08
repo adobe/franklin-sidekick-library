@@ -21,7 +21,7 @@ const defaultState = {
 };
 
 export default class AppModel {
-  static libraryHost = 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library';
+  static libraryHost = 'https://www.hlx.live/tools/sidekick/library';
 
   static appStore;
 

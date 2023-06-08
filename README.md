@@ -6,7 +6,7 @@
 
 This repository contains the Library plugin for the [Franklin Sidekick](https://github.com/adobe/helix-sidekick-extension).
 
-[DEMO](https://main--boilerplate-with-library--dylandepass.hlx.page/sidekick/library?suppressFrame=true)
+[DEMO](https://main--boilerplate-with-library--dylandepass.hlx.page/tools/sidekick/library.html)
 
 ## What is the Sidekick Library?
 
@@ -32,7 +32,7 @@ The sidekick library is populated with your plugins and plugin content using a s
 
 The Sidekick library comes with a `blocks` plugin.
 
-![block-library](https://user-images.githubusercontent.com/3231084/233149458-f56d6b23-abca-4bea-9129-833d3418211f.gif)
+https://github.com/adobe/franklin-sidekick-library/assets/3231084/648b36b9-c74e-4b6e-9c6f-5ef937f84234
 
 ### Blocks Plugin Setup
 
@@ -55,16 +55,13 @@ By default the block name (with variation) will be used to render the item in th
 
 Example block with custom name and description
 
-TODO
-
 **Content**
 
-![Authored name](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/media_1e460e31cfc2a6f198bae6bc772f4371bd228f493.png?width=2000&format=webply&optimize=medium)
+![Screenshot 2023-06-08 at 1 11 09 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/4c1d08ae-9f0d-4644-a55a-ac457e0132d2)
 
 **Display**
 
-![Rendered result](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/media_1b69e1fdc3fb71b453a1ddf22560174deb3093185.png?width=2000&format=webply&optimize=medium)
-
+![Screenshot 2023-06-08 at 1 13 32 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/fce6f59c-775c-457c-bab5-8b3c85c0efa6)
 
 ## Sidekick plugin setup
 

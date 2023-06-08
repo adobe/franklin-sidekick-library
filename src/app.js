@@ -148,7 +148,7 @@ class SidekickLibrary extends LitElement {
         toastContainer?.removeChild(toast);
       });
 
-      if (AppModel.appStore.context.libraries.length === 0) {
+      if (AppModel.appStore.context.libraries && AppModel.appStore.context.libraries.length === 0) {
         this.renderIllustratedMessage();
       }
     });

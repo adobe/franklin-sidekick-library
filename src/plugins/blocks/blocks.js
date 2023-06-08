@@ -26,6 +26,8 @@ import {
 import {
   createTag,
 } from '../../utils/dom.js';
+import '../../components/block-list/block-list.js';
+import '../../components/block-renderer/block-renderer.js';
 
 /**
  * Renders the scaffolding for the block plugin
@@ -113,7 +115,7 @@ export async function decorate(container, data) {
   const blockList = createTag('block-list');
   listContainer.append(blockList);
 
-  blockList.loadBlocks(data, container);
+  await blockList.loadBlocks(data, container);
 
   blockList.addEventListener('PreviewBlock', (e) => {
     window.open(e.details.path, '_blockpreview');

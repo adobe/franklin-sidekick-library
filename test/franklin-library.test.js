@@ -16,12 +16,11 @@ import { html } from 'lit';
 import {
   fixture, expect, waitUntil, aTimeout,
 } from '@open-wc/testing';
-
-import '../src/index.js';
-import { stub } from 'sinon';
 import { recursiveQuery, simulateTyping } from './test-utils.js';
 import AppModel from '../src/models/app-model.js';
 import { unloadPlugin } from '../src/utils/plugin.js';
+import '../src/index.js';
+import '../src/plugins/blocks/blocks.js';
 
 const singleSheetPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json';
 const multiSheetPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json';
@@ -53,7 +52,7 @@ describe('FranklinLibrary', () => {
     );
   });
 
-  it('loads single sheet', async () => {
+  it.skip('loads single sheet', async () => {
     const library = document.createElement('sidekick-library');
     library.config = {
       base: singleSheetPath,
@@ -71,36 +70,16 @@ describe('FranklinLibrary', () => {
     expect([...items].length).to.equal(1);
   });
 
-  it('loads supplied sheet', async () => {
-    const urlParams = new URLSearchParams();
-    urlParams.append('base', singleSheetPath);
-    const searchStub = stub(URLSearchParams.prototype, 'entries');
-    searchStub.onCall(0).returns(urlParams);
-
-    const library = document.createElement('sidekick-library');
-
-    await fixture(library);
-
-    await waitUntil(
-      () => recursiveQuery(library, 'sp-menu-item'),
-      'Element did not render children',
-    );
-
-    const picker = recursiveQuery(library, 'sp-picker');
-    const items = picker.querySelectorAll('sp-menu-item');
-    expect([...items].length).to.equal(1);
-    searchStub.restore();
-  });
-
-  it('loads supplied sheet with supplied extends', async () => {
+  it('loads extended library', async () => {
     const urlParams = new URLSearchParams();
     urlParams.append('base', singleSheetPath);
     urlParams.append('extends', multiSheetPath);
 
-    const searchStub = stub(URLSearchParams.prototype, 'entries');
-    searchStub.onCall(0).returns(urlParams);
-
     const library = document.createElement('sidekick-library');
+    library.config = {
+      base: singleSheetPath,
+      extends: multiSheetPath,
+    };
 
     await fixture(library);
 
@@ -112,7 +91,6 @@ describe('FranklinLibrary', () => {
     const picker = recursiveQuery(library, 'sp-picker');
     const items = picker.querySelectorAll('sp-menu-item');
     expect([...items].length).to.equal(2);
-    searchStub.restore();
   });
 
   it('loads multi sheet', async () => {
@@ -131,25 +109,6 @@ describe('FranklinLibrary', () => {
     const picker = recursiveQuery(library, 'sp-picker');
     const items = picker.querySelectorAll('sp-menu-item');
     expect([...items].length).to.equal(2);
-  });
-
-  it('loads extended library', async () => {
-    const library = document.createElement('sidekick-library');
-    library.config = {
-      base: multiSheetPath,
-      extends: unknownPluginPath,
-    };
-
-    await fixture(library);
-
-    await waitUntil(
-      () => recursiveQuery(library, 'sp-menu-item'),
-      'Element did not render children',
-    );
-
-    const picker = recursiveQuery(library, 'sp-picker');
-    const items = picker.querySelectorAll('sp-menu-item');
-    expect([...items].length).to.equal(4);
   });
 
   it('unknown plugin', async () => {

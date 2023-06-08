@@ -14,7 +14,7 @@
 
 import {
   createCopy,
-  createTag, nextTick, readBlockConfig, toCamelCase,
+  createTag, readBlockConfig, toCamelCase,
 } from '../../utils/dom.js';
 
 export function getLibraryMetadata(block) {

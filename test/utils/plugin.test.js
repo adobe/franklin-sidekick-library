@@ -12,7 +12,6 @@
 
 import sinon from 'sinon';
 import { expect } from '@open-wc/testing';
-
 import { loadPlugin, unloadPlugin } from '../../src/utils/plugin.js';
 import { APP_EVENTS } from '../../src/events/events.js';
 import { EventBus } from '../../src/events/eventbus.js';
@@ -23,24 +22,29 @@ describe('Plugin Util Tests', () => {
   beforeEach(() => {
     appModel = {
       appStore: {
-        libraries: {
-          myPlugin: {},
-        },
         pluginData: null,
         activePluginPath: null,
         activePlugin: null,
+        context: {
+          baseLibraryOrigin: 'https://main--helix-test-content-onedrive--adobe.hlx.page',
+          blocks: 'http://localhost:8001/src/plugins/blocks/blocks.js',
+          libraries: {
+            blocks: {},
+          },
+        },
+        localeDict: {
+          errorLoadingPlugin: 'Error loading plugin',
+        },
       },
     };
   });
   describe('loadPlugin', () => {
     it('should load the plugin and update appStore correctly', async () => {
       const eventSpy = sinon.spy();
-      const path = '../../src/plugins/blocks/blocks.js';
       const importedPlugin = { default: { title: 'Blocks' } };
       EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, eventSpy);
-      await loadPlugin(appModel, 'blocks', path);
-      expect(appModel.appStore.pluginData).to.equal(appModel.appStore.libraries.blocks);
-      expect(appModel.appStore.activePluginPath).to.equal(path);
+      await loadPlugin(appModel, 'blocks');
+      expect(appModel.appStore.pluginData).to.equal(appModel.appStore.context.libraries.blocks);
       expect(appModel.appStore.activePlugin.title).to.equal(importedPlugin.default.title);
       expect(eventSpy.calledOnce).equals(true);
     });

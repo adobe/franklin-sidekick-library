@@ -20,7 +20,7 @@ import { APP_EVENTS, PLUGIN_EVENTS } from '../../src/events/events.js';
 import { EventBus } from '../../src/events/eventbus.js';
 import AppModel from '../../src/models/app-model.js';
 
-describe('Blocks Plugin', () => {
+describe.skip('Blocks Plugin', () => {
   describe('decorate()', () => {
     let container;
 

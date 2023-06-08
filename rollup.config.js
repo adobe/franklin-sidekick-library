@@ -21,7 +21,7 @@ import sourcemaps from 'rollup-plugin-sourcemaps';
 const baseConfig = createBasicConfig();
 
 export default merge(baseConfig, {
-  input: 'src/app.js',
+  input: 'src/index.js',
   output: {
     format: 'es',
     entryFileNames: 'index.js',
@@ -42,7 +42,8 @@ export default merge(baseConfig, {
     copy({
       targets: [{ src: 'src/plugins/**/*', dest: './dist' },
         { src: 'src/utils/dom.js', dest: './dist' },
-        { src: 'src/locales', dest: './dist' }],
+        { src: 'src/locales', dest: './dist' },
+        { src: 'src/events/events.js', dest: './dist' }],
       // set flatten to false to preserve folder structure
       flatten: false,
     }),

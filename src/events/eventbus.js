@@ -14,6 +14,9 @@
 
 import { EventEmitter } from './eventemitter.js';
 
+/**
+ * The EventBus is a singleton that can be used to communicate between components
+ */
 export class EventBus extends EventEmitter {
   static _instance;
 

@@ -10,27 +10,37 @@
  * governing permissions and limitations under the License.
  */
 import { LitElement, html, css } from 'lit';
-import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-left.js';
-import { EventBus } from '../../events/eventbus.js';
+import { capitalize } from '../../utils/dom.js';
 import AppModel from '../../models/app-model.js';
-import { unloadPlugin } from '../../utils/plugin.js';
+import { EventBus } from '../../events/eventbus.js';
 import { APP_EVENTS } from '../../events/events.js';
+import { loadPlugin, unloadPlugin } from '../../utils/plugin.js';
 
 export class Header extends LitElement {
   static properties = {
-    _searchActivated: { type: Boolean },
-    _pluginActive: { type: Boolean },
-
-    headerTitle: { type: String },
+    searchActivated: { type: Boolean },
+    pluginActive: { type: Boolean },
+    libraries: { type: Array },
     searchEnabled: { type: Boolean },
+    defaultPluginName: { type: String },
   };
 
   static styles = css`
     .search {
       padding: 10px 5px;
       display: grid;
-      grid-template-columns: 38px 1fr 38px;
+      grid-template-columns: 238px 1fr 238px;
       gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .search {
+        grid-template-columns: 40px 1fr 40px;
+      }
+
+      .logo-container span {
+        display: none;
+      }
     }
 
     .search > div {
@@ -39,57 +49,81 @@ export class Header extends LitElement {
       align-items: center;
     }
 
-    .search .title sp-search {
+    .search .middle-bar sp-search {
       display: none;
       width: 100%;
     }
 
-    .search .title.search-active sp-search {
-      display: block;
-      width: 100%;
+    .search .middle-bar sp-picker {
+      padding-top: 7px;
     }
 
-    .search .title.search-active > span {
+    .search .middle-bar.search-active sp-search {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      min-width: 200px;
+    }
+
+    .search .middle-bar.search-active > span {
+      display: none;
+    }
+
+    .search .middle-bar.search-active > sp-picker  {
       display: none;
     }
 
     .logo-container {
+      width: 100%;
       padding-left: 10px;
       height: 32px;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search .tools {
+      display: flex;
+      justify-content: flex-end;
     }
   `;
 
   connectedCallback() {
     super.connectedCallback();
 
+    // Listen for the library to be loaded, set the default plugin (blocks) and load it
+    EventBus.instance.addEventListener(APP_EVENTS.LIBRARY_LOADED, () => {
+      this.libraries = AppModel.appStore.context.libraries;
+      const keys = Object.keys(this.libraries);
+      const defaultLibrary = keys.includes('blocks') ? 'blocks' : keys[0];
+      loadPlugin(AppModel, defaultLibrary);
+    });
+
+    // Listen for a plugin to be loaded
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
       if (AppModel.appStore.activePlugin) {
-        const { title, searchEnabled } = AppModel.appStore.activePlugin;
-        this.headerTitle = title;
+        const { searchEnabled } = AppModel.appStore.activePlugin;
 
         if (searchEnabled) {
           this.searchEnabled = true;
         }
 
-        this._pluginActive = true;
+        this.pluginActive = true;
+        this.defaultPluginName = AppModel.appStore.activePlugin.title.toLowerCase();
       }
     });
 
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
-      this.headerTitle = AppModel.appStore.localeDict.appTitle;
-      this._pluginActive = false;
+      this.pluginActive = false;
       this.searchEnabled = false;
-      this._searchActivated = false;
+      this.searchActivated = false;
 
-      const title = this.renderRoot.querySelector('.title');
-      title?.classList.remove('search-active');
+      const middleBar = this.renderRoot.querySelector('.middle-bar');
+      middleBar?.classList.remove('search-active');
 
       const searchInput = this.renderRoot.querySelector('sp-search');
       searchInput.value = '';
-    });
-
-    EventBus.instance.addEventListener(APP_EVENTS.LOCALE_SET, () => {
-      this.headerTitle = AppModel.appStore.localeDict.appTitle;
     });
   }
 
@@ -98,17 +132,24 @@ export class Header extends LitElement {
   }
 
   activateSearch() {
-    const title = this.renderRoot.querySelector('.title');
+    const middleBar = this.renderRoot.querySelector('.middle-bar');
 
-    this._searchActivated = !this._searchActivated;
-    if (this._searchActivated) {
-      title?.classList.add('search-active');
+    this.searchActivated = !this.searchActivated;
+    if (this.searchActivated) {
+      middleBar?.classList.add('search-active');
     } else {
-      title?.classList.remove('search-active');
+      middleBar?.classList.remove('search-active');
     }
 
     const searchInput = this.renderRoot.querySelector('sp-search');
     searchInput?.focus();
+  }
+
+  async onPluginChange(e) {
+    const { value } = e.target;
+
+    unloadPlugin(AppModel);
+    await loadPlugin(AppModel, value);
   }
 
   onSearch(event) {
@@ -116,37 +157,61 @@ export class Header extends LitElement {
     EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.SEARCH_UPDATED));
   }
 
+  renderLibraries() {
+    if (this.libraries) {
+      const keys = Object.keys(this.libraries);
+      return html`
+        <sp-picker
+          quiet 
+          value=${this.defaultPluginName}
+          size="m" 
+          label="Select Library"
+          @change=${this.onPluginChange}>
+          ${keys.map(key => html`
+            <sp-menu-item
+              value=${key}
+              disclosureArrow="true" 
+              data-testid="library-item">${capitalize(key)}</sp-menu-item>`)}
+        </sp-picker>`;
+    }
+
+    return '';
+  }
+
   render() {
-    return html`<div class="search">
-      <div>
-        ${this._pluginActive ? html`
-              <sp-action-button quiet @click=${this.onBack} id="back-button">
-                <sp-icon-chevron-left slot="icon"></sp-icon-chevron-left>
-              </sp-action-button>
-              ` : html`
-              <div class="logo-container">
-                <sp-icon
-                  label="adobe logo"
-                  size="xxl"
-                  src="data:image/svg+xml;base64,PHN2ZyBpZD0iQWRvYmVFeHBlcmllbmNlQ2xvdWQiIGRhdGEtbmFtZT0iTGF5ZXIgMSIgdmlld0JveD0iLTUgLTUgMjUwIDI0NCIgd2lkdGg9IjI1MCIgaGVpZ2h0PSIyNDQiCiAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCBoZWlnaHQ9IjIzNCIgcng9IjQyLjUiIHdpZHRoPSIyNDAiIGZpbGw9IiNmYTBmMDAiLz4KICA8cGF0aCBkPSJNMTg2LjYxNyAxNzUuOTVoLTI4LjUwNmE2LjI0MyA2LjI0MyAwIDAgMS01Ljg0Ny0zLjc2OWwtMzAuOTQ3LTcyLjM1OWExLjM2NCAxLjM2NCAwIDAgMC0yLjYxMS0uMDM0TDk5LjQyIDE0NS43MzFhMS42MzUgMS42MzUgMCAwIDAgMS41MDYgMi4yNjloMjEuMmEzLjI3IDMuMjcgMCAwIDEgMy4wMSAxLjk5NGw5LjI4MSAyMC42NTVhMy44MTIgMy44MTIgMCAwIDEtMy41MDcgNS4zMDFINTMuNzM0YTMuNTE4IDMuNTE4IDAgMCAxLTMuMjEzLTQuOTA0bDQ5LjA5LTExNi45MDJBNi42MzkgNi42MzkgMCAwIDEgMTA1Ljg0MyA1MGgyOC4zMTRhNi42MjggNi42MjggMCAwIDEgNi4yMzIgNC4xNDRsNDkuNDMgMTE2LjkwMmEzLjUxNyAzLjUxNyAwIDAgMS0zLjIwMiA0LjkwNHoiIGRhdGEtbmFtZT0iMjU2IiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPg=="
-                ></sp-icon>
-              </div>
-            `}
-      </div>
-      <div class="title">
-        <span>${this.headerTitle}</span>
-        <sp-search
-          @input=${this.onSearch}
-          @submit=${e => e.preventDefault()}
-        ></sp-search>
-      </div>
-      <div>
-        ${this._pluginActive && this.searchEnabled ? html`
-          <sp-action-button id="search-button" quiet toggles @click=${this.activateSearch}>
-            <sp-icon-search slot="icon"></sp-icon-search>
-          </sp-action-button>` : ''}
-      </div>
-    </div>`;
+    return html`
+      <div class="search">
+        <div>
+          <div class="logo-container">
+            <sp-icon
+              label="adobe logo"
+              size="xxl"
+              src="data:image/svg+xml;base64,PHN2ZyBpZD0iQWRvYmVFeHBlcmllbmNlQ2xvdWQiIGRhdGEtbmFtZT0iTGF5ZXIgMSIgdmlld0JveD0iLTUgLTUgMjUwIDI0NCIgd2lkdGg9IjI1MCIgaGVpZ2h0PSIyNDQiCiAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCBoZWlnaHQ9IjIzNCIgcng9IjQyLjUiIHdpZHRoPSIyNDAiIGZpbGw9IiNmYTBmMDAiLz4KICA8cGF0aCBkPSJNMTg2LjYxNyAxNzUuOTVoLTI4LjUwNmE2LjI0MyA2LjI0MyAwIDAgMS01Ljg0Ny0zLjc2OWwtMzAuOTQ3LTcyLjM1OWExLjM2NCAxLjM2NCAwIDAgMC0yLjYxMS0uMDM0TDk5LjQyIDE0NS43MzFhMS42MzUgMS42MzUgMCAwIDAgMS41MDYgMi4yNjloMjEuMmEzLjI3IDMuMjcgMCAwIDEgMy4wMSAxLjk5NGw5LjI4MSAyMC42NTVhMy44MTIgMy44MTIgMCAwIDEtMy41MDcgNS4zMDFINTMuNzM0YTMuNTE4IDMuNTE4IDAgMCAxLTMuMjEzLTQuOTA0bDQ5LjA5LTExNi45MDJBNi42MzkgNi42MzkgMCAwIDEgMTA1Ljg0MyA1MGgyOC4zMTRhNi42MjggNi42MjggMCAwIDEgNi4yMzIgNC4xNDRsNDkuNDMgMTE2LjkwMmEzLjUxNyAzLjUxNyAwIDAgMS0zLjIwMiA0LjkwNHoiIGRhdGEtbmFtZT0iMjU2IiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPg==">
+            </sp-icon>
+            <span>${AppModel.appStore.localeDict.appTitle}</span>
+          </div>
+        </div>
+        <div class="middle-bar">
+          ${this.renderLibraries()}
+          <sp-search
+            placeholder=${AppModel.appStore.localeDict.search}
+            @input=${this.onSearch}
+            @submit=${e => e.preventDefault()}>
+          </sp-search>
+        </div>
+        <div class="tools">
+          ${this.pluginActive && this.searchEnabled
+    ? html`
+            <sp-action-button 
+              id="search-button" 
+              quiet 
+              toggles 
+              @click=${this.activateSearch}>
+                <sp-icon-search slot="icon"></sp-icon-search>
+            </sp-action-button>`
+    : ''}
+        </div>
+      </div>`;
   }
 }
 

@@ -9,25 +9,29 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+import { css } from 'lit';
+import { SplitView as SPSplitView } from '@spectrum-web-components/split-view';
 
-import { store } from '../store/store.js';
+export class SplitView extends SPSplitView {
+  static get styles() {
+    return [
+      ...super.styles,
+      css`
+        #gripper {
+            display: none;
+            border-width: 1px;
+        }
 
-const defaultState = {
-  initialized: false,
-  activePlugin: undefined,
-  activePluginPath: undefined,
-  searchQuery: '',
-  context: {},
-  localeDict: {},
-};
+        #splitter {
+            width: 1px;
+        }
 
-export default class AppModel {
-  static libraryHost = 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library';
-
-  static appStore;
-
-  static init() {
-    AppModel.appStore = store(defaultState, 'app');
-    AppModel.appStore.webRoot = window.libraryDev ? './src/' : AppModel.libraryHost;
+        :host([vertical]) #splitter {
+            height: 1px;
+        }
+      `,
+    ];
   }
 }
+
+customElements.define('sp-split-view', SplitView);

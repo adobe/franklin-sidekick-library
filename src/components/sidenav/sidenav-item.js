@@ -12,20 +12,13 @@
 import { html, css } from 'lit';
 import { SideNavItem as SPSideNavItem } from '@spectrum-web-components/sidenav';
 import { ifDefined } from '@spectrum-web-components/base/src/directives.js';
-import '@spectrum-web-components/icons-workflow/icons/sp-icon-copy.js';
-import '@spectrum-web-components/icons-workflow/icons/sp-icon-preview.js';
-import '@spectrum-web-components/icons-workflow/icons/sp-icon-info.js';
-import '@spectrum-web-components/icons-workflow/icons/sp-icon-view-detail.js';
-import '@spectrum-web-components/icon/sp-icon.js';
-import '@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js';
 import { APP_EVENTS } from '../../events/events.js';
 
 export class SideNavItem extends SPSideNavItem {
   static properties = {
+    icon: '',
     disclosureArrow: false,
-    copy: false,
-    preview: false,
-    info: '',
+    action: false,
   };
 
   static get styles() {
@@ -43,19 +36,29 @@ export class SideNavItem extends SPSideNavItem {
         }
 
         #item-link:hover .actions{
+          display: block;
+        }
+
+        :host([expanded]) .disclosureArrow {
+          transform: rotate(90deg);
+        }
+
+        :host(.descendant) {
+          padding-left: 23px;
+        }
+
+        .container {
+          width: 100%;
           display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
       `,
     ];
   }
 
-  get hasActions() {
-    return this.copy || this.preview || this.info;
-  }
-
   connectedCallback() {
     super.connectedCallback();
-    this.info = this.getAttribute('data-info');
   }
 
   onClick() {
@@ -63,9 +66,10 @@ export class SideNavItem extends SPSideNavItem {
     this.selected = false;
   }
 
-  onPreview(e) {
+  onAction(e) {
+    e.preventDefault();
     e.stopPropagation();
-    this.dispatchEvent(new CustomEvent(APP_EVENTS.PREVIEW_CONTENT));
+    this.dispatchEvent(new CustomEvent(APP_EVENTS.ON_ACTION));
   }
 
   render() {
@@ -79,27 +83,20 @@ export class SideNavItem extends SPSideNavItem {
         id="item-link"
         aria-current=${ifDefined(this.selected && this.href ? 'page' : undefined)}
       >
+        ${this.disclosureArrow ? html`<sp-icon-chevron-right class="disclosureArrow" size="s"></sp-icon-chevron-right>` : ''}
         <slot name="icon"></slot>
-        ${this.label}
-        <slot></slot>
-        ${this.disclosureArrow ? html`<sp-icon-chevron-right slot="icon"></sp-icon-chevron-right>` : ''}
-        ${this.hasActions ? html`
-          <div class='actions'>
-            ${this.info ? html`
-              <overlay-trigger placement="left">
-                <sp-tooltip slot="hover-content" variant="info">${this.info}</sp-tooltip>
-                <sp-action-button quiet tip slot="trigger">
-                  <sp-icon-info slot="icon"></sp-icon-info>
+        <div class="container">
+          ${this.label}
+          ${this.action ? html`
+            <div class='actions'>
+              ${this.action ? html`
+                <sp-action-button quiet @click=${this.onAction}>
+                  <slot name="action-icon" slot="icon"></slot>
                 </sp-action-button>
-              </overlay-trigger>
-            ` : ''}
-            ${this.preview ? html`
-              <sp-action-button quiet @click=${this.onPreview}>
-                <sp-icon-preview slot="icon"></sp-icon-preview>
-              </sp-action-button>
-            ` : ''}
-          </div>
-        ` : ''}
+              ` : ''}
+            </div>
+          ` : ''}
+        </div>
       </a>
       ${this.expanded ? html` <slot name="descendant"></slot> ` : html``}
     `;

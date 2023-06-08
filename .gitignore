@@ -17,3 +17,7 @@
 /out-tsc
 
 custom-elements.json
+demo-libraries.md
+
+src/plugins/tags
+src/plugins/api-test

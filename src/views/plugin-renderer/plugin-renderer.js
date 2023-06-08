@@ -88,7 +88,8 @@ export class PluginRenderer extends LitElement {
 
     const href = AppModel.appStore.activePluginPath.replace('.js', '.css');
     styleSheet.setAttribute('href', href);
-    this.renderRoot.prepend(styleSheet);
+    styleSheet.setAttribute('type', 'text/css');
+    this.renderRoot.append(styleSheet);
   }
 
   displayLoader() {

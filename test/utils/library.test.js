@@ -291,14 +291,14 @@ describe('Library Util Tests', () => {
           {
             extended: false,
             name: 'Columns',
-            url: 'http://localhost:8001/library/blocks/columns/columns',
+            url: 'http://localhost:8000/library/blocks/columns/columns',
             path: '/library/blocks/columns/columns',
           },
           {
             extended: false,
             name: 'Cards',
             path: '/library/blocks/cards/cards',
-            url: 'http://localhost:8001/library/blocks/cards/cards',
+            url: 'http://localhost:8000/library/blocks/cards/cards',
           },
         ],
         taxonomy: [
@@ -350,13 +350,13 @@ describe('Library Util Tests', () => {
           {
             name: 'Columns',
             path: '/library/blocks/columns/columns',
-            url: 'http://localhost:8001/library/blocks/columns/columns',
+            url: 'http://localhost:8000/library/blocks/columns/columns',
             extended: false,
           },
           {
             name: 'Cards',
             path: '/library/blocks/cards/cards',
-            url: 'http://localhost:8001/library/blocks/cards/cards',
+            url: 'http://localhost:8000/library/blocks/cards/cards',
             extended: false,
           },
           {

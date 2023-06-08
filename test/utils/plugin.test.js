@@ -24,7 +24,7 @@ describe('Plugin Util Tests', () => {
       appStore: {
         context: {
           baseLibraryOrigin: 'https://main--helix-test-content-onedrive--adobe.hlx.page',
-          blocks: 'http://localhost:8001/src/plugins/blocks/blocks.js',
+          blocks: 'http://localhost:8000/src/plugins/blocks/blocks.js',
           libraries: {
             blocks: {},
           },

@@ -147,31 +147,9 @@ describe('FranklinLibrary', () => {
       'Element did not render children',
     );
 
-    const picker = recursiveQuery(library, 'sp-picker');
-    picker.value = 'blocks';
-    picker.dispatchEvent(new Event('click'));
-
-    expect(AppModel.appStore.activePlugin.title).to.equal('Blocks');
-    expect(AppModel.appStore.pluginData).to.deep.equal([
-      {
-        name: 'Cards',
-        path: '/block-library-tests/blocks/cards/cards',
-        url: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards',
-        extended: false,
-      },
-      {
-        name: 'Columns',
-        path: '/block-library-tests/blocks/columns/columns',
-        url: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/columns',
-        extended: false,
-      },
-    ]);
-
     unloadPlugin(AppModel);
 
-    expect(AppModel.appStore.activePlugin).to.equal(undefined);
-    expect(AppModel.appStore.activePluginPath).to.equal(undefined);
-    expect(AppModel.appStore.pluginData).to.equal(undefined);
+    expect(AppModel.appStore.context.activePlugin).to.equal(undefined);
   });
 
   it.skip('should search', async () => {

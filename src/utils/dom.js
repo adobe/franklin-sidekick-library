@@ -47,8 +47,13 @@ export function createTag(tag, attributes, html) {
  * @param {Blob} blob The data
  */
 export function createCopy(blob) {
-  const data = [new ClipboardItem({ [blob.type]: blob })];
-  navigator.clipboard.write(data);
+  try {
+    const data = [new ClipboardItem({ [blob.type]: blob })];
+    navigator.clipboard.write(data);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Unable to write to clipboard', error);
+  }
 }
 
 /**

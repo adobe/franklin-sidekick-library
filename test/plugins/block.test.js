@@ -16,6 +16,8 @@ import {
   html, fixture, expect,
 } from '@open-wc/testing';
 import '../../src/views/plugin-renderer/plugin-renderer.js';
+import '../../src/components/block-list/block-list.js';
+import '../../src/components/block-renderer/block-renderer.js';
 import sinon from 'sinon';
 import { decorate } from '../../src/plugins/blocks/blocks.js';
 import { APP_EVENTS, PLUGIN_EVENTS } from '../../src/events/events.js';
@@ -29,12 +31,16 @@ describe('Blocks Plugin', () => {
     beforeEach(async () => {
       AppModel.init();
       container = await fixture(html`<plugin-renderer></plugin-renderer>`);
-      AppModel.appStore.activePlugin = {
-        title: 'Blocks',
-        searchEnabled: true,
+      AppModel.appStore.context = {
+        activePlugin: {
+          config: {
+            title: 'Blocks',
+            searchEnabled: true,
+          },
+          decorate: () => {},
+          path: '../../src/plugins/blocks/blocks.js',
+        },
       };
-      AppModel.appStore.activePluginDecorate = () => {};
-      AppModel.appStore.activePluginPath = '../../src/plugins/blocks/blocks.js';
 
       const pluginLoadedEvent = new CustomEvent(APP_EVENTS.PLUGIN_LOADED);
       EventBus.instance.dispatchEvent(pluginLoadedEvent);

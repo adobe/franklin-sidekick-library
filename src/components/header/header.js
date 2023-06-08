@@ -102,15 +102,15 @@ export class Header extends LitElement {
 
     // Listen for a plugin to be loaded
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
-      if (AppModel.appStore.activePlugin) {
-        const { searchEnabled } = AppModel.appStore.activePlugin;
+      if (AppModel.appStore.context.activePlugin) {
+        const { searchEnabled } = AppModel.appStore.context.activePlugin.config;
 
         if (searchEnabled) {
           this.searchEnabled = true;
         }
 
         this.pluginActive = true;
-        this.defaultPluginName = AppModel.appStore.activePlugin.title.toLowerCase();
+        this.defaultPluginName = AppModel.appStore.context.activePlugin.config.title.toLowerCase();
       }
     });
 

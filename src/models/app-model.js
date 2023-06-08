@@ -15,7 +15,6 @@ import { store } from '../store/store.js';
 const defaultState = {
   initialized: false,
   activePlugin: undefined,
-  activePluginPath: undefined,
   searchQuery: '',
   context: {},
   localeDict: {},

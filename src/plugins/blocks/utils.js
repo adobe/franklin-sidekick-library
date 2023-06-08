@@ -14,7 +14,7 @@
 
 import {
   createCopy,
-  createTag, readBlockConfig, toCamelCase,
+  createTag, nextTick, readBlockConfig, toCamelCase,
 } from '../../utils/dom.js';
 
 export function getLibraryMetadata(block) {
@@ -178,6 +178,11 @@ export function copyBlock(block, sectionMetadata) {
 
   if (sectionMetadata) tables.push(sectionMetadata);
 
-  const blob = new Blob(tables, { type: 'text/html' });
-  createCopy(blob);
+  try {
+    const blob = new Blob(tables, { type: 'text/html' });
+    createCopy(blob);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Unable to copy block', error);
+  }
 }

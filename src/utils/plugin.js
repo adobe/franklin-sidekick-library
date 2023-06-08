@@ -41,10 +41,12 @@ export async function loadPlugin(appModel, name) {
   if (pluginPath) {
     try {
       const importedPlugin = await import(pluginPath);
-      appStore.pluginData = appStore.context.libraries[name];
-      appStore.activePluginPath = pluginPath;
-      appStore.activePlugin = importedPlugin.default;
-      appStore.activePluginDecorate = importedPlugin.decorate;
+      context.activePlugin = {
+        config: importedPlugin.default,
+        data: appStore.context.libraries[name],
+        path: pluginPath,
+        decorate: importedPlugin.decorate,
+      };
       EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
     } catch (error) {
       EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, {
@@ -76,9 +78,6 @@ export async function loadPlugin(appModel, name) {
  */
 export async function unloadPlugin(appModel) {
   const { appStore } = appModel;
-  appStore.activePlugin = undefined;
-  appStore.pluginData = undefined;
-  appStore.activePluginPath = undefined;
-  appStore.activePluginDecorate = undefined;
+  appStore.context.activePlugin = undefined;
   EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_UNLOADED));
 }

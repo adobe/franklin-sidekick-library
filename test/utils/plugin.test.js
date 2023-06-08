@@ -22,9 +22,6 @@ describe('Plugin Util Tests', () => {
   beforeEach(() => {
     appModel = {
       appStore: {
-        pluginData: null,
-        activePluginPath: null,
-        activePlugin: null,
         context: {
           baseLibraryOrigin: 'https://main--helix-test-content-onedrive--adobe.hlx.page',
           blocks: 'http://localhost:8001/src/plugins/blocks/blocks.js',
@@ -44,8 +41,10 @@ describe('Plugin Util Tests', () => {
       const importedPlugin = { default: { title: 'Blocks' } };
       EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, eventSpy);
       await loadPlugin(appModel, 'blocks');
-      expect(appModel.appStore.pluginData).to.equal(appModel.appStore.context.libraries.blocks);
-      expect(appModel.appStore.activePlugin.title).to.equal(importedPlugin.default.title);
+      expect(appModel.appStore.context.activePlugin.data)
+        .to.equal(appModel.appStore.context.libraries.blocks);
+      expect(appModel.appStore.context.activePlugin.config.title)
+        .to.equal(importedPlugin.default.title);
       expect(eventSpy.calledOnce).equals(true);
     });
   });
@@ -55,9 +54,7 @@ describe('Plugin Util Tests', () => {
       const eventSpy = sinon.spy();
       EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, eventSpy);
       unloadPlugin(appModel);
-      expect(appModel.appStore.pluginData).equals(undefined);
-      expect(appModel.appStore.activePluginPath).equals(undefined);
-      expect(appModel.appStore.activePlugin).equals(undefined);
+      expect(appModel.appStore.context.activePlugin).equals(undefined);
       expect(eventSpy.calledOnce).equals(true);
     });
   });

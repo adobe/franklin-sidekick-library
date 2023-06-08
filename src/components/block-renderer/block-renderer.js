@@ -25,6 +25,7 @@ export class BlockRenderer extends LitElement {
     blockWrapperHTML: { state: false },
     activeOverlayContent: { state: false },
     selectedContentEditable: { state: false },
+    blockData: { state: false },
     extendedBlock: { state: true, type: Boolean },
   };
 
@@ -215,6 +216,30 @@ export class BlockRenderer extends LitElement {
   }
 
   /**
+   * Returns the block element
+   * @returns {HTMLElement} The block element
+   */
+  getBlockElement() {
+    return this.blockWrapperHTML.querySelector('div[class]');
+  }
+
+  /**
+   * Returns the block wrapper
+   * @returns {HTMLElement} The block wrapper
+   */
+  getBlockWrapper() {
+    return this.blockWrapperHTML;
+  }
+
+  /**
+   * Returns the block data
+   * @returns {HTMLElement} The block data
+   */
+  getBlockData() {
+    return this.blockData;
+  }
+
+  /**
    * Loads the block into the iframe
    * @param {String} blockName The name of the block
    * @param {Object} blockData The block data
@@ -231,7 +256,10 @@ export class BlockRenderer extends LitElement {
     // Store the active block
     this.blockWrapperHTML = blockWrapper;
 
-    const block = this.blockWrapperHTML.querySelector('div[class]');
+    // Store the block data
+    this.blockData = blockData;
+
+    const block = this.getBlockElement();
 
     // Decorate the block with ids
     this.decorateEditableElements(block);

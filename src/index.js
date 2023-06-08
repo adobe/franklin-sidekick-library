@@ -54,4 +54,6 @@ import './components/header/header.js';
 import './components/illustrated-message/illustrated-message.js';
 import './components/generative-text-popover/generative-text-popover.js';
 import './views/plugin-renderer/plugin-renderer.js';
+import './components/block-list/block-list.js';
+import './components/block-renderer/block-renderer.js';
 import './app.js';

@@ -26,8 +26,6 @@ import {
 import {
   createTag,
 } from '../../utils/dom.js';
-import '../../components/block-list/block-list.js';
-import '../../components/block-renderer/block-renderer.js';
 
 /**
  * Renders the scaffolding for the block plugin
@@ -132,7 +130,6 @@ export async function decorate(container, data) {
     const blockElement = blockWrapper.querySelector('div[class]');
     const blockName = getBlockName(blockElement, false);
     const authoredBlockName = sectionLibraryMetadata.name ?? getBlockName(blockElement);
-    const blockNameWithVariant = getBlockName(blockElement, true);
 
     // Pull the description for this block,
     // first from sectionLibraryMetadata and fallback to defaultLibraryMetadata
@@ -173,15 +170,19 @@ export async function decorate(container, data) {
 
     const copyButton = content.querySelector('.copy-button');
     copyButton?.addEventListener('click', () => {
+      const copyElement = blockRenderer.getBlockElement();
+      const copyWrapper = blockRenderer.getBlockWrapper();
+      const copyBlockData = blockRenderer.getBlockData();
+
       const blockTable = getTable(
-        blockRenderer.getBlockElement(),
-        blockNameWithVariant,
-        blockData.url,
+        copyElement,
+        getBlockName(copyElement, true),
+        copyBlockData.url,
       );
 
       // Does the block have section metadata?
       let sectionMetadataTable;
-      const sectionMetadata = blockWrapper.querySelector('.section-metadata');
+      const sectionMetadata = copyWrapper.querySelector('.section-metadata');
       if (sectionMetadata) {
       // Create a table for the section metadata
         sectionMetadataTable = getTable(
@@ -213,12 +214,12 @@ export async function decorate(container, data) {
   });
 
   blockList.addEventListener('CopyBlock', (e) => {
-    const { blockWrapper: wrapper, blockNameWithVariant: name, blockPath: path } = e.detail;
+    const { blockWrapper: wrapper, blockNameWithVariant: name, blockURL } = e.detail;
 
     const blockTable = getTable(
       wrapper.querySelector('div[class]'),
       name,
-      path,
+      blockURL,
     );
 
     // Does the block have section metadata?
@@ -229,7 +230,7 @@ export async function decorate(container, data) {
       sectionMetadataTable = getTable(
         sectionMetadata,
         'section-metadata',
-        path,
+        blockURL,
       );
     }
 

@@ -52,7 +52,7 @@ describe('FranklinLibrary', () => {
     );
   });
 
-  it.skip('loads single sheet', async () => {
+  it('loads single sheet', async () => {
     const library = document.createElement('sidekick-library');
     library.config = {
       base: singleSheetPath,
@@ -71,10 +71,6 @@ describe('FranklinLibrary', () => {
   });
 
   it('loads extended library', async () => {
-    const urlParams = new URLSearchParams();
-    urlParams.append('base', singleSheetPath);
-    urlParams.append('extends', multiSheetPath);
-
     const library = document.createElement('sidekick-library');
     library.config = {
       base: singleSheetPath,

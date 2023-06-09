@@ -1,4 +1,4 @@
-# Franklin Sidekick Library
+# AEM Sidekick Library
 [![codecov](https://img.shields.io/codecov/c/github/adobe/franklin-sidekick-library.svg)](https://codecov.io/gh/adobe/franklin-sidekick-library)
 [![GitHub license](https://img.shields.io/github/license/adobe/franklin-sidekick-library.svg)](https://github.com/adobe/franklin-sidekick-library/blob/master/LICENSE.txt)
 [![GitHub issues](https://img.shields.io/github/issues/adobe/franklin-sidekick-library.svg)](https://github.com/adobe/franklin-sidekick-library/issues)

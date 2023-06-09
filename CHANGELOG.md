@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.1.1...v1.2.0) (2023-06-09)
+
+
+### Features
+
+* Full screen sidekick library ([#25](https://github.com/adobe/franklin-sidekick-library/issues/25)) ([b1feeb6](https://github.com/adobe/franklin-sidekick-library/commit/b1feeb6959075de7b62ee4a538766eb8f9ea65f8))
+
 ## [1.1.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.1.0...v1.1.1) (2023-05-02)
 
 

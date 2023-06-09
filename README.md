@@ -6,7 +6,7 @@
 
 This repository contains the Library plugin for the [Franklin Sidekick](https://github.com/adobe/helix-sidekick-extension).
 
-[DEMO](https://main--boilerplate-with-library--dylandepass.hlx.page/tools/sidekick/library.html)
+[DEMO](https://main--boilerplate-with-library--dylandepass.hlx.live/tools/sidekick/library.html)
 
 ## What is the Sidekick Library?
 
@@ -51,7 +51,7 @@ To generate content for the blocks plugin, you need to prepare a separate Word d
 
 #### (Optional) Authoring block names and descriptions.
 
-By default the block name (with variation) will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label when it’s rendered in the blocks plugin. This can be customized by creating a library metadata section within the same section as the block. Library metadata can also be used to author a description of the block as well.
+By default the block name (with variation) will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label when it’s rendered in the blocks plugin. This can be customized by creating a library metadata section within the same section as the block. Library metadata can also be used to author a description of the block as well as adding `searchTags` to include an alias for the block when using the search feature.
 
 Example block with custom name and description
 

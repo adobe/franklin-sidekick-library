@@ -9,29 +9,29 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+import { css } from 'lit';
+import { SplitView as SPSplitView } from '@spectrum-web-components/split-view';
 
-/* eslint-disable no-underscore-dangle */
+export class SplitView extends SPSplitView {
+  static get styles() {
+    return [
+      ...super.styles,
+      css`
+        #gripper {
+            display: none;
+            border-width: 1px;
+        }
 
-import { EventEmitter } from './eventemitter.js';
+        #splitter {
+            width: 1px;
+        }
 
-/**
- * The EventBus is a singleton that can be used to communicate between components
- */
-export class EventBus extends EventEmitter {
-  static _instance;
-
-  constructor() {
-    super();
-    if (!EventBus._instance) {
-      EventBus._instance = this;
-    }
-    return EventBus._instance;
-  }
-
-  static get instance() {
-    if (!EventBus._instance) {
-      EventBus._instance = new EventBus();
-    }
-    return EventBus._instance;
+        :host([vertical]) #splitter {
+            height: 1px;
+        }
+      `,
+    ];
   }
 }
+
+customElements.define('sp-split-view', SplitView);

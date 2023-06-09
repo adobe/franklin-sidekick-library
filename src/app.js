@@ -9,41 +9,13 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+
 import { LitElement, html, css } from 'lit';
-import '@spectrum-web-components/theme/sp-theme.js';
-import '@spectrum-web-components/theme/theme-dark.js';
-import '@spectrum-web-components/theme/theme-light.js';
-import '@spectrum-web-components/theme/scale-medium.js';
-import '@spectrum-web-components/sidenav/sp-sidenav.js';
-import '@spectrum-web-components/icons/sp-icons-medium.js';
-import '@spectrum-web-components/action-button/sp-action-button.js';
-import '@spectrum-web-components/search/sp-search.js';
-import '@spectrum-web-components/divider/sp-divider.js';
-import '@spectrum-web-components/toast/sp-toast.js';
-import '@spectrum-web-components/tooltip/sp-tooltip.js';
-import '@spectrum-web-components/overlay/overlay-trigger.js';
-import '@spectrum-web-components/progress-circle/sp-progress-circle.js';
-import '@spectrum-web-components/illustrated-message/sp-illustrated-message.js';
-import '@spectrum-web-components/icons-workflow/icons/sp-icon-search.js';
-import '@spectrum-web-components/button/sp-button.js';
-import '@spectrum-web-components/button-group/sp-button-group.js';
-import '@spectrum-web-components/icon/sp-icon.js';
-import '@spectrum-web-components/menu/sp-menu.js';
-import '@spectrum-web-components/menu/sp-menu-group.js';
-import '@spectrum-web-components/menu/sp-menu-divider.js';
-import './components/menu-item/menu-item.js';
-import './components/sidenav/sidenav-item.js';
-import './components/header/header.js';
-import './components/illustrated-message/illustrated-message.js';
-import './views/library-list/library-list.js';
-import './views/plugin-renderer/plugin-renderer.js';
 import AppModel from './models/app-model.js';
 import { EventBus } from './events/eventbus.js';
 import { createTag } from './utils/dom.js';
 import { APP_EVENTS } from './events/events.js';
 import { loadLibrary } from './utils/library.js';
-
-export { PLUGIN_EVENTS } from './events/events.js';
 
 class SidekickLibrary extends LitElement {
   static properties = {
@@ -55,12 +27,14 @@ class SidekickLibrary extends LitElement {
       box-sizing: border-box;
     }
 
+    sp-theme {
+      height: 100%;
+    }
+
     main {
       background-color: var(--spectrum-global-color-gray-100);
       color: var(--spectrum-global-color-gray-800);
       height: 100%;
-      max-width: 360px;
-      height: 364px;
       overflow: hidden;
       position: relative;
       display: flex;
@@ -82,43 +56,33 @@ class SidekickLibrary extends LitElement {
       width: 100%;
     }
 
-    library-list {
-      width: 100%;
-      padding: 5px;
-      padding-top: 0;
-      transition: transform 0.2s ease-in-out;
-      position: absolute;
-    }
-
-    library-list.inset {
-      transform: translateX(-360px);
-    }
-
     plugin-renderer {
-      transform: translateX(360px);
+      width: 100%;
       list-style: none;
-      padding: 0;
-      margin: 0;
-      position: absolute;
-      inset: 0;
       transition: transform 0.2s ease-in-out;
-      visibility: hidden;
-    }
-
-    plugin-renderer.inset {
-      transform: translateX(0);
-      visibility: visible;
     }
 
     .toast-container {
       display: flex;
       justify-content: center;
+      z-index: 100;
+    }
+
+
+    .toast-container sp-toast {
+      max-width: 600px;
+      min-width: 200px;
+      margin: 0 auto;
     }
 
     sp-toast {
       position: absolute;
       width: 90%;
       bottom: 10px;
+    }
+
+    sp-split-view {
+      height: 100%;
     }
   `;
 
@@ -184,7 +148,7 @@ class SidekickLibrary extends LitElement {
         toastContainer?.removeChild(toast);
       });
 
-      if (AppModel.appStore.libraries.length === 0) {
+      if (AppModel.appStore.context.libraries && AppModel.appStore.context.libraries.length === 0) {
         this.renderIllustratedMessage();
       }
     });
@@ -202,23 +166,10 @@ class SidekickLibrary extends LitElement {
 
     if (!this.configured) return;
 
-    await loadLibrary(
-      AppModel,
-      this.config,
-    );
+    // Set the context
+    AppModel.appStore.context = this.config;
 
-    const home = this.renderRoot.querySelector('library-list');
-    const library = this.renderRoot.querySelector('plugin-renderer');
-
-    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
-      home?.classList.add('inset');
-      library?.classList.add('inset');
-    });
-
-    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
-      home?.classList.remove('inset');
-      library?.classList.remove('inset');
-    });
+    await loadLibrary();
   }
 
   renderIllustratedMessage() {
@@ -246,8 +197,7 @@ class SidekickLibrary extends LitElement {
           <sp-divider size="s"></sp-divider>
           <div class="container">
             ${this.configured ? html`
-              <library-list></library-list>
-              <plugin-renderer></plugin-renderer>            
+              <plugin-renderer></plugin-renderer>     
             ` : ''}
           </div>
           <div class="toast-container"></div>

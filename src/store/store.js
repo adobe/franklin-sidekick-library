@@ -13,16 +13,6 @@
 /* eslint-disable no-underscore-dangle */
 import { EventBus } from '../events/eventbus.js';
 
-export const defaultState = {
-  initialized: false,
-  activePlugin: undefined,
-  activePluginPath: undefined,
-  searchQuery: '',
-  libraries: [],
-  config: {},
-  localeDict: {},
-};
-
 /* eslint-disable no-param-reassign, no-shadow */
 export function store(data = {}, name = 'store') {
   /**

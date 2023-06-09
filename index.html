@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="Description" content="Put your description here.">
+  <meta name="Description" content="AEM Sidekick Library">
   <base href="/">
 
   <style>
@@ -14,17 +14,18 @@
       padding: 0;
       font-family: sans-serif;
       background-color: #ededed;
+      height: 100%;
     }
   </style>
   <title>sidekick-library</title>
 </head>
 
 <body>
-  <script type="module" src="./src/app.js"></script>
+  <script type="module" src="./src/index.js"></script>
   <script>
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json'
+      base: 'https://main--boilerplate-with-library--dylandepass.hlx.page/tools/sidekick/library.json',
     }
 
     window.libraryDev = true;

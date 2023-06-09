@@ -12,6 +12,9 @@
 
 /* eslint-disable no-plusplus */
 
+/**
+ * The EventEmitter is the base class for the EventBus
+ */
 export class EventEmitter {
   listeners = [];
 

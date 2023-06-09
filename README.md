@@ -1,16 +1,16 @@
-# Franklin Sidekick Library
-[![codecov](https://img.shields.io/codecov/c/github/dylandepass/franklin-sidekick-library.svg)](https://codecov.io/gh/dylandepass/franklin-sidekick-library)
-[![GitHub license](https://img.shields.io/github/license/dylandepass/franklin-sidekick-library.svg)](https://github.com/dylandepass/franklin-sidekick-library/blob/master/LICENSE.txt)
-[![GitHub issues](https://img.shields.io/github/issues/dylandepass/franklin-sidekick-library.svg)](https://github.com/dylandepass/franklin-sidekick-library/issues)
+# AEM Sidekick Library
+[![codecov](https://img.shields.io/codecov/c/github/adobe/franklin-sidekick-library.svg)](https://codecov.io/gh/adobe/franklin-sidekick-library)
+[![GitHub license](https://img.shields.io/github/license/adobe/franklin-sidekick-library.svg)](https://github.com/adobe/franklin-sidekick-library/blob/master/LICENSE.txt)
+[![GitHub issues](https://img.shields.io/github/issues/adobe/franklin-sidekick-library.svg)](https://github.com/adobe/franklin-sidekick-library/issues)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 This repository contains the Library plugin for the [Franklin Sidekick](https://github.com/adobe/helix-sidekick-extension).
 
-[DEMO](https://main--boilerplate-with-library--dylandepass.hlx.page/sidekick/library?suppressFrame=true)
+[DEMO](https://main--boilerplate-with-library--dylandepass.hlx.live/tools/sidekick/library.html)
 
 ## What is the Sidekick Library?
 
-The Sidekick Library is a plugin for the Franklin Sidekick that allows developers to build UI based tooling for their franklin content authoring enviroment (office, gdocs). It comes standard with a blocks plugin that can display a list of all blocks to authors in an intuitive manner, removing the need for authors to remember or search for every variation of a block. Developers can also write their own plugins for the library or even write their own blocks plugin.
+The Sidekick Library is an extension for the AEM Sidekick that enables developers to create UI-driven tooling for content authors. It includes a built-in blocks plugin that can display a list of all blocks to authors in an intuitive manner, removing the need for authors to remember or search for every variation of a block. Developers can also write their own plugins for the sidekick library.
 
 ## How to use the Sidekick Library?
 
@@ -32,15 +32,17 @@ The sidekick library is populated with your plugins and plugin content using a s
 
 The Sidekick library comes with a `blocks` plugin.
 
-![block-library](https://user-images.githubusercontent.com/3231084/233149458-f56d6b23-abca-4bea-9129-833d3418211f.gif)
+https://github.com/adobe/franklin-sidekick-library/assets/3231084/648b36b9-c74e-4b6e-9c6f-5ef937f84234
 
 ### Blocks Plugin Setup
 
+To generate content for the blocks plugin, you need to prepare a separate Word document for each block you want to include.
+
 1. Create a directory inside the `/tools/sidekick` directory where you will store all the block variations. For example, you could create a directory called `blocks` inside `/tools/sidekick`.
-2. For this example, let's assume we want to add a block called `columns` inside the `blocks` directory. First create a Word document called `columns` inside the `blocks` directory and provide examples of all the variations of the `columns` block ([Example](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/columns?view-doc-source=true)).
-3. Preview the `columns` document.
-4. Open the library workbook created in the last section, add inside the `helix-blocks` sheet, create two columns named `name` and `path`.
-6. Next we need to add a row for our `columns` block. Add the name of the block in the first column and the url to the document that defines the block variations in the second column. For instance, if you want to add the `columns` block, you could create a row with the name `Columns` and the path `https://main--mysite--myowner.hlx.page/tools/sidekick/blocks/columns`.
+2. For this example, let's assume we want to define all the variations of a block called `columns`. First create a Word document called `columns` inside the `blocks` directory and provide examples of all the variations of the `columns` block. After each variation of the block add in a [section delimiter](https://www.hlx.live/docs/authoring#sections). ([Example](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/columns?view-doc-source=true)).
+3. Preview and publish the `columns` document.
+4. Open the library workbook created in the last section, inside the `helix-blocks` sheet, create two columns named `name` and `path`.
+6. Next we need to add a row for our `columns` block. Add the name of the block in the first column and the url to the document that defines the block variations in the second column. For instance, if you want to add the `columns` block, you could create a row with the name `Columns` and the path `/tools/sidekick/blocks/columns`. In order for the library to work across enviroments (page, live, prod) you should not use an absolute url for the path column.
 7. Preview and publish the `library` workbook.
 
 ### Example `library.xlsx`
@@ -49,24 +51,116 @@ The Sidekick library comes with a `blocks` plugin.
 
 #### (Optional) Authoring block names and descriptions.
 
-By default the block name and variation will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label. This can be customized by preceeding the block with an `h2`, when this is done the value fo the `h2` will be used instead. 
-
-If the block is preceeded with a paragraph, that text will be treated as a description of the  block and will appear in as a tooltip on the block item.
+By default the block name (with variation) will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label when it’s rendered in the blocks plugin. This can be customized by creating a library metadata section within the same section as the block. Library metadata can also be used to author a description of the block as well as adding `searchTags` to include an alias for the block when using the search feature.
 
 Example block with custom name and description
 
 **Content**
 
-![Authored name](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/media_1e460e31cfc2a6f198bae6bc772f4371bd228f493.png?width=2000&format=webply&optimize=medium)
+![Screenshot 2023-06-08 at 1 11 09 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/4c1d08ae-9f0d-4644-a55a-ac457e0132d2)
 
 **Display**
 
-![Rendered result](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/media_1b69e1fdc3fb71b453a1ddf22560174deb3093185.png?width=2000&format=webply&optimize=medium)
-
+![Screenshot 2023-06-08 at 1 13 32 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/fce6f59c-775c-457c-bab5-8b3c85c0efa6)
 
 ## Sidekick plugin setup
 
-The final step is to add the library plugin to the sidekick config file at `tools/sidekick/config.json` in our source code. This config file needs to be created in the code bus and should be checked into github. Do not create this file in sharepoint or gdrive.
+Since the sidekick library is hosted on the same origin as the content, a static HTML page needs to be created to load and configure the content.
+
+1. Create a file called `library.html` in `tools/sidekick/`;
+
+2. Paste the following code in `library.html`.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="Description" content="AEM Sidekick Library" />
+    <meta name="robots" content="noindex" />
+    <base href="/" />
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background-color: #ededed;
+        height: 100%;
+      }
+      
+      helix-sidekick { display: none }
+    </style>
+    <title>Sidekick Library</title>
+  </head>
+
+  <body>
+    <script
+      type="module"
+      src="https://www.hlx.live/tools/sidekick/library/index.js"
+    ></script>
+    <script>
+      const library = document.createElement('sidekick-library')
+      library.config = {
+        base: '/tools/sidekick/library.json',
+      }
+
+      document.body.prepend(library)
+    </script>
+  </body>
+</html>
+```
+
+In the code above we load the sidekick library from `hlx.live` and then create a custom `sidekick-library` element and add it to the page. The `sidekick-library` element accepts a `config` object that is required to configure the sidekick library.
+
+### Supported configuration parameters
+| Parameter Name | Value                                     | Description                                                                                                                     | Required |
+|----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
+| base           | Path to the library               | The base library to be loaded                                                                                                   | true     |
+| extended       | Absolute URL to the extended library      | A library to extend the base library with                                                                                       | false    |
+| {plugin-name}  | Path to the custom plugin js file | For custom plugins, the parameter name should be the name of the plugin and the value should be a URL to the plugin source (js) | false    |
+
+If you have custom plugins for the sidekick library they can be added by including the plugin name in the config and then the path to the plugin. Ideally the plugin code is host same origin as the `library.html` document.
+
+### Custom plugin setup
+
+The example below of defines a tags plugin in the config.
+
+```javascript
+const library = document.createElement('sidekick-library')
+library.config = {
+  base: '/tools/sidekick/library.json',
+  tags: '/tools/sidekick/plugins/tags/tags.js',
+}
+```
+
+### Extended Libraries
+
+In some cases merging two block libraries may be desirable. When an extended library is defined the sidekick library application will merge the base library and the extended library together into a single library list for authors. 
+
+The example below defines a base library and an extended library (on another origin) that will be merged into the base library.
+
+
+```javascript
+const library = document.createElement('sidekick-library')
+library.config = {
+  base: '/tools/sidekick/library.json',
+  extends: 'https://main--repo--owner.hlx.live/tools/sidekick/library.json'
+}
+```
+
+> The `Access-Control-Allow-Origin` headers will need to be set on the `library.json` and blocks of the extended library in order for them to load in the sidekick library. See [Custom HTTP Response Headers](https://www.hlx.live/docs/custom-headers) for more info.
+
+> Due to same-origin policies enforced by browsers on iframes a preview of an extended block cannot be loaded at this time. 
+
+### Sidekick `config.json` setup
+
+Next, in order for the sidekick library to appear in the sidekick a config file needs to be created at `tools/sidekick/config.json`. This config file needs to be created in the code bus and should be checked into github.
 
 ```json
 {
@@ -75,38 +169,19 @@ The final step is to add the library plugin to the sidekick config file at `tool
     {
       "id": "library",
       "title": "Library",
-      "environments": [ "edit" ],
-      "isPalette": true,
-      "paletteRect": "top: auto; bottom: 20px; left: 20px; height: 398px; width: 360px;",
-      "url": "https://hlx.live/tools/sidekick/library?base=URL_TO_LIBRARY_JSON",
-      "includePaths": [ "**.docx**" ]
+      "environments": ["edit"],
+      "url": "/tools/sidekick/library.html",
+      "includePaths": ["**.docx**"]
     }
   ]
 }
 ```
 
-The `url` property of the plugin configuration is what tells the sidekick where to load the plugin from. In the example above we are telling the sidekick to load the library plugin from `hlx.live` and configuring it using URL parameters.
-
-Change the `URL_TO_LIBRARY_JSON` to point to the `library` workbook created above. For example, assuming your library is at `https://main--repo1--company.hlx.live/tools/sidekick/library.json` you would set the `url` of the library plugin to `https://hlx.live/tools/sidekick/library?base=https://main--repo1--company.hlx.live/tools/sidekick/library.json`
-
-### Supported configuration parameters
-| Parameter Name | Value                                     | Description                                                                                                                     | Required |
-|----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
-| base           | Absolute URL to the library               | The base library to be loaded                                                                                                   | true     |
-| extended       | Absolute URL to the extended library      | A library to extend the base library with                                                                                       | false    |
-| {plugin-name}  | Absolute URL to the custom plugin js file | For custom plugins, the parameter name should be the name of the plugin and the value should be a URL to the plugin source (js) | false    |
-
-Below is an example URL that sets the base libray, an extended library and a custom plugin called `tags`.
-
-`https://hlx.live/tools/sidekick/library?base=https://main--repo1--company.hlx.live/tools/sidekick/library.json&extended=https://main--repo2--company.hlx.live/tools/sidekick/library.json&tags=https://main--repo1--company.hlx.live/tools/sidekick/plugins/tags/tags.js`
+The `url` property in the plugin configuration indicates the location from which the sidekick should load the plugin. This should point to the `library.html` file we previously created.
 
 > The sidekick config must be checked into the `main` branch in order to for the plugin to appear in the sidekick.
 
 > If the `tools/sidekick/config.json` file does not exist in your github repository, it must be created. For more information on sidekick plugin configuration options, see the [docs](https://github.com/adobe/helix-sidekick-extension/blob/main/docs/API.md#Plugin).
-
-### Limitations
-
-Currently the sidekick library is not able to work with sites behind authentication.
 
 ## Building a Plugin
 
@@ -143,24 +218,47 @@ When the `searchEnabled` property is true, the library header will display a sea
 
 Plugin authors can utilize a select set of web components from [Spectrum](https://opensource.adobe.com/spectrum-web-components/index.html) when building a custom plugin.
 
-The available components from Spectrum are
+The following components from Spectrum are available
 
 | Component              | Documentation Link                                                                           |
 |------------------------|----------------------------------------------------------------------------------------------|
-| sp-button              | [Docs](https://opensource.adobe.com/spectrum-web-components/components/button/)              |
-| sp-button-group        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/button-group/)        |
-| sp-action-button       | [Docs](https://opensource.adobe.com/spectrum-web-components/components/action-button/)       |
-| sp-sidenav             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/sidenav/)             |
+| sp-tooltip             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/tooltip/)             |
+| sp-toast               | [Docs](https://opensource.adobe.com/spectrum-web-components/components/toast/)               |
+| sp-textfield           | [Docs](https://opensource.adobe.com/spectrum-web-components/components/textfield/)           |
 | sp-sidenav-item        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/sidenav-item/)        |
-| sp-menu                | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
+| sp-sidenav             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/sidenav/)             |
+| sp-search              | [Docs](https://opensource.adobe.com/spectrum-web-components/components/search/)              |
+| sp-progress-circle     | [Docs](https://opensource.adobe.com/spectrum-web-components/components/progress-circle/)     |
+| sp-picker              | [Docs](https://opensource.adobe.com/spectrum-web-components/components/picker/)              |
 | sp-menu-item           | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
 | sp-menu-group          | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
 | sp-menu-divider        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
-| sp-search              | [Docs](https://opensource.adobe.com/spectrum-web-components/components/search/)              |
+| sp-menu                | [Docs](https://opensource.adobe.com/spectrum-web-components/components/menu/)                |
 | sp-illustrated-message | [Docs](https://opensource.adobe.com/spectrum-web-components/components/illustrated-message/) |
 | sp-divider             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/divider/)             |
-| sp-tooltip             | [Docs](https://opensource.adobe.com/spectrum-web-components/components/tooltip/)             |
+| sp-card                | [Docs](https://opensource.adobe.com/spectrum-web-components/components/card/)                |
+| sp-button-group        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/button-group/)        |
+| sp-button              | [Docs](https://opensource.adobe.com/spectrum-web-components/components/button/)              |
+| sp-action-button       | [Docs](https://opensource.adobe.com/spectrum-web-components/components/action-button/)       |
 | overlay-trigger        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/overlay-trigger/)     |
+
+The following icons from Spectrum are also available
+
+| Component              | Documentation Link                                                                           |
+|------------------------|----------------------------------------------------------------------------------------------|
+| sp-icon-search         | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-file-template  | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-file-code      | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-device-phone   | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-device-tablet  | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-device-desktop | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-magic-wand     | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-copy           | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-preview        | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-info           | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-view-detail    | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-chevron-right  | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
+| sp-icon-chevron-left   | [Docs](https://opensource.adobe.com/spectrum-web-components/components/icons-workflow/)      |
 
 ### Plugin Events
 
@@ -169,7 +267,7 @@ Plugin authors can dispatch events from their plugin to the parent sidekick libr
 #### Toast Messages
 
 ```js
-import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/index.js';
+import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show a toast message
@@ -180,7 +278,7 @@ export async function decorate(container, data, query) {
 #### Show and Hide Loader
 
 ```js
-import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/index.js';
+import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show loader
@@ -228,3 +326,4 @@ $ npm run lint
 ```bash
 $ npm run build
 ```
+

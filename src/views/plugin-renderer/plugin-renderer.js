@@ -57,7 +57,13 @@ export class PluginRenderer extends LitElement {
       root.addEventListener(PLUGIN_EVENTS.TOAST, this.sendToast);
       root.addEventListener(PLUGIN_EVENTS.HIDE_LOADER, this.hideLoader.bind(this));
 
-      AppModel.appStore.activePluginDecorate(root, AppModel.appStore.pluginData);
+      const { context } = AppModel.appStore;
+      const { activePlugin } = context;
+      activePlugin.decorate(
+        root,
+        activePlugin.data,
+        AppModel.appStore.searchQuery,
+      );
     });
 
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {
@@ -73,11 +79,9 @@ export class PluginRenderer extends LitElement {
       const root = this.renderRoot.querySelector('.plugin-root');
       if (root) {
         root.innerHTML = '';
-        AppModel.appStore.activePluginDecorate(
-          root,
-          AppModel.appStore.pluginData,
-          AppModel.appStore.searchQuery,
-        );
+        const { context } = AppModel.appStore;
+        const { activePlugin } = context;
+        activePlugin.decorate(root, activePlugin.data, AppModel.appStore.searchQuery);
       }
     });
   }
@@ -86,9 +90,10 @@ export class PluginRenderer extends LitElement {
     const styleSheet = document.createElement('link');
     styleSheet.setAttribute('rel', 'stylesheet');
 
-    const href = AppModel.appStore.activePluginPath.replace('.js', '.css');
+    const href = AppModel.appStore.context.activePlugin.path.replace('.js', '.css');
     styleSheet.setAttribute('href', href);
-    this.renderRoot.prepend(styleSheet);
+    styleSheet.setAttribute('type', 'text/css');
+    this.renderRoot.append(styleSheet);
   }
 
   displayLoader() {

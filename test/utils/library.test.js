@@ -20,6 +20,7 @@ import {
 } from '../../src/utils/library.js';
 import { EventBus } from '../../src/events/eventbus.js';
 import { APP_EVENTS } from '../../src/events/events.js';
+import AppModel from '../../src/models/app-model.js';
 
 const multiSheetResponse = {
   blocks: {
@@ -82,6 +83,7 @@ describe('Library Util Tests', () => {
   });
   afterEach(() => {
     window.fetch = ogFetch;
+    window.libraryDev = false;
   });
   describe('fetchLibrary', () => {
     it('Test library fetch with no supplied library', async () => {
@@ -273,8 +275,10 @@ describe('Library Util Tests', () => {
   describe('loadLibrary', () => {
     it('should fetch the base library and set it in the app store', async () => {
       const eventSpy = sinon.spy();
-      const appModel = { appStore: {}, libraries: {} };
-      const config = { base: 'https://example.com/library.json' };
+      AppModel.init();
+      AppModel.appStore.context = { base: 'https://example.com/library.json' };
+
+      window.libraryDev = true;
 
       window.fetch = () => Promise.resolve({
         ok: true,
@@ -283,17 +287,21 @@ describe('Library Util Tests', () => {
 
       EventBus.instance.addEventListener(APP_EVENTS.LIBRARY_LOADED, eventSpy);
 
-      await loadLibrary(appModel, config);
+      await loadLibrary();
 
-      expect(appModel.appStore.libraries).to.deep.equal({
+      expect(AppModel.appStore.context.libraries).to.deep.equal({
         blocks: [
           {
+            extended: false,
             name: 'Columns',
-            path: 'https://example.hlx.page/library/blocks/columns/columns',
+            url: 'https://example.com/library/blocks/columns/columns',
+            path: '/library/blocks/columns/columns',
           },
           {
+            extended: false,
             name: 'Cards',
-            path: 'https://example.hlx.page/library/blocks/cards/cards',
+            path: '/library/blocks/cards/cards',
+            url: 'https://example.com/library/blocks/cards/cards',
           },
         ],
         taxonomy: [
@@ -311,24 +319,27 @@ describe('Library Util Tests', () => {
 
     it('should fetch the extended library and combine it with the base library if `extends` is defined in the config', async () => {
       const eventSpy = sinon.spy();
-      const appModel = { appStore: {}, libraries: {} };
-      const config = {
+
+      AppModel.init();
+      AppModel.appStore.context = {
         base: 'https://example.com/library.json',
         extends: 'https://example.com/extended-library.json',
       };
+
+      window.libraryDev = true;
 
       const baseLibrary = multiSheetResponse;
       const extendedLibrary = singleSheetResponse;
 
       window.fetch = (url) => {
-        if (url === config.base) {
+        if (url === AppModel.appStore.context.base) {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(baseLibrary),
           });
         }
 
-        if (url === config.extends) {
+        if (url === AppModel.appStore.context.extends) {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(extendedLibrary),
@@ -337,35 +348,36 @@ describe('Library Util Tests', () => {
       };
       EventBus.instance.addEventListener(APP_EVENTS.LIBRARY_LOADED, eventSpy);
 
-      await loadLibrary(appModel, config);
+      await loadLibrary();
 
-      expect(appModel.appStore.libraries).to.deep.equal({
-        taxonomy: [
-          {
-            tag: 'Advisory Services',
-          },
-          {
-            tag: 'Article',
-          },
-        ],
+      expect(AppModel.appStore.context.libraries).to.deep.equal({
         blocks: [
           {
             name: 'Columns',
-            path: 'https://example.hlx.page/library/blocks/columns/columns',
+            path: '/library/blocks/columns/columns',
+            url: 'https://example.com/library/blocks/columns/columns',
+            extended: false,
           },
           {
             name: 'Cards',
-            path: 'https://example.hlx.page/library/blocks/cards/cards',
+            path: '/library/blocks/cards/cards',
+            url: 'https://example.com/library/blocks/cards/cards',
+            extended: false,
           },
           {
             name: 'Columns',
-            path: 'https://main--boilerplate-with-library--dylandepass.hlx.page/library/blocks/columns/columns',
+            path: '/library/blocks/columns/columns',
+            url: 'https://main--boilerplate-with-library--dylandepass.hlx.page/library/blocks/columns/columns',
+            extended: true,
           },
           {
             name: 'Cards',
-            path: 'https://main--boilerplate-with-library--dylandepass.hlx.page/library/blocks/cards/cards',
+            path: '/library/blocks/cards/cards',
+            url: 'https://main--boilerplate-with-library--dylandepass.hlx.page/library/blocks/cards/cards',
+            extended: true,
           },
         ],
+        taxonomy: [{ tag: 'Advisory Services' }, { tag: 'Article' }],
       });
 
       expect(eventSpy.calledOnce).equals(true);

@@ -15,9 +15,9 @@ export const APP_EVENTS = {
   LIBRARY_LOADED: 'LibraryLoaded',
   PLUGIN_LOADED: 'PluginLoaded',
   PLUGIN_UNLOADED: 'PluginUnloaded',
-  PREVIEW_CONTENT: 'Preview',
   LOCALE_SET: 'LocaleSet',
   SEARCH_UPDATED: 'SearchUpdated',
+  ON_ACTION: 'OnAction',
 };
 
 export const PLUGIN_EVENTS = {

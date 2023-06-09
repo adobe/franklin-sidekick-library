@@ -9,18 +9,24 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-import { isDev } from '../utils/library.js';
-import { store, defaultState } from '../store/store.js';
+
+import { store } from '../store/store.js';
+
+const defaultState = {
+  initialized: false,
+  activePlugin: undefined,
+  searchQuery: '',
+  context: {},
+  localeDict: {},
+};
 
 export default class AppModel {
-  static host = 'https://www.hlx.live/tools/sidekick/library';
+  static libraryHost = 'https://www.hlx.live/tools/sidekick/library';
 
   static appStore;
 
-  static libraries;
-
   static init() {
     AppModel.appStore = store(defaultState, 'app');
-    AppModel.appStore.webRoot = isDev() ? './src/' : AppModel.host;
+    AppModel.appStore.webRoot = window.libraryDev ? './src/' : AppModel.libraryHost;
   }
 }

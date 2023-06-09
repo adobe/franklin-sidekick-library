@@ -43,12 +43,16 @@ describe('PluginRenderer', () => {
     AppModel.init();
     const el = await fixture(html`<plugin-renderer></plugin-renderer>`);
     expect(el.shadowRoot.querySelector('.plugin-root')).to.not.exist;
-    AppModel.appStore.activePlugin = {
-      title: 'Blocks',
-      searchEnabled: true,
+    AppModel.appStore.context = {
+      activePlugin: {
+        config: {
+          title: 'Blocks',
+          searchEnabled: true,
+        },
+        decorate: () => {},
+        path: '../../src/plugins/blocks/blocks.js',
+      },
     };
-    AppModel.appStore.activePluginDecorate = () => {};
-    AppModel.appStore.activePluginPath = '../../src/plugins/blocks/blocks.js';
 
     const pluginLoadedEvent = new CustomEvent(APP_EVENTS.PLUGIN_LOADED);
     EventBus.instance.dispatchEvent(pluginLoadedEvent);
@@ -60,10 +64,17 @@ describe('PluginRenderer', () => {
 
     beforeEach(async () => {
       element = await fixture(html`<plugin-renderer></plugin-renderer>`);
-      AppModel.appStore.pluginData = { data: 'test data' };
-      AppModel.appStore.activePlugin = {};
-      AppModel.appStore.activePluginPath = '../../src/plugins/blocks/blocks.js';
-      AppModel.appStore.activePluginDecorate = () => {};
+      AppModel.appStore.context = {
+        activePlugin: {
+          config: {
+            title: 'Blocks',
+            searchEnabled: true,
+          },
+          data: { data: 'test data' },
+          decorate: () => {},
+          path: '../../src/plugins/blocks/blocks.js',
+        },
+      };
     });
 
     afterEach(() => {
@@ -85,7 +96,7 @@ describe('PluginRenderer', () => {
     });
 
     it('should listen for PLUGIN_LOADED event and call decorate method with root element', () => {
-      const decorateSpy = spy(AppModel.appStore, 'activePluginDecorate');
+      const decorateSpy = spy(AppModel.appStore.context.activePlugin, 'decorate');
       EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
       expect(decorateSpy.calledOnce).to.be.true;
     });
@@ -100,7 +111,7 @@ describe('PluginRenderer', () => {
     });
 
     it('should listen for SEARCH_UPDATED event and call decorate method with root element, plugin data, and search query', () => {
-      const decorateSpy = spy(AppModel.appStore, 'activePluginDecorate');
+      const decorateSpy = spy(AppModel.appStore.context.activePlugin, 'decorate');
       EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
       EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.SEARCH_UPDATED));
       expect(decorateSpy.calledTwice).to.be.true;

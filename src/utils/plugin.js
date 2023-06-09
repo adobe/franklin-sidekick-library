@@ -11,7 +11,16 @@
  */
 
 import { EventBus } from '../events/eventbus.js';
-import { APP_EVENTS } from '../events/events.js';
+import { APP_EVENTS, PLUGIN_EVENTS } from '../events/events.js';
+import AppModel from '../models/app-model.js';
+import { isDev } from './library.js';
+import { isPath } from './dom.js';
+
+const plugins = {
+  blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : `${AppModel.libraryHost}/plugins/blocks/blocks.js`,
+  tags: isDev() ? '../../src/plugins/tags/tags.js' : `${AppModel.libraryHost}/plugins/tags/tags.js`,
+  'api-test': isDev() ? '../../src/plugins/api-test/api-test.js' : `${AppModel.libraryHost}/plugins/api-test/api-test.js`,
+};
 
 /**
  * Loads a plugin into the application
@@ -19,14 +28,48 @@ import { APP_EVENTS } from '../events/events.js';
  * @param {String} name The name of the plugin
  * @param {String} path The path to the plugin
  */
-export async function loadPlugin(appModel, name, path) {
+export async function loadPlugin(appModel, name) {
   const { appStore } = appModel;
-  const importedPlugin = await import(path);
-  appStore.pluginData = appStore.libraries[name];
-  appStore.activePluginPath = path;
-  appStore.activePlugin = importedPlugin.default;
-  appStore.activePluginDecorate = importedPlugin.decorate;
-  EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
+  const { context } = appStore;
+
+  let pluginPath = plugins[name];
+  const configPlugin = context[name];
+  if (configPlugin) {
+    pluginPath = isPath(configPlugin) ? `${context.baseLibraryOrigin}${configPlugin}` : configPlugin;
+  }
+
+  if (pluginPath) {
+    try {
+      const importedPlugin = await import(pluginPath);
+      context.activePlugin = {
+        config: importedPlugin.default,
+        data: appStore.context.libraries[name],
+        path: pluginPath,
+        decorate: importedPlugin.decorate,
+      };
+      EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
+    } catch (error) {
+      EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, {
+        detail: {
+          variant: 'negative',
+          message: appModel.appStore.localeDict.errorLoadingPlugin,
+        },
+      }));
+
+      unloadPlugin(appModel);
+
+      // eslint-disable-next-line no-console
+      console.error(`Error loading plugin ${name}: ${error.message}`);
+    }
+    return;
+  }
+
+  EventBus.instance.dispatchEvent(new CustomEvent(PLUGIN_EVENTS.TOAST, {
+    detail: {
+      variant: 'negative',
+      message: appModel.appStore.localeDict.unknownPlugin,
+    },
+  }));
 }
 
 /**
@@ -35,9 +78,6 @@ export async function loadPlugin(appModel, name, path) {
  */
 export async function unloadPlugin(appModel) {
   const { appStore } = appModel;
-  appStore.activePlugin = undefined;
-  appStore.pluginData = undefined;
-  appStore.activePluginPath = undefined;
-  appStore.activePluginDecorate = undefined;
+  appStore.context.activePlugin = undefined;
   EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_UNLOADED));
 }

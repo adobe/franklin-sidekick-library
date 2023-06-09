@@ -39,4 +39,8 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
       flatten: false,
     }),
   ],
+  // Cert can be generated with mkcert
+  // http2: true,
+  // sslKey: './certs/localhost-key.pem',
+  // sslCert: './certs/localhost.pem',
 });

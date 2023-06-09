@@ -10,7 +10,7 @@ This repository contains the Library plugin for the [Franklin Sidekick](https://
 
 ## What is the Sidekick Library?
 
-The Sidekick Library is an extension for the Franklin Sidekick that enables developers to create UI-driven tooling for franklin content authors. It includes a built-in blocks plugin that can display a list of all blocks to authors in an intuitive manner, removing the need for authors to remember or search for every variation of a block. Developers can also write their own plugins for the sidekick library.
+The Sidekick Library is an extension for the AEM Sidekick that enables developers to create UI-driven tooling for content authors. It includes a built-in blocks plugin that can display a list of all blocks to authors in an intuitive manner, removing the need for authors to remember or search for every variation of a block. Developers can also write their own plugins for the sidekick library.
 
 ## How to use the Sidekick Library?
 

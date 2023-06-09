@@ -80,7 +80,7 @@ Since the sidekick library is hosted on the same origin as the content, a static
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <meta name="Description" content="Franklin Sidekick Library" />
+    <meta name="Description" content="AEM Sidekick Library" />
     <meta name="robots" content="noindex" />
     <base href="/" />
 

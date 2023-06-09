@@ -20,11 +20,11 @@ describe('Plugin Util Tests', () => {
   let appModel;
 
   beforeEach(() => {
+    window.libraryDev = true;
     appModel = {
       appStore: {
         context: {
           baseLibraryOrigin: 'https://main--helix-test-content-onedrive--adobe.hlx.page',
-          blocks: 'http://localhost:8000/src/plugins/blocks/blocks.js',
           libraries: {
             blocks: {},
           },
@@ -34,6 +34,9 @@ describe('Plugin Util Tests', () => {
         },
       },
     };
+  });
+  afterEach(() => {
+    window.libraryDev = false;
   });
   describe('loadPlugin', () => {
     it('should load the plugin and update appStore correctly', async () => {

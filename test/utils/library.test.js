@@ -83,6 +83,7 @@ describe('Library Util Tests', () => {
   });
   afterEach(() => {
     window.fetch = ogFetch;
+    window.libraryDev = false;
   });
   describe('fetchLibrary', () => {
     it('Test library fetch with no supplied library', async () => {
@@ -277,6 +278,8 @@ describe('Library Util Tests', () => {
       AppModel.init();
       AppModel.appStore.context = { base: 'https://example.com/library.json' };
 
+      window.libraryDev = true;
+
       window.fetch = () => Promise.resolve({
         ok: true,
         json: () => Promise.resolve(multiSheetResponse),
@@ -291,14 +294,14 @@ describe('Library Util Tests', () => {
           {
             extended: false,
             name: 'Columns',
-            url: 'http://localhost:8000/library/blocks/columns/columns',
+            url: 'https://example.com/library/blocks/columns/columns',
             path: '/library/blocks/columns/columns',
           },
           {
             extended: false,
             name: 'Cards',
             path: '/library/blocks/cards/cards',
-            url: 'http://localhost:8000/library/blocks/cards/cards',
+            url: 'https://example.com/library/blocks/cards/cards',
           },
         ],
         taxonomy: [
@@ -322,6 +325,8 @@ describe('Library Util Tests', () => {
         base: 'https://example.com/library.json',
         extends: 'https://example.com/extended-library.json',
       };
+
+      window.libraryDev = true;
 
       const baseLibrary = multiSheetResponse;
       const extendedLibrary = singleSheetResponse;
@@ -350,13 +355,13 @@ describe('Library Util Tests', () => {
           {
             name: 'Columns',
             path: '/library/blocks/columns/columns',
-            url: 'http://localhost:8000/library/blocks/columns/columns',
+            url: 'https://example.com/library/blocks/columns/columns',
             extended: false,
           },
           {
             name: 'Cards',
             path: '/library/blocks/cards/cards',
-            url: 'http://localhost:8000/library/blocks/cards/cards',
+            url: 'https://example.com/library/blocks/cards/cards',
             extended: false,
           },
           {

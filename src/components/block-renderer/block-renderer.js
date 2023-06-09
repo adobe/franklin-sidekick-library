@@ -314,45 +314,6 @@ export class BlockRenderer extends LitElement {
       [...frame.contentDocument.querySelectorAll('p, strong, li, a, h1, h2, h3, h4, h5, h6')].forEach((el) => {
         // Disable enter key on contenteditable
         el.addEventListener('keydown', (e) => { if (e.keyCode === 13) e.preventDefault(); });
-
-        // Display the generative text popover on focus if the key is set
-        el.addEventListener('focus', (e) => {
-          if (localStorage.getItem('open-ai-key')) {
-            this.selectedContentEditable = e.target;
-            const boundingRect = e.target.getBoundingClientRect();
-
-            this.activeOverlayContent = createTag('generative-text-popover');
-            this.activeOverlayContent.style.top = `${boundingRect.top + boundingRect.height + 63}px`;
-            this.activeOverlayContent.style.left = `${boundingRect.left + boundingRect.width + frame.getBoundingClientRect().left - 36}px`;
-            this.activeOverlayContent.style.position = 'absolute';
-
-            this.activeOverlayContent.addEventListener('generated', (response) => {
-              this.activeOverlayContent.open = false;
-              this.selectedContentEditable.innerHTML = response.detail.generated;
-              this.activeOverlayContent.remove();
-            });
-
-            hostContainer.append(this.activeOverlayContent);
-          }
-        });
-
-        // Remove the popover on blur
-        el.addEventListener('focusout', (e) => {
-          if (e.relatedTarget) {
-            if (this.activeOverlayContent) {
-              hostContainer.querySelector('generative-text-popover')?.remove();
-            }
-          } else {
-            // Have to give time for the focus to change
-            setTimeout(() => {
-              if (document.activeElement?.tagName !== 'SP-TEXTFIELD' || document.activeElement?.tagName === 'SIDEKICK-LIBRARY') {
-                if (this.activeOverlayContent) {
-                  hostContainer.querySelector('generative-text-popover')?.remove();
-                }
-              }
-            }, 700);
-          }
-        });
       });
 
       // Enable drag and drop on images

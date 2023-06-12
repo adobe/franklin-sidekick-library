@@ -23,10 +23,6 @@ The sidekick library is populated with your plugins and plugin content using a s
 1. Start by creating a directory in sharepoint or gdrive where you want to store the content for the library. We recommmending storing the content in `/tools/sidekick` (or any other name) in the root of the mountpoint. The next steps will assume the directory is called `/tools/sidekick`.
 2. Next create a workbook (an Excel file) in the `/tools/sidekick` directory called `library` (or any other name). Each sheet in the workbook represents a plugin that will be loaded by the Sidekick Library. The name of the sheet determines the name of the plugin that will be loaded. Any data contained in the sheet will be passed to the plugin when loaded. The plugin sheet name must be prepended with `helix-`. For example, if you want to load a plugin called `tags`, you would create a sheet named `helix-tags`.
 3. For this tutorial we will create a sheet for our `blocks` plugin. Create a sheet (or rename the default sheet) and call it `helix-blocks` and leave it empty for now.
-3. The `library` workbook will be loaded by the Sidekick Library from the `hlx.live` origin which means the `access-control-allow-origin` header must be returned with the workbook. You will also need to return this header on any other content loaded by the sidekick library. So it's best to set this header on the `/tools/sidekick` directory and any of it's child directories. See [Custom Reponse Headers](https://www.hlx.live/docs/custom-headers) for more info how to set this up.
-
-### Example `.helix/headers.xlsx`
-![headers.xlsx](https://main--boilerplate-with-library--dylandepass.hlx.page/media_1d2afbd105a93fba6227559ed27b9308c5f973a51.png?width=2000&format=webply&optimize=medium)
 
 ## Blocks Plugin
 
@@ -296,6 +292,8 @@ export async function decorate(container, data, query) {
 [Plugin API Example](https://github.com/dylandepass/boilerplate-with-library/blob/main/tools/sidekick/plugins/api-test/api-test.js)
 
 ## Development
+
+If testing a customer configuration locally that does not have the correct CORS headers set you will have to run the in a browser with web security disabled.
 
 ### Install Dependencies
 

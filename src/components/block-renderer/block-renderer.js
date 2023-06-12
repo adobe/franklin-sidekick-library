@@ -278,6 +278,10 @@ export class BlockRenderer extends LitElement {
     const containerDocument = new DOMParser().parseFromString(containerPageMarkup, 'text/html');
     const containerDocumentMain = containerDocument.querySelector('main');
 
+    // Hide the header and footer
+    containerDocument.querySelector('header').style.display = 'none';
+    containerDocument.querySelector('footer').style.display = 'none';
+
     // Replace the children of the main element with our decorated block
     containerDocumentMain.replaceChildren(blockClone);
 
@@ -312,9 +316,17 @@ export class BlockRenderer extends LitElement {
         }
       });
 
-      [...frame.contentDocument.querySelectorAll('p, strong, li, a, h1, h2, h3, h4, h5, h6')].forEach((el) => {
-        // Disable enter key on contenteditable
+      // Disable enter key on contenteditable
+      frame.contentDocument.querySelectorAll('p, strong, li, a, h1, h2, h3, h4, h5, h6').forEach((el) => {
         el.addEventListener('keydown', (e) => { if (e.keyCode === 13) e.preventDefault(); });
+      });
+
+      // Disable click events on buttons or anchor tags
+      frame.contentDocument.querySelectorAll('a, button').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
       });
 
       // Enable drag and drop on images
@@ -339,10 +351,6 @@ export class BlockRenderer extends LitElement {
       };
 
       styleLink.onload = () => {
-        // Once the CSS is loaded, remove the header and footer
-        iframeBody.querySelector('header')?.remove();
-        iframeBody.querySelector('footer')?.remove();
-
         // Show the iframe
         frame.style.display = 'block';
 

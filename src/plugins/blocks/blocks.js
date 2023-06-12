@@ -197,7 +197,7 @@ export async function decorate(container, data) {
       container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
 
       // Track block copy event
-      sampleRUM('blockcopied');
+      sampleRUM('library:blockcopied');
     });
 
     const frameView = content.querySelector('.frame-view');

@@ -42,6 +42,7 @@ export default merge(baseConfig, {
     copy({
       targets: [{ src: 'src/plugins/**/*', dest: './dist' },
         { src: 'src/utils/dom.js', dest: './dist' },
+        { src: 'src/utils/rum.js', dest: './dist' },
         { src: 'src/locales', dest: './dist' },
         { src: 'src/events/events.js', dest: './dist' }],
       // set flatten to false to preserve folder structure

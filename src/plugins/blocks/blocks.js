@@ -26,6 +26,7 @@ import {
 import {
   createTag,
 } from '../../utils/dom.js';
+import { sampleRUM } from '../../utils/rum.js';
 
 /**
  * Renders the scaffolding for the block plugin
@@ -194,6 +195,9 @@ export async function decorate(container, data) {
 
       copyBlock(blockTable, sectionMetadataTable);
       container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
+
+      // Track block copy event
+      sampleRUM('blockcopied');
     });
 
     const frameView = content.querySelector('.frame-view');
@@ -211,6 +215,9 @@ export async function decorate(container, data) {
     desktopViewButton?.addEventListener('click', () => {
       frameView.style.width = '100%';
     });
+
+    // Track block view
+    sampleRUM('blockviewed');
   });
 
   blockList.addEventListener('CopyBlock', (e) => {
@@ -238,6 +245,9 @@ export async function decorate(container, data) {
 
     // Show toast
     container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
+
+    // Track block copy event
+    sampleRUM('blockcopied');
   });
 
   const search = content.querySelector('sp-search');

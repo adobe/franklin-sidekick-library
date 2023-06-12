@@ -217,7 +217,7 @@ export async function decorate(container, data) {
     });
 
     // Track block view
-    sampleRUM('blockviewed');
+    sampleRUM('library:blockviewed');
   });
 
   blockList.addEventListener('CopyBlock', (e) => {

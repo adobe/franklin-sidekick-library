@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 import { LitElement, html, css } from 'lit';
-import { capitalize } from '../../utils/dom.js';
+import { capitalize, removeAllURLParams, setURLParams } from '../../utils/dom.js';
 import AppModel from '../../models/app-model.js';
 import { EventBus } from '../../events/eventbus.js';
 import { APP_EVENTS } from '../../events/events.js';
@@ -111,6 +111,8 @@ export class Header extends LitElement {
 
         this.pluginActive = true;
         this.defaultPluginName = AppModel.appStore.context.activePlugin.config.title.toLowerCase();
+
+        setURLParams([['plugin', this.defaultPluginName]]);
       }
     });
 
@@ -147,6 +149,7 @@ export class Header extends LitElement {
 
   async onPluginChange(e) {
     const { value } = e.target;
+    removeAllURLParams();
 
     unloadPlugin(AppModel);
     await loadPlugin(AppModel, value);

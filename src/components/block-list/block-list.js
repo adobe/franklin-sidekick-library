@@ -231,7 +231,7 @@ export class BlockList extends LitElement {
             blockVariantItem.addEventListener('click', async () => {
               this.dispatchEvent(new CustomEvent('LoadBlock', {
                 detail: {
-                  blockWrapper, blockData, sectionLibraryMetadata, defaultLibraryMetadata,
+                  blockWrapper, blockData, sectionLibraryMetadata, defaultLibraryMetadata, index,
                 },
               }));
             });

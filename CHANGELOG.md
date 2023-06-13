@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.2.0...v1.3.0) (2023-06-13)
+
+
+### Features
+
+* add rum collection ([#33](https://github.com/adobe/franklin-sidekick-library/issues/33)) ([9c29b81](https://github.com/adobe/franklin-sidekick-library/commit/9c29b81d8cbbe07a6255f6b7e4d4f2e8740e9b24))
+
 # [1.2.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.1.1...v1.2.0) (2023-06-09)
 
 

@@ -16,6 +16,7 @@ import { EventBus } from './events/eventbus.js';
 import { createTag } from './utils/dom.js';
 import { APP_EVENTS } from './events/events.js';
 import { loadLibrary } from './utils/library.js';
+import { sampleRUM } from './utils/rum.js';
 
 class SidekickLibrary extends LitElement {
   static properties = {
@@ -170,6 +171,9 @@ class SidekickLibrary extends LitElement {
     AppModel.appStore.context = this.config;
 
     await loadLibrary();
+
+    // Track library opened
+    sampleRUM('library:opened');
   }
 
   renderIllustratedMessage() {

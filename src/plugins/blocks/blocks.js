@@ -26,6 +26,7 @@ import {
 import {
   createTag, setURLParams,
 } from '../../utils/dom.js';
+import { sampleRUM } from '../../utils/rum.js';
 
 /**
  * Renders the scaffolding for the block plugin
@@ -95,6 +96,32 @@ function renderFrameSplitContainer() {
       </div>
     </sp-split-view>
   `;
+}
+
+function copyBlockToClipboard(wrapper, name, blockURL) {
+  const element = wrapper.querySelector('div[class]');
+  const blockTable = getTable(
+    element,
+    name,
+    blockURL,
+  );
+
+  // Does the block have section metadata?
+  let sectionMetadataTable;
+  const sectionMetadata = wrapper.querySelector('.section-metadata');
+  if (sectionMetadata) {
+  // Create a table for the section metadata
+    sectionMetadataTable = getTable(
+      sectionMetadata,
+      'section-metadata',
+      blockURL,
+    );
+  }
+
+  copyBlock(blockTable, sectionMetadataTable);
+
+  // Track block copy event
+  sampleRUM('library:blockcopied', { target: blockURL });
 }
 
 /**
@@ -177,25 +204,7 @@ export async function decorate(container, data) {
       const copyWrapper = blockRenderer.getBlockWrapper();
       const copyBlockData = blockRenderer.getBlockData();
 
-      const blockTable = getTable(
-        copyElement,
-        getBlockName(copyElement, true),
-        copyBlockData.url,
-      );
-
-      // Does the block have section metadata?
-      let sectionMetadataTable;
-      const sectionMetadata = copyWrapper.querySelector('.section-metadata');
-      if (sectionMetadata) {
-      // Create a table for the section metadata
-        sectionMetadataTable = getTable(
-          sectionMetadata,
-          'section-metadata',
-          blockData.url,
-        );
-      }
-
-      copyBlock(blockTable, sectionMetadataTable);
+      copyBlockToClipboard(copyWrapper, getBlockName(copyElement, true), copyBlockData.url);
       container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
     });
 
@@ -214,32 +223,14 @@ export async function decorate(container, data) {
     desktopViewButton?.addEventListener('click', () => {
       frameView.style.width = '100%';
     });
+
+    // Track block view
+    sampleRUM('library:blockviewed', { target: blockData.url });
   });
 
   blockList.addEventListener('CopyBlock', (e) => {
     const { blockWrapper: wrapper, blockNameWithVariant: name, blockURL } = e.detail;
-
-    const blockTable = getTable(
-      wrapper.querySelector('div[class]'),
-      name,
-      blockURL,
-    );
-
-    // Does the block have section metadata?
-    let sectionMetadataTable;
-    const sectionMetadata = wrapper.querySelector('.section-metadata');
-    if (sectionMetadata) {
-      // Create a table for the section metadata
-      sectionMetadataTable = getTable(
-        sectionMetadata,
-        'section-metadata',
-        blockURL,
-      );
-    }
-
-    copyBlock(blockTable, sectionMetadataTable);
-
-    // Show toast
+    copyBlockToClipboard(wrapper, name, blockURL);
     container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
   });
 

@@ -24,7 +24,7 @@ import {
   parseDescription,
 } from './utils.js';
 import {
-  createTag,
+  createTag, setURLParams,
 } from '../../utils/dom.js';
 
 /**
@@ -167,6 +167,9 @@ export async function decorate(container, data) {
       blockWrapper,
       container,
     );
+
+    // Append the path and index of the current block to the url params
+    setURLParams([['path', blockData.path], ['index', e.detail.index]]);
 
     const copyButton = content.querySelector('.copy-button');
     copyButton?.addEventListener('click', () => {

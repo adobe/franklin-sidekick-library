@@ -207,3 +207,26 @@ export function nextTick(ms = 1) {
   // eslint-disable-next-line no-promise-executor-return
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+/**
+ * Appends the provided url params to the current url
+ * @param {Array} kvs An array of key value pairs
+ */
+export function setURLParams(kvs) {
+  const url = new URL(window.location.href);
+  kvs.forEach(([key, value]) => {
+    url.searchParams.set(key, value);
+  });
+  const { href } = url;
+  window.history.pushState({ path: href }, '', decodeURIComponent(href));
+}
+
+/**
+ * Removes all the urlParams
+ * @param {Array} keys An array of keys
+ */
+export function removeAllURLParams() {
+  const url = new URL(window.location.href);
+  const newUrl = `${url.origin}${url.pathname}`;
+  window.history.pushState({ path: newUrl }, '', newUrl);
+}

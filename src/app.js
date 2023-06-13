@@ -173,7 +173,7 @@ class SidekickLibrary extends LitElement {
     await loadLibrary();
 
     // Track library opened
-    sampleRUM('library:opened', { source: window.location.href });
+    sampleRUM('library:opened');
   }
 
   renderIllustratedMessage() {

@@ -121,7 +121,7 @@ function copyBlockToClipboard(wrapper, name, blockURL) {
   copyBlock(blockTable, sectionMetadataTable);
 
   // Track block copy event
-  sampleRUM('library:blockcopied', { source: window.location.href, target: blockURL });
+  sampleRUM('library:blockcopied', { target: blockURL });
 }
 
 /**
@@ -222,7 +222,7 @@ export async function decorate(container, data) {
     });
 
     // Track block view
-    sampleRUM('library:blockviewed', { source: window.location.href, target: blockData.url });
+    sampleRUM('library:blockviewed', { target: blockData.url });
   });
 
   blockList.addEventListener('CopyBlock', (e) => {

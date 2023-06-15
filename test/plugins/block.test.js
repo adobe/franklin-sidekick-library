@@ -14,7 +14,7 @@
 
 import sinon from 'sinon';
 import {
-  html, fixture, expect, waitUntil, aTimeout,
+  html, fixture, expect, waitUntil,
 } from '@open-wc/testing';
 import '@spectrum-web-components/search/sp-search.js';
 import '@spectrum-web-components/action-button/sp-action-button.js';
@@ -201,7 +201,8 @@ describe('Blocks Plugin', () => {
       const blockLibrary = container.querySelector('.block-library');
       container.addEventListener('Toast', toastSpy);
 
-      const copyButton = blockLibrary.querySelector('sp-split-view .content .details-container .action-bar sp-button');
+      const actionBar = blockLibrary.querySelector('sp-split-view .content .details-container .action-bar');
+      const copyButton = actionBar.querySelector('sp-button');
       copyButton.dispatchEvent(new Event('click'));
 
       expect(toastSpy.calledOnce).to.be.true;
@@ -212,18 +213,19 @@ describe('Blocks Plugin', () => {
 
       const blockLibrary = container.querySelector('.block-library');
 
-      const tableViewButton = blockLibrary.querySelector('sp-split-view .content .view .action-bar sp-action-button[value="tablet"]');
+      const actionBar = blockLibrary.querySelector('sp-split-view .content .view .action-bar');
+      const tableViewButton = actionBar.querySelector('sp-action-button[value="tablet"]');
       tableViewButton.dispatchEvent(new Event('click'));
 
       const frameView = blockLibrary.querySelector('.frame-view');
       expect(frameView.style.width).to.eq('768px');
 
-      const mobileViewButton = blockLibrary.querySelector('sp-split-view .content .view .action-bar sp-action-button[value="mobile"]');
+      const mobileViewButton = actionBar.querySelector('sp-action-button[value="mobile"]');
       mobileViewButton.dispatchEvent(new Event('click'));
 
       expect(frameView.style.width).to.eq('480px');
 
-      const desktopViewButton = blockLibrary.querySelector('sp-split-view .content .view .action-bar sp-action-button[value="desktop"]');
+      const desktopViewButton = actionBar.querySelector('sp-action-button[value="desktop"]');
       desktopViewButton.dispatchEvent(new Event('click'));
 
       expect(frameView.style.width).to.eq('100%');

@@ -16,6 +16,10 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   /** Test files to run */
   files: 'test/**/*.test.js',
 
+  coverageConfig: {
+    exclude: ['test/test-utils.js', 'node_modules/**/*'],
+  },
+
   /** Resolve bare module imports */
   nodeResolve: {
     exportConditions: ['browser', 'development'],

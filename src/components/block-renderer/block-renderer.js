@@ -76,7 +76,7 @@ export class BlockRenderer extends LitElement {
    */
   decorateEditableElements(block) {
     // Make editable elements contentEditable and assign an id
-    [...block.querySelectorAll('p, li, strong, a, h1, h2, h3, h4, h5, h6')].forEach((el) => {
+    block?.querySelectorAll('p, li, strong, a, h1, h2, h3, h4, h5, h6').forEach((el) => {
       if (el.textContent.trim() !== '') {
         el.setAttribute('contentEditable', true);
         el.setAttribute('data-library-id', window.crypto.randomUUID());
@@ -84,7 +84,7 @@ export class BlockRenderer extends LitElement {
     });
 
     // If a button, remove contentEditable from parent elements
-    [...block.querySelectorAll('a')].forEach((el) => {
+    block?.querySelectorAll('a').forEach((el) => {
       const up = el.parentElement;
       const twoup = el.parentElement.parentElement;
 
@@ -106,7 +106,7 @@ export class BlockRenderer extends LitElement {
     });
 
     // Assign a library id to img tags
-    [...block.querySelectorAll('img')].forEach((el) => {
+    block?.querySelectorAll('img').forEach((el) => {
       el.setAttribute('data-library-id', window.crypto.randomUUID());
     });
   }
@@ -220,7 +220,7 @@ export class BlockRenderer extends LitElement {
    * @returns {HTMLElement} The block element
    */
   getBlockElement() {
-    return this.blockWrapperHTML.querySelector('div[class]');
+    return this.blockWrapperHTML.querySelector(':scope > div:not(.section-metadata)');
   }
 
   /**
@@ -264,7 +264,7 @@ export class BlockRenderer extends LitElement {
 
     // Add the sidekick-library class to the block element
     const sidekickLibraryClass = 'sidekick-library';
-    block.classList.add(sidekickLibraryClass);
+    block?.classList.add(sidekickLibraryClass);
 
     // Decorate the block with ids
     this.decorateEditableElements(block);

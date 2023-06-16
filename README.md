@@ -179,6 +179,65 @@ The `url` property in the plugin configuration indicates the location from which
 
 > If the `tools/sidekick/config.json` file does not exist in your github repository, it must be created. For more information on sidekick plugin configuration options, see the [docs](https://github.com/adobe/helix-sidekick-extension/blob/main/docs/API.md#Plugin).
 
+## Considerations when building blocks for the library
+
+The sidekick library renders blocks by first fetching the `plain.html` rendition of the the block and then strips it of any other blocks in the content (for example if there are multiple variations of a block in the response). It then requests the same page (without `.plain.html`) and replaces the `main` element with the stripped block and loads the entire document into an `iframe` using the [srcdoc](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc) attribute.
+
+### Use of `window.location`
+Since the block is loaded in an iframe using the `srcdoc` attribute, the instance of the `window.location` object used by your sites code will not contain the typical values you would expect to see.
+
+Example `window.location` object when running in the library
+```json
+{
+  host: "",
+  hostname: "",
+  href: "about:srcdoc"
+  origin: "null"
+  pathname: "srcdoc"
+  port: ""
+  protocol: "about:"
+}
+```
+
+For this reason, if your block requires use of the `window.location` object we recommend adding the following functions to your `scripts.js` file and importing them into your function for use.
+
+```js
+/**
+ * Returns the true origin of the current page in the browser.
+ * If the page is running in a iframe with srcdoc, the ancestor origin is returned.
+ * @returns {String} The true origin
+ */
+export function getOrigin() {
+  const { location } = window;
+  return location.href === 'about:srcdoc' ? window.parent.location.origin : location.origin;
+}
+
+/**
+ * Returns the true of the current page in the browser.mac
+ * If the page is running in a iframe with srcdoc,
+ * the ancestor origin + the path query param is returned.
+ * @returns {String} The href of the current page or the href of the block running in the library
+ */
+export function getHref() {
+  if (window.location.href !== 'about:srcdoc') return window.location.href;
+
+  const { location: parentLocation } = window.parent;
+  const urlParams = new URLSearchParams(parentLocation.search);
+  return `${parentLocation.origin}${urlParams.get('path')}`;
+}
+```
+
+### Use of `createOptimizedPicture` in lib-franklin
+
+The `createOptimizedPicture` function in lib-franklin also [uses](https://github.com/adobe/helix-project-boilerplate/blob/c6ab59278d89a251c864fad1100f6de03a63a6fe/scripts/lib-franklin.js#L480) `window.location.href`. If you are using this function we recommend to move it into `scripts.js` and modify it to use the `getHref()` function above.
+
+### Checking for the presence of the sidekick library
+
+Sometimes you may want to know if the page or the block is running in the sidekick library. To do this there are a couple of options.
+
+1. Check if `window.location.href === 'about:srcdoc'`
+2. The `main` element and the block element will contain the `sidekick-library` class
+
 ## Building a Plugin
 
 Developing a plugin is similar to constructing a block in Franklin. Once a user tries to load the plugin, the sidekick library will trigger the `decorate()` method on your plugin. This method receives the container to render the plugin in and any data that included in the plugins sheet.

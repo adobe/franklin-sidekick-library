@@ -262,6 +262,10 @@ export class BlockRenderer extends LitElement {
 
     const block = this.getBlockElement();
 
+    // Add the sidekick-library class to the block element
+    const sidekickLibraryClass = 'sidekick-library';
+    block.classList.add(sidekickLibraryClass);
+
     // Decorate the block with ids
     this.decorateEditableElements(block);
 
@@ -278,6 +282,9 @@ export class BlockRenderer extends LitElement {
     const containerDocument = new DOMParser().parseFromString(containerPageMarkup, 'text/html');
     const containerDocumentMain = containerDocument.querySelector('main');
 
+    // Add the sidekick-library class to the main element
+    containerDocumentMain.classList.add(sidekickLibraryClass);
+
     // Hide the header and footer
     containerDocument.querySelector('header').style.display = 'none';
     containerDocument.querySelector('footer').style.display = 'none';
@@ -292,7 +299,8 @@ export class BlockRenderer extends LitElement {
 
     // When the iframe loads, replace the iframe body with the block
     frame.addEventListener('load', () => {
-      const { body: iframeBody } = frame.contentWindow.document;
+      const { contentWindow: iframeWindow } = frame;
+      const { body: iframeBody } = iframeWindow.document;
 
       // Decorate icons with page origin
       this.decorateIcons(iframeBody, origin);
@@ -309,7 +317,6 @@ export class BlockRenderer extends LitElement {
       });
 
       // On focus remove the popover
-      const iframeWindow = frame.contentWindow;
       iframeWindow.addEventListener('focus', () => {
         if (this.activeOverlayContent) {
           this.activeOverlayContent.remove();

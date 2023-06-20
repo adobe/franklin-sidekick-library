@@ -128,6 +128,36 @@ describe('FranklinLibrary', () => {
     const toast = recursiveQuery(library, 'sp-toast');
     expect(toast).to.be.visible;
     expect(toast.getAttribute('variant')).to.equal('negative');
+    expect(toast.innerHTML).to.equal('Unknown plugin');
+  });
+
+  it('plugin with error', async () => {
+    const library = document.createElement('sidekick-library');
+    library.config = {
+      base: unknownPluginPath,
+      foobar: '/foobar.js',
+    };
+
+    await fixture(library);
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-menu-item'),
+      'Element did not render children',
+    );
+
+    const picker = recursiveQuery(library, 'sp-picker');
+
+    picker.value = 'Foobar';
+    picker.dispatchEvent(new Event('click'));
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-toast'),
+      'Element did not render children',
+    );
+    const toast = recursiveQuery(library, 'sp-toast');
+    expect(toast).to.be.visible;
+    expect(toast.getAttribute('variant')).to.equal('negative');
+    expect(toast.innerHTML).to.equal('Error loading plugin');
   });
 
   it('unload plugin', async () => {

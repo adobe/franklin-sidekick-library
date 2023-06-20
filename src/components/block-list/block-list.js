@@ -108,7 +108,7 @@ export class BlockList extends LitElement {
 
     // Filter results
     childItems.forEach((block) => {
-      const blockName = block.label.toLowerCase();
+      const blockName = block.getAttribute('label').toLowerCase();
       const searchTags = block.dataset.searchTags ?? '';
       if (blockName.includes(query.toLowerCase()) || searchTags.split(',').some(tag => tag.toLowerCase().includes(query.toLowerCase()))) {
         block.removeAttribute('aria-hidden');

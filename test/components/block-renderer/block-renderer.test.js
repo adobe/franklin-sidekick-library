@@ -76,7 +76,7 @@ describe('BlockRenderer', () => {
       const blockElement = blockRenderer.getBlockElement();
       expect(blockElement).to.exist;
       expect(blockElement.tagName).to.equal('DIV');
-      expect(blockElement.getAttribute('class')).to.eq('cards');
+      expect(blockElement.getAttribute('class')).to.eq('cards sidekick-library');
     });
   });
 

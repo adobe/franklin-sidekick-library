@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/adobe/franklin-sidekick-library/compare/v1.3.1...v1.3.2) (2023-06-20)
+
+
+### Bug Fixes
+
+* add sidekick-library class to main and block ([#38](https://github.com/adobe/franklin-sidekick-library/issues/38)) ([2dde39e](https://github.com/adobe/franklin-sidekick-library/commit/2dde39e39a1737870ea43fa3bd58a8b34859f737))
+
 ## [1.3.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.3.0...v1.3.1) (2023-06-20)
 
 

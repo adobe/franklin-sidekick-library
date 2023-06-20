@@ -189,13 +189,13 @@ Since the block is loaded in an iframe using the `srcdoc` attribute, the instanc
 Example `window.location` object when running in the library
 ```json
 {
-  host: "",
-  hostname: "",
-  href: "about:srcdoc"
-  origin: "null"
-  pathname: "srcdoc"
-  port: ""
-  protocol: "about:"
+  "host": "",
+  "hostname": "",
+  "href": "about:srcdoc"
+  "origin": "null"
+  "pathname": "srcdoc"
+  "port": ""
+  "protocol": "about:"
 }
 ```
 

@@ -16,6 +16,10 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   /** Test files to run */
   files: 'test/**/*.test.js',
 
+  coverageConfig: {
+    exclude: ['test/test-utils.js', 'node_modules/**/*', 'src/utils/rum.js'],
+  },
+
   /** Resolve bare module imports */
   nodeResolve: {
     exportConditions: ['browser', 'development'],
@@ -30,6 +34,8 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
     }
     return true;
   },
+  // manual: true,
+  // open: true,
 
   /** Compile JS for older browsers. Requires @web/dev-server-esbuild plugin */
   // esbuildTarget: 'auto',

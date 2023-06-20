@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.3.0...v1.3.1) (2023-06-20)
+
+
+### Bug Fixes
+
+* duplicate section metadata when pasted from block with only sm ([#35](https://github.com/adobe/franklin-sidekick-library/issues/35)) ([0c6268e](https://github.com/adobe/franklin-sidekick-library/commit/0c6268ef60da46be9421fcf7e9ee3751fc25c351))
+
 # [1.3.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.2.0...v1.3.0) (2023-06-13)
 
 

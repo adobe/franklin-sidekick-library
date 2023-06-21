@@ -19,15 +19,15 @@ import {
 import '@spectrum-web-components/search/sp-search.js';
 import '@spectrum-web-components/action-button/sp-action-button.js';
 
-import '../../src/views/plugin-renderer/plugin-renderer.js';
-import '../../src/components/block-list/block-list.js';
-import '../../src/components/block-renderer/block-renderer.js';
-import '../../src/components/split-view/split-view.js';
-import { decorate } from '../../src/plugins/blocks/blocks.js';
-import { APP_EVENTS, PLUGIN_EVENTS } from '../../src/events/events.js';
-import { EventBus } from '../../src/events/eventbus.js';
-import AppModel from '../../src/models/app-model.js';
-import { simulateTyping } from '../test-utils.js';
+import '../../../src/views/plugin-renderer/plugin-renderer.js';
+import '../../../src/components/block-list/block-list.js';
+import '../../../src/components/block-renderer/block-renderer.js';
+import '../../../src/components/split-view/split-view.js';
+import { decorate } from '../../../src/plugins/blocks/blocks.js';
+import { APP_EVENTS, PLUGIN_EVENTS } from '../../../src/events/events.js';
+import { EventBus } from '../../../src/events/eventbus.js';
+import AppModel from '../../../src/models/app-model.js';
+import { simulateTyping } from '../../test-utils.js';
 
 const CARDS = { name: 'Cards', url: 'https://main--helix-test-content-onedrive--adobe.hlx.live/block-library-tests/blocks/cards/cards', path: '/block-library-tests/blocks/cards/cards' };
 const COLUMNS = { name: 'Columns', url: 'https://main--helix-test-content-onedrive--adobe.hlx.live/block-library-tests/blocks/columns/columns', path: '/block-library-tests/blocks/cards/cards' };

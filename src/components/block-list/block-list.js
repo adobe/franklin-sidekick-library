@@ -162,11 +162,11 @@ export class BlockList extends LitElement {
       // Create an array of promises for each block
       const promises = data.map(async (blockData) => {
         const { url: blockURL } = blockData;
-        const docPromise = fetchBlock(blockURL);
+        const blockPromise = fetchBlock(blockURL);
 
         try {
-          const res = await docPromise;
-          if (!res) {
+          const blockDocument = await blockPromise;
+          if (!blockDocument) {
             throw new Error(`An error occurred fetching ${blockData.name}`);
           }
 
@@ -183,7 +183,7 @@ export class BlockList extends LitElement {
           blockParentItem.addEventListener('OnAction', e => this.onPreview(e, blockURL));
 
           // Get the body container of the block variants, clone it so we don't mutate the original
-          const { body } = res.cloneNode(true);
+          const { body } = blockDocument.cloneNode(true);
 
           // Check for default library metadata
           const defaultLibraryMetadata = getDefaultLibraryMetadata(body);
@@ -237,7 +237,7 @@ export class BlockList extends LitElement {
             });
           });
 
-          return docPromise;
+          return blockPromise;
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error(e.message);

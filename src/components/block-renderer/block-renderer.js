@@ -348,14 +348,15 @@ export class BlockRenderer extends LitElement {
         characterDataOldValue: true,
       });
 
-      // Load the block CSS
-      const styleLink = createTag('link', { rel: 'stylesheet', href: `${origin}/blocks/${blockName}/${blockName}.css` });
-      const lazyStyleLink = createTag('link', { rel: 'stylesheet', href: `${origin}/styles/lazy-styles.css` });
+      // Get the hlx object from the iframe
+      const { window: { window: { hlx } } } = iframeWindow;
+
+      // Load the block and lazy CSS
+      const codePath = `${origin}${hlx?.codeBasePath}`;
+      const styleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/blocks/${blockName}/${blockName}.css` });
+      const lazyStyleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/styles/lazy-styles.css` });
       frame.contentWindow.document.head.append(lazyStyleLink);
       frame.contentWindow.document.head.append(styleLink);
-      frame.contentWindow.hlx = {
-        codeBasePath: origin,
-      };
 
       styleLink.onload = () => {
         // Show the iframe

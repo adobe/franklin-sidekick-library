@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/adobe/franklin-sidekick-library/compare/v1.3.3...v1.3.4) (2023-06-21)
+
+
+### Bug Fixes
+
+* include codeBasePath when loading ([#44](https://github.com/adobe/franklin-sidekick-library/issues/44)) ([5417eb3](https://github.com/adobe/franklin-sidekick-library/commit/5417eb373c067edbcab6c79c0d099dbe8167880e))
+
 ## [1.3.3](https://github.com/adobe/franklin-sidekick-library/compare/v1.3.2...v1.3.3) (2023-06-21)
 
 

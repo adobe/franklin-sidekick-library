@@ -20,8 +20,9 @@ import { stub } from 'sinon';
 import { sendKeys } from '@web/test-runner-commands';
 import AppModel from '../../../src/models/app-model.js';
 import {
-  ALL_EDITABLE_ELEMENTS, CARDS, IMAGE,
-} from './fixures.js';
+  mockBlock, CARDS_BLOCK, ALL_EDITABLE_BLOCK,
+} from '../../fixtures/blocks.js';
+import { IMAGE } from '../../fixtures/assets.js';
 import { recursiveQuery } from '../../test-utils.js';
 
 describe('BlockRenderer', () => {
@@ -33,8 +34,9 @@ describe('BlockRenderer', () => {
       url: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards',
       extended: false,
     };
+    const cardsBlock = mockBlock(CARDS_BLOCK, [], true);
 
-    await blockRendererMethod.loadBlock(cardsBlockName, cardsBlockData, CARDS);
+    await blockRendererMethod.loadBlock(cardsBlockName, cardsBlockData, cardsBlock);
   };
 
   const renderAllEditable = async (blockRendererMethod) => {
@@ -44,10 +46,12 @@ describe('BlockRenderer', () => {
       extended: false,
     };
 
+    const allEditableBlock = mockBlock(ALL_EDITABLE_BLOCK, [], true);
+
     await blockRendererMethod.loadBlock(
       allEditableBlockName,
       allEditableBlockData,
-      ALL_EDITABLE_ELEMENTS,
+      allEditableBlock,
     );
   };
 

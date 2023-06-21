@@ -182,8 +182,8 @@ export class BlockList extends LitElement {
 
           blockParentItem.addEventListener('OnAction', e => this.onPreview(e, blockURL));
 
-          // Get the body container of the block variants
-          const { body } = res;
+          // Get the body container of the block variants, clone it so we don't mutate the original
+          const { body } = res.cloneNode(true);
 
           // Check for default library metadata
           const defaultLibraryMetadata = getDefaultLibraryMetadata(body);

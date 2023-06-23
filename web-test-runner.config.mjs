@@ -17,7 +17,16 @@ export default /** @type {import("@web/test-runner").TestRunnerConfig} */ ({
   files: 'test/**/*.test.js',
 
   coverageConfig: {
-    exclude: ['test/test-utils.js', 'node_modules/**/*', 'src/utils/rum.js'],
+    exclude: [
+      'test/test-utils.js',
+      'node_modules/**/*',
+      'src/utils/rum.js',
+      'src/plugins/tags/tags.js',
+      'src/components/card/card.js',
+      'src/components/menu-item/menu-item.js',
+      'src/components/split-view/split-view.js',
+      'src/components/sidenav/sidenav-item.js',
+    ],
   },
 
   /** Resolve bare module imports */

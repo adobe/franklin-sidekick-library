@@ -195,14 +195,13 @@ export class BlockList extends LitElement {
             // Check if the variation has library metadata
             const sectionLibraryMetadata = getLibraryMetadata(blockWrapper) ?? {};
             const blockElement = blockWrapper.querySelector('div[class]');
-            const blockName = getBlockName(blockElement, false);
             const authoredBlockName = sectionLibraryMetadata.name ?? getBlockName(blockElement);
             const blockNameWithVariant = getBlockName(blockElement, true);
-            const searchTags = sectionLibraryMetadata.searchTags
-                                ?? defaultLibraryMetadata.searchTags ?? '';
-            if (!blockName) {
-              return;
-            }
+            const searchTags = sectionLibraryMetadata.searchtags
+                                ?? sectionLibraryMetadata['search-tags']
+                                ?? defaultLibraryMetadata.searchtags
+                                ?? defaultLibraryMetadata['search-tags']
+                                ?? '';
 
             const blockVariantItem = createSideNavItem(
               authoredBlockName,

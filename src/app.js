@@ -96,8 +96,8 @@ class SidekickLibrary extends LitElement {
       Object.keys(messages).forEach((key) => {
         dict[key] = messages[key].message;
       });
+    /* c8 ignore next 3 */
     } catch (e) {
-      /* istanbul ignore next */
       console.error(`failed to fetch dictionary from ${dictPath}`); // eslint-disable-line no-console
     }
 
@@ -136,6 +136,7 @@ class SidekickLibrary extends LitElement {
 
     // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+      /* c8 ignore next */
       this.theme = e.matches ? 'dark' : 'light';
     });
 

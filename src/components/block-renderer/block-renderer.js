@@ -352,7 +352,7 @@ export class BlockRenderer extends LitElement {
       const { window: { window: { hlx } } } = iframeWindow;
 
       // Load the block and lazy CSS
-      const codePath = `${origin}${hlx?.codeBasePath}`;
+      const codePath = `${origin}${hlx?.codeBasePath ?? ''}`;
       const styleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/blocks/${blockName}/${blockName}.css` });
       const lazyStyleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/styles/lazy-styles.css` });
       frame.contentWindow.document.head.append(lazyStyleLink);

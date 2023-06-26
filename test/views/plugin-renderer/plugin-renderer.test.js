@@ -15,9 +15,7 @@
 import { html, fixture, expect } from '@open-wc/testing';
 import '../../../src/views/plugin-renderer/plugin-renderer.js';
 import { spy } from 'sinon';
-import {
-  APP_EVENTS,
-} from '../../../src/events/events.js';
+import { APP_EVENTS } from '../../../src/events/events.js';
 import { EventBus } from '../../../src/events/eventbus.js';
 import AppModel from '../../../src/models/app-model.js';
 

@@ -14,22 +14,39 @@
 
 import { html } from 'lit';
 import {
-  fixture, expect, waitUntil, aTimeout,
+  fixture, expect, waitUntil,
 } from '@open-wc/testing';
+import fetchMock from 'fetch-mock/esm/client';
 import { recursiveQuery, simulateTyping } from './test-utils.js';
 import AppModel from '../src/models/app-model.js';
 import { unloadPlugin } from '../src/utils/plugin.js';
 import '../src/index.js';
 import '../src/plugins/blocks/blocks.js';
-
-const singleSheetPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-single-sheet.json';
-const multiSheetPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-multi-sheet.json';
-const unknownPluginPath = 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/library-unknown-plugin.json';
+import {
+  mockFetchMultiSheetLibrarySuccess,
+  mockFetchSingleSheetLibrarySuccess,
+  singleSheetUrl,
+  multiSheetUrl,
+  mockFetchSheetLibraryWithUnknownPluginSuccess,
+  unknownPluginSheetUrl,
+} from './fixtures/libraries.js';
+import { mockFetchEnLocalesSuccess } from './fixtures/locales.js';
+import { mockFetchCardsPlainHTMLSuccess, mockFetchColumnsPlainHTMLSuccess } from './fixtures/blocks.js';
 
 describe('FranklinLibrary', () => {
   beforeEach(() => {
     window.libraryDev = true;
+    mockFetchEnLocalesSuccess();
+    mockFetchSingleSheetLibrarySuccess();
+    mockFetchMultiSheetLibrarySuccess();
+    mockFetchCardsPlainHTMLSuccess();
+    mockFetchColumnsPlainHTMLSuccess();
   });
+
+  afterEach(() => {
+    fetchMock.restore();
+  });
+
   it('renders container', async () => {
     const element = await fixture(html`<sidekick-library></sidekick-library>`);
     const container = element.shadowRoot.querySelector('.container');
@@ -50,12 +67,17 @@ describe('FranklinLibrary', () => {
       () => recursiveQuery(library, 'illustrated-message'),
       'Element did not render children',
     );
+
+    const message = recursiveQuery(library, 'sp-illustrated-message');
+    expect(message).to.be.visible;
+    expect(message.getAttribute('heading')).to.equal('Invalid Configuration');
+    expect(message.getAttribute('description')).to.equal('The library is misconfigured');
   });
 
   it('loads single sheet', async () => {
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: singleSheetPath,
+      base: singleSheetUrl,
     };
 
     await fixture(library);
@@ -73,8 +95,8 @@ describe('FranklinLibrary', () => {
   it('loads extended library', async () => {
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: singleSheetPath,
-      extends: multiSheetPath,
+      base: singleSheetUrl,
+      extends: multiSheetUrl,
     };
 
     await fixture(library);
@@ -92,7 +114,7 @@ describe('FranklinLibrary', () => {
   it('loads multi sheet', async () => {
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: multiSheetPath,
+      base: multiSheetUrl,
     };
 
     await fixture(library);
@@ -108,9 +130,11 @@ describe('FranklinLibrary', () => {
   });
 
   it('unknown plugin', async () => {
+    mockFetchSheetLibraryWithUnknownPluginSuccess();
+
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: unknownPluginPath,
+      base: unknownPluginSheetUrl,
     };
 
     await fixture(library);
@@ -132,9 +156,10 @@ describe('FranklinLibrary', () => {
   });
 
   it('plugin with error', async () => {
+    mockFetchSheetLibraryWithUnknownPluginSuccess();
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: unknownPluginPath,
+      base: unknownPluginSheetUrl,
       foobar: '/foobar.js',
     };
 
@@ -163,7 +188,7 @@ describe('FranklinLibrary', () => {
   it('unload plugin', async () => {
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: singleSheetPath,
+      base: singleSheetUrl,
     };
 
     await fixture(library);
@@ -179,23 +204,25 @@ describe('FranklinLibrary', () => {
   });
 
   it.skip('should search', async () => {
+    AppModel.libraryHost = 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library';
+
     const library = document.createElement('sidekick-library');
     library.config = {
-      base: multiSheetPath,
+      base: multiSheetUrl,
     };
 
     await fixture(library);
 
     await waitUntil(
-      () => recursiveQuery(library, 'sp-sidenav-item'),
+      () => recursiveQuery(library, 'sp-menu-item'),
       'Element did not render children',
     );
 
-    const taxonomyItem = recursiveQuery(library, 'sp-menu-item[value="taxonomy"]');
-    taxonomyItem.dispatchEvent(new Event('click'));
-
+    const picker = recursiveQuery(library, 'sp-picker');
+    picker.value = 'tags';
+    picker.dispatchEvent(new Event('change'));
     await waitUntil(
-      () => recursiveQuery(library, 'sp-sidenav-item'),
+      () => recursiveQuery(library, '#tags-plugin'),
       'Element did not render children',
     );
 
@@ -207,21 +234,19 @@ describe('FranklinLibrary', () => {
       'Element did not render children',
     );
 
+    const middleBar = recursiveQuery(library, '.middle-bar');
+    expect(middleBar.classList.contains('search-active')).to.be.true;
+
     const input = recursiveQuery(library, 'sp-search');
 
-    await aTimeout(1000);
-    await simulateTyping(input, 'Authored Name');
+    await simulateTyping(input, 'foo');
     input.dispatchEvent(new Event('input'));
 
-    const pluginRenderer = recursiveQuery(library, 'plugin-renderer');
-
-    await waitUntil(
-      () => recursiveQuery(pluginRenderer, 'sp-sidenav-item'),
-      'Element did not render children',
-    );
-
-    const pluginSideNav = recursiveQuery(pluginRenderer, 'sp-sidenav');
-    const items = pluginSideNav.querySelectorAll('sp-sidenav-item');
+    const pluginRenderer = recursiveQuery(library, '#tags-plugin');
+    const pluginSideNav = recursiveQuery(pluginRenderer, 'sp-menu');
+    const items = pluginSideNav.querySelectorAll('sp-menu-item');
     expect([...items].length).to.equal(2);
-  }).timeout(5000);
+    searchButton.dispatchEvent(new Event('click'));
+    expect(middleBar.classList.contains('search-active')).to.be.false;
+  });
 });

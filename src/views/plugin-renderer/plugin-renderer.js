@@ -64,6 +64,9 @@ export class PluginRenderer extends LitElement {
         activePlugin.data,
         AppModel.appStore.searchQuery,
       );
+
+      // Set the id of the render root element to the plugin name
+      root.setAttribute('id', `${activePlugin.config.title.toLowerCase()}-plugin`);
     });
 
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_UNLOADED, () => {

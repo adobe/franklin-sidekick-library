@@ -18,12 +18,22 @@ import {
 import '../../../src/components/block-renderer/block-renderer.js';
 import { stub } from 'sinon';
 import { sendKeys } from '@web/test-runner-commands';
+import fetchMock from 'fetch-mock/esm/client';
 import AppModel from '../../../src/models/app-model.js';
 import {
-  mockBlock, CARDS_BLOCK, ALL_EDITABLE_BLOCK,
+  mockBlock,
 } from '../../fixtures/blocks.js';
 import { IMAGE } from '../../fixtures/assets.js';
 import { recursiveQuery } from '../../test-utils.js';
+import { CARDS_DEFAULT_STUB } from '../../fixtures/stubs/cards.js';
+import { ALL_EDITABLE_STUB } from '../../fixtures/stubs/editable.js';
+import {
+  allEditablePageUrl,
+  cardsPageUrl,
+  mockFetchAllEditableDocumentSuccess,
+  mockFetchCardsDocumentSuccess,
+  mockFetchInlinePageDependenciesSuccess,
+} from '../../fixtures/pages.js';
 
 describe('BlockRenderer', () => {
   let blockRenderer;
@@ -31,10 +41,10 @@ describe('BlockRenderer', () => {
   const renderCardsBlock = async (blockRendererMethod) => {
     const cardsBlockName = 'cards';
     const cardsBlockData = {
-      url: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards',
+      url: cardsPageUrl,
       extended: false,
     };
-    const cardsBlock = mockBlock(CARDS_BLOCK, [], true);
+    const cardsBlock = mockBlock(CARDS_DEFAULT_STUB, [], true);
 
     await blockRendererMethod.loadBlock(cardsBlockName, cardsBlockData, cardsBlock);
   };
@@ -42,11 +52,11 @@ describe('BlockRenderer', () => {
   const renderAllEditable = async (blockRendererMethod) => {
     const allEditableBlockName = 'all-editable-elements';
     const allEditableBlockData = {
-      url: 'https://example.com/blocks/cards',
+      url: allEditablePageUrl,
       extended: false,
     };
 
-    const allEditableBlock = mockBlock(ALL_EDITABLE_BLOCK, [], true);
+    const allEditableBlock = mockBlock(ALL_EDITABLE_STUB, [], true);
 
     await blockRendererMethod.loadBlock(
       allEditableBlockName,
@@ -66,12 +76,18 @@ describe('BlockRenderer', () => {
         decorate: () => {},
         path: '../../src/plugins/blocks/blocks.js',
       },
+      baseLibraryOrigin: 'https://example.hlx.test',
     };
+
+    mockFetchCardsDocumentSuccess();
+    mockFetchAllEditableDocumentSuccess();
+    mockFetchInlinePageDependenciesSuccess();
     blockRenderer = await fixture(html`<block-renderer></block-renderer>`);
   });
 
   afterEach(() => {
     blockRenderer = null;
+    fetchMock.restore();
   });
 
   describe('getBlockElement', () => {
@@ -100,15 +116,23 @@ describe('BlockRenderer', () => {
       const blockData = blockRenderer.getBlockData();
       expect(blockData).to.exist;
       expect(blockData).to.deep.equal({
-        url: 'https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/cards/cards',
+        url: cardsPageUrl,
         extended: false,
       });
     });
   });
 
   describe('decorateEditableElements', () => {
-    it('check for contenteditable and data-library-id', () => {
-      renderAllEditable(blockRenderer);
+    it('check for contenteditable and data-library-id', async () => {
+      mockFetchInlinePageDependenciesSuccess('all-editable-elements');
+      await renderAllEditable(blockRenderer);
+
+      const iframe = blockRenderer.shadowRoot.querySelector('iframe');
+      await waitUntil(
+        () => recursiveQuery(iframe.contentDocument, '.all-editable-elements'),
+        'Element did not render children',
+      );
+
       const blockElement = blockRenderer.getBlockElement();
       blockElement.querySelectorAll('li, a, h1, h2, h3, h4, h5, h6').forEach((el) => {
         expect(el.getAttribute('contenteditable')).to.equal('true');
@@ -172,7 +196,7 @@ describe('BlockRenderer', () => {
 
   describe('editable content', () => {
     it('content should be editable', async () => {
-      renderCardsBlock(blockRenderer);
+      await renderCardsBlock(blockRenderer);
 
       const iframe = blockRenderer.shadowRoot.querySelector('iframe');
       await waitUntil(
@@ -184,12 +208,14 @@ describe('BlockRenderer', () => {
       expect(cardsBlock).to.exist;
 
       const strong = cardsBlock.querySelector('strong');
-      strong.textContent = 'hello world';
+      strong.textContent = 'hello world 1';
 
+      // iframe needs to be visible for sendKeys to work
+      iframe.display = 'block';
       const p = cardsBlock.querySelector('p:nth-of-type(2)');
       p.focus();
       await sendKeys({
-        type: 'hello world',
+        type: 'hello world 2',
       });
 
       const img = cardsBlock.querySelector('img');
@@ -197,8 +223,8 @@ describe('BlockRenderer', () => {
       await aTimeout(1000);
       const wrapper = blockRenderer.getBlockWrapper();
       const modifiedBlock = wrapper.querySelector('.cards');
-      expect(modifiedBlock.querySelector('strong').textContent).to.equal('hello world');
-      expect(modifiedBlock.querySelector('p:nth-of-type(2)').textContent).to.equal('hello worldHelix is the fastest way to publish, create, and serve websites');
+      expect(modifiedBlock.querySelector('strong').textContent).to.equal('hello world 1');
+      expect(modifiedBlock.querySelector('p:nth-of-type(2)').textContent).to.equal('hello world 2Helix is the fastest way to publish, create, and serve websites');
       expect(modifiedBlock.querySelector('img').src).to.equal(IMAGE);
     });
 
@@ -244,7 +270,6 @@ describe('BlockRenderer', () => {
         img.dispatchEvent(new Event('dragleave', { target: img }));
         expect(img.style.outline).to.equal('initial');
         expect(img.style.outlineRadius).to.equal('initial');
-        await aTimeout(1000);
       });
     });
   });

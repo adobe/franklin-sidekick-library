@@ -16,12 +16,6 @@ import AppModel from '../models/app-model.js';
 import { isDev } from './library.js';
 import { isPath } from './dom.js';
 
-const plugins = {
-  blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : `${AppModel.libraryHost}/plugins/blocks/blocks.js`,
-  tags: isDev() ? '../../src/plugins/tags/tags.js' : `${AppModel.libraryHost}/plugins/tags/tags.js`,
-  'api-test': isDev() ? '../../src/plugins/api-test/api-test.js' : `${AppModel.libraryHost}/plugins/api-test/api-test.js`,
-};
-
 /**
  * Loads a plugin into the application
  * @param {AppModel} appModel The app model
@@ -31,6 +25,12 @@ const plugins = {
 export async function loadPlugin(appModel, name) {
   const { appStore } = appModel;
   const { context } = appStore;
+
+  const plugins = {
+    blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : `${AppModel.libraryHost}/plugins/blocks/blocks.js`,
+    tags: isDev() ? '../../src/plugins/tags/tags.js' : `${AppModel.libraryHost}/plugins/tags/tags.js`,
+    'api-test': isDev() ? '../../src/plugins/api-test/api-test.js' : `${AppModel.libraryHost}/plugins/api-test/api-test.js`,
+  };
 
   let pluginPath = plugins[name];
   const configPlugin = context[name];

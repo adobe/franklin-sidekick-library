@@ -27,6 +27,6 @@ export default class AppModel {
 
   static init() {
     AppModel.appStore = store(defaultState, 'app');
-    AppModel.appStore.webRoot = window.libraryDev ? './src/' : AppModel.libraryHost;
+    AppModel.appStore.webRoot = window.libraryDev ? './src' : AppModel.libraryHost;
   }
 }

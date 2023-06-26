@@ -129,10 +129,6 @@ export class Header extends LitElement {
     });
   }
 
-  onBack() {
-    unloadPlugin(AppModel);
-  }
-
   activateSearch() {
     const middleBar = this.renderRoot.querySelector('.middle-bar');
 

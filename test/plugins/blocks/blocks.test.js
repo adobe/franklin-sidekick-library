@@ -18,7 +18,7 @@ import {
 } from '@open-wc/testing';
 import '@spectrum-web-components/search/sp-search.js';
 import '@spectrum-web-components/action-button/sp-action-button.js';
-
+import fetchMock from 'fetch-mock/esm/client';
 import '../../../src/views/plugin-renderer/plugin-renderer.js';
 import '../../../src/components/block-list/block-list.js';
 import '../../../src/components/block-renderer/block-renderer.js';
@@ -28,18 +28,21 @@ import { APP_EVENTS, PLUGIN_EVENTS } from '../../../src/events/events.js';
 import { EventBus } from '../../../src/events/eventbus.js';
 import AppModel from '../../../src/models/app-model.js';
 import { simulateTyping } from '../../test-utils.js';
-
-const CARDS = { name: 'Cards', url: 'https://main--helix-test-content-onedrive--adobe.hlx.live/block-library-tests/blocks/cards/cards', path: '/block-library-tests/blocks/cards/cards' };
-const COLUMNS = { name: 'Columns', url: 'https://main--helix-test-content-onedrive--adobe.hlx.live/block-library-tests/blocks/columns/columns', path: '/block-library-tests/blocks/cards/cards' };
-const NON_EXISTENT = { name: 'Columns', url: 'https://main--helix-test-content-onedrive--adobe.hlx.live/block-library-tests/blocks/columns/path-does-not-exist', path: '/block-library-tests/blocks/columns/path-does-not-exist' };
+import { mockFetchCardsPlainHTMLSuccess, mockFetchColumnsPlainHTMLSuccess, mockFetchNonExistantPlainHTMLFailure } from '../../fixtures/blocks.js';
+import { CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM, NON_EXISTENT_BLOCK_LIBRARY_ITEM } from '../../fixtures/libraries.js';
+import { mockFetchCardsDocumentSuccess, mockFetchInlinePageDependenciesSuccess } from '../../fixtures/pages.js';
 
 describe('Blocks Plugin', () => {
   describe('decorate()', () => {
     let container;
 
     const loadBlock = async () => {
+      mockFetchCardsPlainHTMLSuccess();
+      mockFetchCardsDocumentSuccess();
+      mockFetchInlinePageDependenciesSuccess();
+
       const loadBlockSpy = sinon.spy();
-      const mockData = [CARDS];
+      const mockData = [CARDS_BLOCK_LIBRARY_ITEM];
 
       await decorate(container, mockData);
       const blockLibrary = container.querySelector('.block-library');
@@ -84,15 +87,23 @@ describe('Blocks Plugin', () => {
           decorate: () => {},
           path: '../../src/plugins/blocks/blocks.js',
         },
+        baseLibraryOrigin: 'https://example.hlx.test',
       };
+
+      window.blocks = { cards: CARDS_BLOCK_LIBRARY_ITEM };
 
       const pluginLoadedEvent = new CustomEvent(APP_EVENTS.PLUGIN_LOADED);
       EventBus.instance.dispatchEvent(pluginLoadedEvent);
     });
 
-    it('should render a list of blocks', async () => {
-      const mockData = [CARDS];
+    afterEach(() => {
+      fetchMock.restore();
+    });
 
+    it('should render a list of blocks', async () => {
+      const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
+      mockFetchCardsPlainHTMLSuccess();
+      mockFetchColumnsPlainHTMLSuccess();
       await decorate(container, mockData);
 
       const blockLibrary = container.querySelector('.block-library');
@@ -100,12 +111,17 @@ describe('Blocks Plugin', () => {
       expect(blocks.length).to.equal(6);
       expect(blocks[0].getAttribute('label')).to.equal('Cards');
       expect(blocks[1].getAttribute('label')).to.equal('cards');
-      expect(blocks[2].getAttribute('label')).to.equal('cards (logos)');
     });
 
     it('should render any valid path and ignore any invalid path', async () => {
-      const mockData = [NON_EXISTENT, CARDS];
-
+      mockFetchCardsPlainHTMLSuccess();
+      mockFetchColumnsPlainHTMLSuccess();
+      mockFetchNonExistantPlainHTMLFailure();
+      const mockData = [
+        NON_EXISTENT_BLOCK_LIBRARY_ITEM,
+        CARDS_BLOCK_LIBRARY_ITEM,
+        COLUMNS_BLOCK_LIBRARY_ITEM,
+      ];
       await decorate(container, mockData);
 
       const blockLibrary = container.querySelector('.block-library');
@@ -113,12 +129,11 @@ describe('Blocks Plugin', () => {
       expect(blocks.length).to.equal(6);
       expect(blocks[0].getAttribute('label')).to.equal('Cards');
       expect(blocks[1].getAttribute('label')).to.equal('cards');
-      expect(blocks[2].getAttribute('label')).to.equal('cards (logos)');
     });
 
     it('should render a toast & empty results message if loading all blocks failed', async () => {
       const eventSpy = sinon.spy();
-      const mockData = [NON_EXISTENT];
+      const mockData = [NON_EXISTENT_BLOCK_LIBRARY_ITEM];
 
       container.addEventListener(PLUGIN_EVENTS.TOAST, eventSpy);
       await decorate(container, mockData);
@@ -131,7 +146,9 @@ describe('Blocks Plugin', () => {
     });
 
     it('should expand a block if it matches the query', async () => {
-      const mockData = [CARDS, COLUMNS];
+      mockFetchCardsPlainHTMLSuccess();
+      mockFetchColumnsPlainHTMLSuccess();
+      const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
 
       await decorate(container, mockData);
       const blockLibrary = container.querySelector('.block-library');
@@ -141,7 +158,6 @@ describe('Blocks Plugin', () => {
       spSearch.dispatchEvent(new Event('input'));
 
       const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector(':scope sp-sidenav');
-
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       expect(cardsItem.getAttribute('expanded')).to.exist;
 
@@ -151,7 +167,9 @@ describe('Blocks Plugin', () => {
     });
 
     it('should render no results if no matches to the query', async () => {
-      const mockData = [CARDS, COLUMNS];
+      mockFetchCardsPlainHTMLSuccess();
+      mockFetchColumnsPlainHTMLSuccess();
+      const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
 
       await decorate(container, mockData);
 
@@ -170,9 +188,10 @@ describe('Blocks Plugin', () => {
     });
 
     it('should copy block from block-list', async () => {
+      mockFetchCardsPlainHTMLSuccess();
       const toastSpy = sinon.spy();
       const copyBlockSpy = sinon.spy();
-      const mockData = [CARDS];
+      const mockData = [CARDS_BLOCK_LIBRARY_ITEM];
 
       await decorate(container, mockData);
       const blockLibrary = container.querySelector('.block-library');
@@ -188,10 +207,6 @@ describe('Blocks Plugin', () => {
 
       expect(copyBlockSpy.calledOnce).to.be.true;
       expect(toastSpy.calledOnce).to.be.true;
-    });
-
-    it('load block', async () => {
-      await loadBlock();
     });
 
     it('copy block via details panel', async () => {

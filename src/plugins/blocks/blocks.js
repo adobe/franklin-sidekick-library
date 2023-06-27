@@ -22,6 +22,8 @@ import {
   getBlockName,
   getTable,
   parseDescription,
+  prepareIconsForCopy,
+  prepareImagesForCopy,
 } from './utils.js';
 import {
   createTag, setURLParams,
@@ -98,7 +100,13 @@ function renderFrameSplitContainer() {
   `;
 }
 
-function copyBlockToClipboard(wrapper, name, blockURL) {
+/**
+ * Copies a block to the clipboard
+ * @param {HTMLElement} wrapper The wrapper element
+ * @param {string} name The name of the block
+ * @param {string} blockURL The URL of the block
+ */
+export function copyBlockToClipboard(wrapper, name, blockURL) {
   // Get the first block element ignoring any section metadata blocks
   const element = wrapper.querySelector(':scope > div:not(.section-metadata)');
   let blockTable = '';
@@ -125,6 +133,33 @@ function copyBlockToClipboard(wrapper, name, blockURL) {
   }
 
   copyBlock(blockTable, sectionMetadataTable);
+
+  // Track block copy event
+  sampleRUM('library:blockcopied', { target: blockURL });
+}
+
+/**
+ * Copies default content to the clipboard
+ * @param {HTMLElement} wrapper The wrapper element
+ * @param {string} blockURL The URL of the block
+ */
+export function copyDefaultContentToClipboard(wrapper, blockURL) {
+  prepareIconsForCopy(wrapper);
+  prepareImagesForCopy(wrapper, blockURL, 100);
+
+  // Does the block have section metadata?
+  let sectionMetadataTable;
+  const sectionMetadata = wrapper.querySelector('.section-metadata');
+  if (sectionMetadata) {
+  // Create a table for the section metadata
+    sectionMetadataTable = getTable(
+      sectionMetadata,
+      'Section metadata',
+      blockURL,
+    );
+  }
+
+  copyBlock(wrapper.outerHTML, sectionMetadataTable);
 
   // Track block copy event
   sampleRUM('library:blockcopied', { target: blockURL });
@@ -194,6 +229,7 @@ export async function decorate(container, data) {
 
     const blockRenderer = content.querySelector('block-renderer');
 
+    // If the block element exists, load the block
     blockRenderer.loadBlock(
       blockName,
       blockData,
@@ -210,7 +246,14 @@ export async function decorate(container, data) {
       const copyWrapper = blockRenderer.getBlockWrapper();
       const copyBlockData = blockRenderer.getBlockData();
 
-      copyBlockToClipboard(copyWrapper, getBlockName(copyElement, true), copyBlockData.url);
+      // Are we trying to copy a block or default content?
+      // The copy operation is slightly different depending on which
+      if (blockRenderer.isBlock) {
+        copyBlockToClipboard(copyWrapper, getBlockName(copyElement, true), copyBlockData.url);
+      } else {
+        copyDefaultContentToClipboard(copyWrapper, copyBlockData.url);
+      }
+
       container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
     });
 
@@ -236,7 +279,15 @@ export async function decorate(container, data) {
 
   blockList.addEventListener('CopyBlock', (e) => {
     const { blockWrapper: wrapper, blockNameWithVariant: name, blockURL } = e.detail;
-    copyBlockToClipboard(wrapper, name, blockURL);
+
+    // We may not have rendered the block yet, so we need to check for a block to know if
+    // we are dealing with a block or default content
+    const block = wrapper.querySelector(':scope > div:not(.section-metadata)');
+    if (block) {
+      copyBlockToClipboard(wrapper, name, blockURL);
+    } else {
+      copyDefaultContentToClipboard(wrapper, blockURL);
+    }
     container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block' } }));
   });
 

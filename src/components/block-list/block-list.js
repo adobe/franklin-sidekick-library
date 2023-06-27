@@ -40,6 +40,12 @@ export class BlockList extends LitElement {
       display: none;
     }
 
+
+    .list-container sp-sidenav sp-sidenav-item[label="Unnamed Item"] {
+      --spectrum-sidenav-item-text-color: var(--spectrum-negative-color-700);
+    }
+
+
     .message-container {
       padding-top: 50px;
     }
@@ -186,16 +192,16 @@ export class BlockList extends LitElement {
           const { body } = blockDocument.cloneNode(true);
 
           // Check for default library metadata
-          const defaultLibraryMetadata = getDefaultLibraryMetadata(body);
+          const defaultLibraryMetadata = getDefaultLibraryMetadata(body) ?? {};
 
           // Query all variations of the block in the container
-          const pageBlocks = [...body.querySelectorAll(':scope > div')];
+          const pageBlocks = body.querySelectorAll(':scope > div');
 
           pageBlocks.forEach((blockWrapper, index) => {
             // Check if the variation has library metadata
             const sectionLibraryMetadata = getLibraryMetadata(blockWrapper) ?? {};
             const blockElement = blockWrapper.querySelector('div[class]');
-            const authoredBlockName = sectionLibraryMetadata.name ?? getBlockName(blockElement);
+            let itemName = sectionLibraryMetadata.name ?? getBlockName(blockElement);
             const blockNameWithVariant = getBlockName(blockElement, true);
             const searchTags = sectionLibraryMetadata.searchtags
                                 ?? sectionLibraryMetadata['search-tags']
@@ -203,8 +209,14 @@ export class BlockList extends LitElement {
                                 ?? defaultLibraryMetadata['search-tags']
                                 ?? '';
 
+            // If the item doesn't have an authored or default
+            // name (default content), set to 'Unnamed Item'
+            if (!itemName) {
+              itemName = 'Unnamed Item';
+            }
+
             const blockVariantItem = createSideNavItem(
-              authoredBlockName,
+              itemName,
               'sp-icon-file-code',
               false,
               true,

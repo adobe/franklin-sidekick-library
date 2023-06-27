@@ -20,7 +20,7 @@ import '../../../src/components/block-list/block-list.js';
 import fetchMock from 'fetch-mock/esm/client';
 import { createTag } from '../../../src/utils/dom.js';
 import { CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM } from '../../fixtures/libraries.js';
-import { mockFetchCardsPlainHTMLSuccess, mockFetchColumnsPlainHTMLSuccess } from '../../fixtures/blocks.js';
+import { mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess, mockFetchColumnsPlainHTMLSuccess } from '../../fixtures/blocks.js';
 import { recursiveQuery } from '../../test-utils.js';
 
 describe('BlockRenderer', () => {
@@ -29,7 +29,7 @@ describe('BlockRenderer', () => {
 
   beforeEach(async () => {
     mockFetchColumnsPlainHTMLSuccess();
-    mockFetchCardsPlainHTMLSuccess({ name: 'Cards Authored Name', searchTags: 'foobar' });
+    mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess({ name: 'Cards Authored Name', searchTags: 'foobar' });
     blockList = await fixture(html`<block-list></block-list>`);
     container = createTag('div');
   });
@@ -52,7 +52,7 @@ describe('BlockRenderer', () => {
       expect(allSideNavItems.length).to.equal(6);
     });
     it('renders authored name', async () => {
-      blockList.loadBlocks([CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM], container);
+      await blockList.loadBlocks([CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM], container);
       await waitUntil(
         () => recursiveQuery(blockList, 'sp-sidenav'),
         'Element did not render children',
@@ -61,6 +61,24 @@ describe('BlockRenderer', () => {
       const authoredCardName = sideNav.querySelector('sp-sidenav-item[label="Cards Authored Name"]');
       expect(authoredCardName).to.exist;
     });
+
+    it('default library metadata', async () => {
+      await blockList.loadBlocks([CARDS_BLOCK_LIBRARY_ITEM], container);
+      await waitUntil(
+        () => recursiveQuery(blockList, 'sp-sidenav'),
+        'Element did not render children',
+      );
+
+      const sideNav = recursiveQuery(blockList, 'sp-sidenav');
+      const authoredCardName = sideNav.querySelector('sp-sidenav-item[label="Cards Authored Name"]');
+      expect(authoredCardName).to.exist;
+      expect(authoredCardName.getAttribute('data-search-tags')).to.equal('foobar');
+
+      const blockWithDefaultSearchTags = sideNav.querySelector('sp-sidenav-item[label="cards (logos)"]');
+      expect(blockWithDefaultSearchTags).to.exist;
+      expect(blockWithDefaultSearchTags.getAttribute('data-search-tags')).to.equal('Default Search Tag');
+    });
+
     it('preview block', async () => {
       const previewSpy = spy();
 

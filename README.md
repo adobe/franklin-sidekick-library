@@ -45,7 +45,7 @@ To generate content for the blocks plugin, you need to prepare a separate Word d
 
 ![Library.xlsx](https://github.com/adobe/franklin-sidekick-library/assets/3231084/5f645ab8-cc30-4cd6-932b-94024d01713b)
 
-#### (Optional) Authoring block names and descriptions.
+### (Optional) Authoring block names and descriptions.
 
 By default the block name (with variation) will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label when it’s rendered in the blocks plugin. This can be customized by creating a library metadata section within the same section as the block. Library metadata can also be used to author a description of the block as well as adding `searchTags` to include an alias for the block when using the search feature.
 
@@ -58,6 +58,10 @@ Example block with custom name and description
 **Display**
 
 ![Screenshot 2023-06-08 at 1 13 32 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/fce6f59c-775c-457c-bab5-8b3c85c0efa6)
+
+### Autoblocks and Default Content
+
+The blocks plugin is capable of rendering default content and autoblocks. In order to achieve this, it is necessary to place your default content or autoblock within a dedicated section, which should include a library metadata table defining a name property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
 
 ## Sidekick plugin setup
 

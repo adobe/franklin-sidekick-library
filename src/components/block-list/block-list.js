@@ -211,7 +211,7 @@ export class BlockList extends LitElement {
 
             // If the item doesn't have an authored or default
             // name (default content), set to 'Unnamed Item'
-            if (!itemName) {
+            if (!itemName || itemName === 'section-metadata') {
               itemName = 'Unnamed Item';
             }
 

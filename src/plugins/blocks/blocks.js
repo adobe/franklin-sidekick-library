@@ -100,6 +100,12 @@ function renderFrameSplitContainer() {
   `;
 }
 
+function removeAllEventListeners(element) {
+  const clone = element.cloneNode(true);
+  element.parentNode.replaceChild(clone, element);
+  return clone;
+}
+
 /**
  * Copies a block to the clipboard
  * @param {HTMLElement} wrapper The wrapper element
@@ -144,22 +150,24 @@ export function copyBlockToClipboard(wrapper, name, blockURL) {
  * @param {string} blockURL The URL of the block
  */
 export function copyDefaultContentToClipboard(wrapper, blockURL) {
-  prepareIconsForCopy(wrapper);
-  prepareImagesForCopy(wrapper, blockURL, 100);
+  const wrapperClone = wrapper.cloneNode(true);
+  prepareIconsForCopy(wrapperClone);
+  prepareImagesForCopy(wrapperClone, blockURL, 100);
 
   // Does the block have section metadata?
   let sectionMetadataTable;
-  const sectionMetadata = wrapper.querySelector('.section-metadata');
+  const sectionMetadata = wrapperClone.querySelector('.section-metadata');
   if (sectionMetadata) {
-  // Create a table for the section metadata
+    // Create a table for the section metadata
     sectionMetadataTable = getTable(
       sectionMetadata,
       'Section metadata',
       blockURL,
     );
+    sectionMetadata.remove();
   }
 
-  copyBlock(wrapper.outerHTML, sectionMetadataTable);
+  copyBlock(wrapperClone.outerHTML, sectionMetadataTable);
 
   // Track block copy event
   sampleRUM('library:blockcopied', { target: blockURL });
@@ -240,8 +248,8 @@ export async function decorate(container, data) {
     // Append the path and index of the current block to the url params
     setURLParams([['path', blockData.path], ['index', e.detail.index]]);
 
-    const copyButton = content.querySelector('.copy-button');
-    copyButton?.addEventListener('click', () => {
+    const copyButton = removeAllEventListeners(content.querySelector('.copy-button'));
+    copyButton.addEventListener('click', () => {
       const copyElement = blockRenderer.getBlockElement();
       const copyWrapper = blockRenderer.getBlockWrapper();
       const copyBlockData = blockRenderer.getBlockData();
@@ -258,17 +266,17 @@ export async function decorate(container, data) {
     });
 
     const frameView = content.querySelector('.frame-view');
-    const mobileViewButton = content.querySelector('sp-action-button[value="mobile"]');
+    const mobileViewButton = removeAllEventListeners(content.querySelector('sp-action-button[value="mobile"]'));
     mobileViewButton?.addEventListener('click', () => {
       frameView.style.width = '480px';
     });
 
-    const tabletViewButton = content.querySelector('sp-action-button[value="tablet"]');
+    const tabletViewButton = removeAllEventListeners(content.querySelector('sp-action-button[value="tablet"]'));
     tabletViewButton?.addEventListener('click', () => {
       frameView.style.width = '768px';
     });
 
-    const desktopViewButton = content.querySelector('sp-action-button[value="desktop"]');
+    const desktopViewButton = removeAllEventListeners(content.querySelector('sp-action-button[value="desktop"]'));
     desktopViewButton?.addEventListener('click', () => {
       frameView.style.width = '100%';
     });

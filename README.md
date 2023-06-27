@@ -61,7 +61,7 @@ Example block with custom name and description
 
 ### Autoblocks and Default Content
 
-The blocks plugin is capable of rendering default content and autoblocks. In order to achieve this, it is necessary to place your default content or autoblock within a dedicated section, which should include a library metadata table defining a name property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
+The blocks plugin is capable of rendering [default content](https://www.hlx.live/developer/markup-sections-blocks#default-content) and [autoblocks](https://www.hlx.live/developer/markup-sections-blocks#auto-blocking). In order to achieve this, it is necessary to place your `default content` or `autoblock` within a dedicated section, which should include a library metadata table defining a name property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
 
 ## Sidekick plugin setup
 

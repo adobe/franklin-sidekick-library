@@ -15,6 +15,7 @@ import { createTag } from '../../src/utils/dom.js';
 import { CARDS_DEFAULT_STUB, CARDS_LOGOS_STUB } from './stubs/cards.js';
 import { stubHead, stubPage } from './stubs/pages.js';
 import { ALL_EDITABLE_STUB } from './stubs/editable.js';
+import { DEFAULT_CONTENT_STUB } from './stubs/default-content.js';
 
 export function mockBlock(html, variants = [], wrap = false) {
   const clone = html.cloneNode(true);
@@ -36,11 +37,18 @@ export const mockFetchAllEditableDocumentSuccess = () => fetchMock.get(allEditab
   body: stubPage(stubHead('all-editable'), [mockBlock(ALL_EDITABLE_STUB, [], true)]),
 });
 
+export const defaultContentPageUrl = 'https://example.hlx.test/tools/sidekick/blocks/default-content/default-content';
+export const mockFetchDefaultContentDocumentSuccess = () => fetchMock.get(defaultContentPageUrl, {
+  status: 200,
+  body: stubPage(stubHead('default-content'), [mockBlock(DEFAULT_CONTENT_STUB, [], false)]),
+}, { overwriteRoutes: true });
+
 export const mockFetchInlinePageDependenciesSuccess = (blockName = 'cards') => {
-  fetchMock.get('https://example.hlx.test/scripts.js', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('https://example.hlx.test/scripts/scripts.js', { status: 200 }, { overwriteRoutes: true });
   fetchMock.get(`https://example.hlx.test/blocks/${blockName}/${blockName}.css`, { status: 200 }, { overwriteRoutes: true });
   fetchMock.get('https://example.hlx.test/styles/lazy-styles.css', { status: 200 }, { overwriteRoutes: true });
   fetchMock.get('https://example.hlx.test/icons/arrow.svg', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('https://example.hlx.test/icons/home.svg', { status: 200 }, { overwriteRoutes: true });
   fetchMock.get('https://example.hlx.test/media_1.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
   fetchMock.get('https://example.hlx.test/media_2.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
   fetchMock.get('https://example.hlx.test/media_3.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });

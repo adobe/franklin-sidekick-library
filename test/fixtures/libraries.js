@@ -30,6 +30,12 @@ export const NON_EXISTENT_BLOCK_LIBRARY_ITEM = {
   url: 'https://example.hlx.test/tools/sidekick/blocks/columns/path-does-not-exist',
 };
 
+export const DEFAULT_CONTENT_LIBRARY_ITEM = {
+  name: 'Default Content',
+  path: '/tools/sidekick/blocks/default-content/default-content',
+  url: 'https://example.hlx.test/tools/sidekick/blocks/default-content/default-content',
+};
+
 const constructSingleSheetJSONBody = data => ({
   body: {
     total: data.length,

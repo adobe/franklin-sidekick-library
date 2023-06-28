@@ -30,10 +30,13 @@ import { ALL_EDITABLE_STUB } from '../../fixtures/stubs/editable.js';
 import {
   allEditablePageUrl,
   cardsPageUrl,
+  defaultContentPageUrl,
   mockFetchAllEditableDocumentSuccess,
   mockFetchCardsDocumentSuccess,
+  mockFetchDefaultContentDocumentSuccess,
   mockFetchInlinePageDependenciesSuccess,
 } from '../../fixtures/pages.js';
+import { DEFAULT_CONTENT_STUB } from '../../fixtures/stubs/default-content.js';
 
 describe('BlockRenderer', () => {
   let blockRenderer;
@@ -65,6 +68,21 @@ describe('BlockRenderer', () => {
     );
   };
 
+  const renderDefaultContent = async (blockRendererMethod) => {
+    const defaultContentBlockName = 'default content';
+    const defaultContentBlockData = {
+      url: defaultContentPageUrl,
+      extended: false,
+    };
+    const defaultContent = mockBlock(DEFAULT_CONTENT_STUB, [], false);
+
+    await blockRendererMethod.loadBlock(
+      defaultContentBlockName,
+      defaultContentBlockData,
+      defaultContent,
+    );
+  };
+
   beforeEach(async () => {
     AppModel.init();
     AppModel.appStore.context = {
@@ -82,6 +100,7 @@ describe('BlockRenderer', () => {
     mockFetchCardsDocumentSuccess();
     mockFetchAllEditableDocumentSuccess();
     mockFetchInlinePageDependenciesSuccess();
+    mockFetchDefaultContentDocumentSuccess();
     blockRenderer = await fixture(html`<block-renderer></block-renderer>`);
   });
 
@@ -191,6 +210,24 @@ describe('BlockRenderer', () => {
 
       const cardsBlock = recursiveQuery(iframe.contentDocument, '.cards');
       expect(cardsBlock).to.exist;
+    });
+  });
+
+  describe('default content', () => {
+    it('default content should render', async () => {
+      await renderDefaultContent(blockRenderer);
+
+      const iframe = blockRenderer.shadowRoot.querySelector('iframe');
+      await waitUntil(
+        () => recursiveQuery(iframe.contentDocument, '#this-is-a-heading'),
+        'Element did not render children',
+      );
+
+      const heading = recursiveQuery(iframe.contentDocument, '#this-is-a-heading');
+      expect(heading).to.exist;
+
+      const img = recursiveQuery(iframe.contentDocument, 'img');
+      expect(img.src).to.equal('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
     });
   });
 

@@ -26,6 +26,7 @@ export class BlockRenderer extends LitElement {
     activeOverlayContent: { state: false },
     selectedContentEditable: { state: false },
     blockData: { state: false },
+    isBlock: { state: false, type: Boolean },
     extendedBlock: { state: true, type: Boolean },
   };
 
@@ -254,13 +255,27 @@ export class BlockRenderer extends LitElement {
       ? context.extendedLibraryOrigin
       : context.baseLibraryOrigin;
 
+    // Change all media relative paths to absolute paths in the block
+    blockWrapper.innerHTML = blockWrapper.innerHTML
+      .replace(/\.\/media/g, `${origin}/media`)
+      .replace(/src="\/media/g, `src="${origin}/media`);
+
     // Store the active block
     this.blockWrapperHTML = blockWrapper;
 
     // Store the block data
     this.blockData = blockData;
 
-    const block = this.getBlockElement();
+    // Assume what we are trying to load is a block and not an autoblock or default content
+    this.isBlock = true;
+
+    let block = this.getBlockElement();
+
+    // If there is no block, then we are rendering an autoblock or default content
+    if (!block) {
+      this.isBlock = false;
+      block = this.getBlockWrapper();
+    }
 
     // Add the sidekick-library class to the block element
     const sidekickLibraryClass = 'sidekick-library';
@@ -271,11 +286,6 @@ export class BlockRenderer extends LitElement {
 
     // Clone the block and decorate it
     const blockClone = blockWrapper.cloneNode(true);
-
-    // Change all media relative paths to absolute paths in the block
-    blockClone.innerHTML = blockClone.innerHTML
-      .replace(/\.\/media/g, `${origin}/media`)
-      .replace(/src="\/media/g, `src="${origin}/media`);
 
     // Fetch the container page markup
     const containerPageMarkup = await this.fetchContainerPageMarkup(blockURL, origin);
@@ -353,12 +363,18 @@ export class BlockRenderer extends LitElement {
 
       // Load the block and lazy CSS
       const codePath = `${origin}${hlx?.codeBasePath ?? ''}`;
-      const styleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/blocks/${blockName}/${blockName}.css` });
+
+      // If we are rendering a block, load the block CSS
+      if (this.isBlock) {
+        const styleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/blocks/${blockName}/${blockName}.css` });
+        frame.contentWindow.document.head.append(styleLink);
+      }
+
+      // Load the lazy CSS
       const lazyStyleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/styles/lazy-styles.css` });
       frame.contentWindow.document.head.append(lazyStyleLink);
-      frame.contentWindow.document.head.append(styleLink);
 
-      styleLink.onload = () => {
+      lazyStyleLink.onload = () => {
         // Show the iframe
         frame.style.display = 'block';
 
@@ -375,7 +391,7 @@ export class BlockRenderer extends LitElement {
           }
         });
       };
-      styleLink.onerror = (e) => {
+      lazyStyleLink.onerror = (e) => {
         // eslint-disable-next-line no-console
         console.error(e);
       };

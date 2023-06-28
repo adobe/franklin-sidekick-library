@@ -94,23 +94,38 @@ export class Header extends LitElement {
 
     // Listen for the library to be loaded, set the default plugin (blocks) and load it
     EventBus.instance.addEventListener(APP_EVENTS.LIBRARY_LOADED, () => {
-      this.libraries = AppModel.appStore.context.libraries;
-      const keys = Object.keys(this.libraries);
-      const defaultLibrary = keys.includes('blocks') ? 'blocks' : keys[0];
-      loadPlugin(AppModel, defaultLibrary);
+      const { context } = AppModel.appStore;
+      const { libraries } = context;
+      const keys = Object.keys(libraries);
+
+      // Store libraries in state
+      this.libraries = libraries;
+
+      let activePlugin = keys.includes('blocks') ? 'blocks' : keys[0];
+
+      // Check if the url deep links to a plugin
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.has('plugin')) {
+        const plugin = searchParams.get('plugin');
+        activePlugin = plugin;
+      }
+
+      loadPlugin(AppModel, activePlugin);
     });
 
     // Listen for a plugin to be loaded
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
-      if (AppModel.appStore.context.activePlugin) {
-        const { searchEnabled } = AppModel.appStore.context.activePlugin.config;
+      const { context } = AppModel.appStore;
+      if (context.activePlugin) {
+        const { activePlugin } = context;
+        const { searchEnabled } = activePlugin.config;
 
         if (searchEnabled) {
           this.searchEnabled = true;
         }
 
         this.pluginActive = true;
-        this.defaultPluginName = AppModel.appStore.context.activePlugin.config.title.toLowerCase();
+        this.defaultPluginName = activePlugin.config.title.toLowerCase().replace(' ', '-');
 
         setURLParams([['plugin', this.defaultPluginName]]);
       }

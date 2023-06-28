@@ -189,8 +189,6 @@ export async function decorate(container, data) {
   const blockList = createTag('block-list');
   listContainer.append(blockList);
 
-  await blockList.loadBlocks(data, container);
-
   blockList.addEventListener('PreviewBlock', (e) => {
     window.open(e.details.path, '_blockpreview');
   });
@@ -303,6 +301,8 @@ export async function decorate(container, data) {
   search.addEventListener('input', (e) => {
     blockList.filterBlocks(e.target.value);
   });
+
+  await blockList.loadBlocks(data, container);
 
   // Show blocks and hide loader
   container.dispatchEvent(new CustomEvent('HideLoader'));

@@ -17,7 +17,7 @@ import {
   fixture, expect, waitUntil,
 } from '@open-wc/testing';
 import fetchMock from 'fetch-mock/esm/client';
-import { recursiveQuery, simulateTyping } from './test-utils.js';
+import { recursiveQuery, recursiveQueryAll, simulateTyping } from './test-utils.js';
 import AppModel from '../src/models/app-model.js';
 import { unloadPlugin } from '../src/utils/plugin.js';
 import '../src/index.js';
@@ -32,6 +32,8 @@ import {
 } from './fixtures/libraries.js';
 import { mockFetchEnLocalesSuccess } from './fixtures/locales.js';
 import { mockFetchCardsPlainHTMLSuccess, mockFetchColumnsPlainHTMLSuccess } from './fixtures/blocks.js';
+import { setURLParams } from '../src/utils/dom.js';
+import { mockFetchColumnsDocumentSuccess, mockFetchInlinePageDependenciesSuccess } from './fixtures/pages.js';
 
 describe('FranklinLibrary', () => {
   beforeEach(() => {
@@ -41,6 +43,7 @@ describe('FranklinLibrary', () => {
     mockFetchMultiSheetLibrarySuccess();
     mockFetchCardsPlainHTMLSuccess();
     mockFetchColumnsPlainHTMLSuccess();
+    mockFetchColumnsDocumentSuccess();
   });
 
   afterEach(() => {
@@ -146,8 +149,8 @@ describe('FranklinLibrary', () => {
 
     const picker = recursiveQuery(library, 'sp-picker');
 
-    picker.value = 'Foobar';
-    picker.dispatchEvent(new Event('click'));
+    picker.value = 'foobar';
+    picker.dispatchEvent(new Event('change'));
 
     const toast = recursiveQuery(library, 'sp-toast');
     expect(toast).to.be.visible;
@@ -201,6 +204,60 @@ describe('FranklinLibrary', () => {
     unloadPlugin(AppModel);
 
     expect(AppModel.appStore.context.activePlugin).to.equal(undefined);
+  });
+
+  it('deep linking to block', async () => {
+    mockFetchInlinePageDependenciesSuccess('columns');
+    setURLParams([['plugin', 'blocks'], ['path', '/tools/sidekick/blocks/columns/columns'], ['index', 1]]);
+    const library = document.createElement('sidekick-library');
+    library.config = {
+      base: singleSheetUrl,
+    };
+
+    await fixture(library);
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-menu-item'),
+      'Element did not render children',
+    );
+
+    const expandedItem = recursiveQuery(library, 'sp-sidenav-item[expanded]');
+    expect(expandedItem).to.not.be.null;
+    expect(expandedItem.getAttribute('label')).to.equal('Columns');
+
+    const blockTitle = recursiveQuery(library, '.block-title');
+    expect(blockTitle.textContent).to.equal('columns (center, background)');
+
+    const blockRenderer = recursiveQuery(library, 'block-renderer');
+    const iframe = blockRenderer.shadowRoot.querySelector('iframe');
+    await waitUntil(
+      () => recursiveQuery(iframe.contentDocument, '.columns'),
+      'Element did not render children',
+    );
+
+    const columnsBlock = iframe.contentDocument.querySelector('.columns');
+    const h2 = columnsBlock.querySelector('h2');
+    expect(h2.textContent).to.equal('Lorem Ipsum');
+  });
+
+  it('deep linking to tags plugin', async () => {
+    mockFetchInlinePageDependenciesSuccess('columns');
+    setURLParams([['plugin', 'tags']]);
+    const library = document.createElement('sidekick-library');
+    library.config = {
+      base: multiSheetUrl,
+    };
+
+    await fixture(library);
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-menu-item'),
+      'Element did not render children',
+    );
+
+    const pluginRenderer = recursiveQuery(library, '#tags-plugin');
+    const menuItems = recursiveQueryAll(pluginRenderer, 'sp-menu-item');
+    expect(menuItems.size).to.equal(3);
   });
 
   it.skip('should search', async () => {

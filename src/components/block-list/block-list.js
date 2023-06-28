@@ -157,6 +157,11 @@ export class BlockList extends LitElement {
    * @param {*} containe The container to load the blocks into
    */
   async loadBlocks(data, container) {
+    // Check if there is a deeplink to a block (path and index)
+    const sp = new URLSearchParams(window.location.search);
+    const dlPath = sp.has('path') ? sp.get('path') : undefined;
+    const dlIndex = sp.has('index') ? sp.get('index') : undefined;
+
     const listContainer = createTag('div', { class: 'list-container' });
 
     if (this.type === 'hierarchical') {
@@ -167,7 +172,7 @@ export class BlockList extends LitElement {
 
       // Create an array of promises for each block
       const promises = data.map(async (blockData) => {
-        const { url: blockURL } = blockData;
+        const { url: blockURL, path } = blockData;
         const blockPromise = fetchBlock(blockURL);
 
         try {
@@ -239,13 +244,23 @@ export class BlockList extends LitElement {
             // Add child variant to parent
             blockParentItem.append(blockVariantItem);
 
+            // Construct a load payload
+            const eventPayload = {
+              detail: {
+                blockWrapper, blockData, sectionLibraryMetadata, defaultLibraryMetadata, index,
+              },
+            };
+
+            // On item click
             blockVariantItem.addEventListener('click', async () => {
-              this.dispatchEvent(new CustomEvent('LoadBlock', {
-                detail: {
-                  blockWrapper, blockData, sectionLibraryMetadata, defaultLibraryMetadata, index,
-                },
-              }));
+              this.dispatchEvent(new CustomEvent('LoadBlock', eventPayload));
             });
+
+            // If the block path and index match the URL params, load the block
+            if (dlPath === path && dlIndex === index.toString()) {
+              blockParentItem.setAttribute('expanded', true);
+              this.dispatchEvent(new CustomEvent('LoadBlock', eventPayload));
+            }
           });
 
           return blockPromise;

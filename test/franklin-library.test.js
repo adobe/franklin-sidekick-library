@@ -246,12 +246,18 @@ describe('FranklinLibrary', () => {
     const library = document.createElement('sidekick-library');
     library.config = {
       base: multiSheetUrl,
+      tags: 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library/plugins/tags/tags.js',
     };
 
     await fixture(library);
 
     await waitUntil(
       () => recursiveQuery(library, 'sp-menu-item'),
+      'Element did not render children',
+    );
+
+    await waitUntil(
+      () => recursiveQuery(library, '#tags-plugin'),
       'Element did not render children',
     );
 

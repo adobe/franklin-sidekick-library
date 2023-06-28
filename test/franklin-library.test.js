@@ -266,12 +266,13 @@ describe('FranklinLibrary', () => {
     expect(menuItems.size).to.equal(3);
   });
 
-  it.skip('should search', async () => {
+  it('custom plugin search should work', async () => {
     AppModel.libraryHost = 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library';
 
     const library = document.createElement('sidekick-library');
     library.config = {
       base: multiSheetUrl,
+      tags: 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library/plugins/tags/tags.js',
     };
 
     await fixture(library);
@@ -284,8 +285,14 @@ describe('FranklinLibrary', () => {
     const picker = recursiveQuery(library, 'sp-picker');
     picker.value = 'tags';
     picker.dispatchEvent(new Event('change'));
+
     await waitUntil(
       () => recursiveQuery(library, '#tags-plugin'),
+      'Element did not render children',
+    );
+
+    await waitUntil(
+      () => recursiveQuery(library, '#search-button'),
       'Element did not render children',
     );
 

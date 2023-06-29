@@ -16,6 +16,7 @@ import { CARDS_DEFAULT_STUB, CARDS_LOGOS_STUB } from './stubs/cards.js';
 import { stubHead, stubPage } from './stubs/pages.js';
 import { ALL_EDITABLE_STUB } from './stubs/editable.js';
 import { DEFAULT_CONTENT_STUB } from './stubs/default-content.js';
+import { COLUMNS_CENTER_BACKGROUND_STUB, COLUMNS_DEFAULT_STUB } from './stubs/columns.js';
 
 export function mockBlock(html, variants = [], wrap = false) {
   const clone = html.cloneNode(true);
@@ -29,6 +30,12 @@ export const cardsPageUrl = 'https://example.hlx.test/tools/sidekick/blocks/card
 export const mockFetchCardsDocumentSuccess = () => fetchMock.get(cardsPageUrl, {
   status: 200,
   body: stubPage(stubHead('cards'), [mockBlock(CARDS_DEFAULT_STUB, [], true), mockBlock(CARDS_LOGOS_STUB, [], true)]),
+});
+
+export const columnsPageUrl = 'https://example.hlx.test/tools/sidekick/blocks/columns/columns';
+export const mockFetchColumnsDocumentSuccess = () => fetchMock.get(columnsPageUrl, {
+  status: 200,
+  body: stubPage(stubHead('columns'), [mockBlock(COLUMNS_DEFAULT_STUB, [], true), mockBlock(COLUMNS_CENTER_BACKGROUND_STUB, [], true)]),
 });
 
 export const allEditablePageUrl = 'https://example.hlx.test/tools/sidekick/blocks/alleditable/alleditable';

@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.4.0...v1.5.0) (2023-06-29)
+
+
+### Features
+
+* deep linking support ([#48](https://github.com/adobe/franklin-sidekick-library/issues/48)) ([3d68cfc](https://github.com/adobe/franklin-sidekick-library/commit/3d68cfcc193b94756b95946952668ceca7bdd261))
+
 # [1.4.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.3.4...v1.4.0) (2023-06-28)
 
 

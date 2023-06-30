@@ -52,6 +52,7 @@ import {
 } from '../../fixtures/pages.js';
 import { DEFAULT_CONTENT_STUB_WITH_SECTION_METADATA } from '../../fixtures/stubs/default-content.js';
 import { CARDS_DEFAULT_STUB } from '../../fixtures/stubs/cards.js';
+import { createTag } from '../../../src/utils/dom.js';
 
 describe('Blocks Plugin', () => {
   describe('decorate()', () => {
@@ -313,6 +314,14 @@ describe('Blocks Plugin', () => {
       copyButton.dispatchEvent(new Event('click'));
 
       expect(toastSpy.calledOnce).to.be.true;
+
+      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.target[0]);
+      expect(copiedHTML.querySelector('p:first-of-type').textContent).to.eq('Unmatched speed');
+
+      const firstImage = copiedHTML.querySelector('img');
+      expect(firstImage.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
+      expect(firstImage.width).to.eq(270);
+      expect(firstImage.height).to.eq(153);
     });
 
     it('copy default content via details panel', async () => {
@@ -327,6 +336,11 @@ describe('Blocks Plugin', () => {
       copyButton.dispatchEvent(new Event('click'));
 
       expect(toastSpy.calledOnce).to.be.true;
+
+      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.target[0]);
+      expect(copiedHTML.querySelector('h1').textContent).to.eq('This is a heading');
+      expect(copiedHTML.querySelector('p:last-of-type').textContent).to.eq(':home:');
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
     });
 
     it('copyBlockToClipboard', async () => {
@@ -334,7 +348,9 @@ describe('Blocks Plugin', () => {
       addSectionMetadata(defaultCardsBlock, { style: 'dark' });
 
       const wrapper = defaultCardsBlock;
-      copyBlockToClipboard(wrapper, 'cards', cardsBlockUrl);
+      const copied = copyBlockToClipboard(wrapper, 'cards', cardsBlockUrl);
+      const copiedHTML = createTag('div', undefined, copied[0]);
+      const copiedMetadata = createTag('div', undefined, copied[1]);
 
       const img = wrapper.querySelector('img');
       expect(img.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
@@ -344,15 +360,30 @@ describe('Blocks Plugin', () => {
 
       const sectionMetadata = wrapper.querySelector('.section-metadata');
       expect(sectionMetadata).to.not.be.null;
+
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
+      expect(copiedHTML.querySelector('table')).to.not.be.null;
+      expect(copiedHTML.querySelector('td:nth-of-type(2)').style.width).to.eq('50%');
+
+      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section metadata');
+      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(1)').textContent).to.eq('style');
+      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(2)').textContent).to.eq('dark');
     });
 
     it('copyDefaultContentToClipboard', async () => {
       const wrapper = DEFAULT_CONTENT_STUB_WITH_SECTION_METADATA;
       const url = new URL(defaultContentBlockUrl);
 
-      copyDefaultContentToClipboard(wrapper, url);
+      const copied = copyDefaultContentToClipboard(wrapper, url);
+      const copiedHTML = createTag('div', undefined, copied[0]);
+      const copiedMetadata = createTag('div', undefined, copied[1]);
 
-      // Node is cloned
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
+      expect(copiedHTML.querySelector('p:last-of-type').textContent).to.eq(':home:');
+
+      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section metadata');
+      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(1)').textContent).to.eq('name');
+      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(2)').textContent).to.eq('Home Hero');
     });
 
     it('switch iframe view sizes', async () => {

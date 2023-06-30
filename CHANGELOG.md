@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.0...v1.5.1) (2023-06-30)
+
+
+### Bug Fixes
+
+* bad img url when copying default content + tests ([f8decf6](https://github.com/adobe/franklin-sidekick-library/commit/f8decf60f83b27b922090bb74ab949333e1495c6))
+
 # [1.5.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.4.0...v1.5.0) (2023-06-29)
 
 

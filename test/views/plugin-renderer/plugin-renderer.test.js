@@ -12,7 +12,9 @@
 
 /* eslint-disable no-unused-expressions */
 
-import { html, fixture, expect } from '@open-wc/testing';
+import {
+  html, fixture, expect, waitUntil,
+} from '@open-wc/testing';
 import '../../../src/views/plugin-renderer/plugin-renderer.js';
 import { spy } from 'sinon';
 import { APP_EVENTS } from '../../../src/events/events.js';
@@ -93,9 +95,15 @@ describe('PluginRenderer', () => {
       expect(root.classList.contains('plugin-root')).to.be.true;
     });
 
-    it('should listen for PLUGIN_LOADED event and call decorate method with root element', () => {
+    it('should listen for PLUGIN_LOADED event and call decorate method with root element', async () => {
       const decorateSpy = spy(AppModel.appStore.context.activePlugin, 'decorate');
       EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
+
+      await waitUntil(
+        () => decorateSpy.calledOnce,
+        'Wait for decorate to be called',
+      );
+
       expect(decorateSpy.calledOnce).to.be.true;
     });
 
@@ -108,10 +116,16 @@ describe('PluginRenderer', () => {
       expect(removedRoot).not.to.exist;
     });
 
-    it('should listen for SEARCH_UPDATED event and call decorate method with root element, plugin data, and search query', () => {
+    it('should listen for SEARCH_UPDATED event and call decorate method with root element, plugin data, and search query', async () => {
       const decorateSpy = spy(AppModel.appStore.context.activePlugin, 'decorate');
       EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.PLUGIN_LOADED));
       EventBus.instance.dispatchEvent(new CustomEvent(APP_EVENTS.SEARCH_UPDATED));
+
+      await waitUntil(
+        () => decorateSpy.calledTwice,
+        'Wait for decorate to be called',
+      );
+
       expect(decorateSpy.calledTwice).to.be.true;
     });
   });

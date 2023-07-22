@@ -16,6 +16,7 @@ import { LitElement, html, css } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { createTag } from '../../utils/dom.js';
 import AppModel from '../../models/app-model.js';
+import { isDev } from '../../utils/library.js';
 
 export class BlockRenderer extends LitElement {
   iframe = createRef();
@@ -378,10 +379,15 @@ export class BlockRenderer extends LitElement {
         // Show the iframe
         frame.style.display = 'block';
 
-        // Remove all source tags
-        [...frame.contentDocument.querySelectorAll('source')].forEach((el) => {
-          el.remove();
-        });
+        // When in dev mode, we need to change the relative urls of the images to absolute
+        if (isDev()) {
+          [...frame.contentDocument.querySelectorAll('source')].forEach((el) => {
+            const srcset = el.getAttribute('srcset');
+            if (srcset.startsWith('/media')) {
+              el.setAttribute('srcset', `${origin}${srcset}`);
+            }
+          });
+        }
 
         // Images created with createOptimizedImage will have a src that starts with /media
         [...frame.contentDocument.querySelectorAll('img')].forEach((el) => {

@@ -375,19 +375,19 @@ export class BlockRenderer extends LitElement {
       const lazyStyleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/styles/lazy-styles.css` });
       frame.contentWindow.document.head.append(lazyStyleLink);
 
+      // When in dev mode, we need to change the relative urls of the images to absolute
+      if (isDev()) {
+        [...frame.contentDocument.querySelectorAll('source')].forEach((el) => {
+          const srcset = el.getAttribute('srcset');
+          if (srcset.startsWith('/media')) {
+            el.setAttribute('srcset', `${origin}${srcset}`);
+          }
+        });
+      }
+
       lazyStyleLink.onload = () => {
         // Show the iframe
         frame.style.display = 'block';
-
-        // When in dev mode, we need to change the relative urls of the images to absolute
-        if (isDev()) {
-          [...frame.contentDocument.querySelectorAll('source')].forEach((el) => {
-            const srcset = el.getAttribute('srcset');
-            if (srcset.startsWith('/media')) {
-              el.setAttribute('srcset', `${origin}${srcset}`);
-            }
-          });
-        }
 
         // Images created with createOptimizedImage will have a src that starts with /media
         [...frame.contentDocument.querySelectorAll('img')].forEach((el) => {

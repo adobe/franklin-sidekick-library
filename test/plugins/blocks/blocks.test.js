@@ -408,15 +408,5 @@ describe('Blocks Plugin', () => {
 
       expect(frameView.style.width).to.eq('100%');
     });
-
-    it('should change srcset to absolute when in devMode', async () => {
-      window.libraryDev = true;
-      await loadBlock();
-
-      const blockLibrary = container.querySelector('.block-library');
-      const blockRenderer = blockLibrary.querySelector('sp-split-view .content .view .frame-view block-renderer');
-      const iframe = blockRenderer.shadowRoot.querySelector('iframe');
-      expect(iframe.contentDocument.querySelector('source').srcset).to.eq('https://example.hlx.test/media_1.jpeg?width=2000&format=webply&optimize=medium');
-    });
   });
 });

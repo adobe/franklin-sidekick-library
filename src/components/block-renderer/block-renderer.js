@@ -371,26 +371,28 @@ export class BlockRenderer extends LitElement {
         frame.contentWindow.document.head.append(styleLink);
       }
 
+      // Since these requests happen in the iframe there is no way to mock the responses in a test
+      /* c8 ignore next 32 */
       // Load the lazy CSS
       const lazyStyleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/styles/lazy-styles.css` });
       frame.contentWindow.document.head.append(lazyStyleLink);
-
-      // When in dev mode, we need to change the relative urls of the images to absolute
-      if (isDev()) {
-        [...frame.contentDocument.querySelectorAll('source')].forEach((el) => {
-          const srcset = el.getAttribute('srcset');
-          if (srcset.startsWith('/media')) {
-            el.setAttribute('srcset', `${origin}${srcset}`);
-          }
-        });
-      }
 
       lazyStyleLink.onload = () => {
         // Show the iframe
         frame.style.display = 'block';
 
+        // When in dev mode, we need to change the relative urls of the images to absolute
+        if (isDev()) {
+          frame.contentDocument.querySelectorAll('source').forEach((el) => {
+            const srcset = el.getAttribute('srcset');
+            if (srcset.startsWith('/media')) {
+              el.setAttribute('srcset', `${origin}${srcset}`);
+            }
+          });
+        }
+
         // Images created with createOptimizedImage will have a src that starts with /media
-        [...frame.contentDocument.querySelectorAll('img')].forEach((el) => {
+        frame.contentDocument.querySelectorAll('img').forEach((el) => {
           const src = el.getAttribute('src');
           if (src.startsWith('/media')) {
             el.src = `${origin}${src}`;

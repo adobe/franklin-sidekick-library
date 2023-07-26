@@ -47,11 +47,12 @@ export class PluginRenderer extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, () => {
+    EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, async () => {
       const root = createTag('div', { class: 'plugin-root', 'data-testid': 'plugin-root' });
       this.renderRoot.prepend(root);
 
-      this.loadPluginStylesheet();
+      // Load the stylesheet for the plugin
+      await this.loadPluginStylesheet();
 
       root.addEventListener(PLUGIN_EVENTS.SHOW_LOADER, this.displayLoader.bind(this));
       root.addEventListener(PLUGIN_EVENTS.TOAST, this.sendToast);
@@ -89,14 +90,27 @@ export class PluginRenderer extends LitElement {
     });
   }
 
+  /**
+   * Loads the stylesheet for the active plugin
+   * @returns {Promise<void>}
+   */
   loadPluginStylesheet() {
-    const styleSheet = document.createElement('link');
-    styleSheet.setAttribute('rel', 'stylesheet');
+    return new Promise((resolve) => {
+      const styleSheet = document.createElement('link');
+      styleSheet.setAttribute('rel', 'stylesheet');
 
-    const href = AppModel.appStore.context.activePlugin.path.replace('.js', '.css');
-    styleSheet.setAttribute('href', href);
-    styleSheet.setAttribute('type', 'text/css');
-    this.renderRoot.append(styleSheet);
+      // Resolve when loaded or errored
+      styleSheet.onload = () => resolve();
+
+      /* c8 ignore next */
+      styleSheet.onerror = () => resolve();
+
+      // Assume the css file has the same name as the js file
+      const href = AppModel.appStore.context.activePlugin.path.replace('.js', '.css');
+      styleSheet.setAttribute('href', href);
+      styleSheet.setAttribute('type', 'text/css');
+      this.renderRoot.append(styleSheet);
+    });
   }
 
   displayLoader() {

@@ -1,3 +1,11 @@
+## [1.5.2](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.1...v1.5.2) (2023-07-26)
+
+
+### Bug Fixes
+
+* load plugin stylesheet before loading plugin js ([#52](https://github.com/adobe/franklin-sidekick-library/issues/52)) ([a7465d7](https://github.com/adobe/franklin-sidekick-library/commit/a7465d7e8325bf45109d27219a8bd581c290bc0a))
+* only change source tag urls when running in devMode ([#54](https://github.com/adobe/franklin-sidekick-library/issues/54)) ([3308fdb](https://github.com/adobe/franklin-sidekick-library/commit/3308fdb9c87e10eb81bd6c73b9e500afba1230ac))
+
 ## [1.5.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.0...v1.5.1) (2023-06-30)
 
 

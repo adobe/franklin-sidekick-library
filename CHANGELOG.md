@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.2...v1.5.3) (2023-07-28)
+
+
+### Bug Fixes
+
+* add sidekick library class to body element ([#57](https://github.com/adobe/franklin-sidekick-library/issues/57)) ([88d5a61](https://github.com/adobe/franklin-sidekick-library/commit/88d5a61a2ad06ce07dd71142fb4d93c24ee1090e))
+
 ## [1.5.2](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.1...v1.5.2) (2023-07-26)
 
 

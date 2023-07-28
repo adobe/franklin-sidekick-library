@@ -210,6 +210,7 @@ describe('BlockRenderer', () => {
 
       const cardsBlock = recursiveQuery(iframe.contentDocument, '.cards');
       expect(cardsBlock).to.exist;
+      expect(iframe.contentDocument.body.classList.contains('sidekick-library')).to.eq(true);
     });
   });
 
@@ -228,6 +229,7 @@ describe('BlockRenderer', () => {
 
       const img = recursiveQuery(iframe.contentDocument, 'img');
       expect(img.src).to.equal('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
+      expect(iframe.contentDocument.body.classList.contains('sidekick-library')).to.eq(true);
     });
   });
 

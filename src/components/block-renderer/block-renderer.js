@@ -291,9 +291,11 @@ export class BlockRenderer extends LitElement {
     // Fetch the container page markup
     const containerPageMarkup = await this.fetchContainerPageMarkup(blockURL, origin);
     const containerDocument = new DOMParser().parseFromString(containerPageMarkup, 'text/html');
+    const containerDocumentBody = containerDocument.querySelector('body');
     const containerDocumentMain = containerDocument.querySelector('main');
 
-    // Add the sidekick-library class to the main element
+    // Add the sidekick-library class to the body & main element
+    containerDocumentBody.classList.add(sidekickLibraryClass);
     containerDocumentMain.classList.add(sidekickLibraryClass);
 
     // Hide the header and footer

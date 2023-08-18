@@ -51,6 +51,7 @@ export class BlockRenderer extends LitElement {
    * Replace icons with inline SVG using the origin of the block
    * @param {Element} element
    */
+  /* c8 ignore next 19 */
   decorateIcons(element, origin) {
     element.querySelectorAll('span.icon').forEach(async (span) => {
       if (span.classList.length < 2 || !span.classList[1].startsWith('icon-')) {

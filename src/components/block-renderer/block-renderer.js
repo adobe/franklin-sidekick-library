@@ -51,7 +51,6 @@ export class BlockRenderer extends LitElement {
    * Replace icons with inline SVG using the origin of the block
    * @param {Element} element
    */
-  /* c8 ignore next 19 */
   decorateIcons(element, origin) {
     element.querySelectorAll('span.icon').forEach(async (span) => {
       if (span.classList.length < 2 || !span.classList[1].startsWith('icon-')) {
@@ -317,7 +316,6 @@ export class BlockRenderer extends LitElement {
       const { body: iframeBody } = iframeWindow.document;
 
       // When in dev mode, decorate icons with page origin
-      /* c8 ignore next 3 */
       if (isDev()) {
         this.decorateIcons(iframeBody, origin);
       }

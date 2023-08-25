@@ -214,6 +214,89 @@ describe('BlockRenderer', () => {
     });
   });
 
+  describe('decorateIcons', () => {
+    let fetchStub;
+
+    beforeEach(() => {
+      fetchStub = stub(window, 'fetch');
+    });
+
+    afterEach(() => {
+      fetchStub.restore();
+    });
+
+    it('should decorate icons as svg correctly', async () => {
+      // Mock successful fetch response
+      const mockResponse = new Response('<svg>Mocked Icon</svg>', { status: 200 });
+      fetchStub.resolves(mockResponse);
+
+      // Create a sample element and call the function
+      const element = document.createElement('div');
+      element.innerHTML = `
+        <span class="icon icon-example1"></span>
+      `;
+
+      const origin = 'http://example.com';
+
+      // Call the function
+      blockRenderer.decorateIcons(element, origin);
+
+      await waitUntil(
+        () => recursiveQuery(element, '.icon-example1 svg'),
+        'Element did not render children',
+      );
+
+      // Write your assertions here
+      expect(element.querySelector('.icon-example1 svg')).to.exist;
+    });
+
+    it('should decorate icons as svg correctly', async () => {
+      // Mock successful fetch response
+      const mockResponse = new Response('<svg><style></style>Mocked Icon</svg>', { status: 200 });
+      fetchStub.resolves(mockResponse);
+
+      // Create a sample element and call the function
+      const element = document.createElement('div');
+      element.innerHTML = `
+        <span class="icon icon-example1"></span>
+      `;
+
+      const origin = 'http://example.com';
+
+      // Call the function
+      blockRenderer.decorateIcons(element, origin);
+
+      await waitUntil(
+        () => recursiveQuery(element, '.icon-example1 img'),
+        'Element did not render children',
+      );
+
+      // Write your assertions here
+      expect(element.querySelector('.icon-example1 img')).to.exist;
+    });
+
+    it('no icon to decorate', async () => {
+      // Create a sample element and call the function
+      const element = document.createElement('div');
+      element.innerHTML = `
+        <span class="icon"></span>
+      `;
+
+      const origin = 'http://example.com';
+
+      // Call the function
+      blockRenderer.decorateIcons(element, origin);
+
+      await waitUntil(
+        () => recursiveQuery(element, '.icon'),
+        'Element did not render children',
+      );
+
+      // Write your assertions here
+      expect(element.querySelector('.icon-example1 img')).to.not.exist;
+    });
+  });
+
   describe('default content', () => {
     it('default content should render', async () => {
       await renderDefaultContent(blockRenderer);

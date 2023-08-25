@@ -315,8 +315,11 @@ export class BlockRenderer extends LitElement {
       const { contentWindow: iframeWindow } = frame;
       const { body: iframeBody } = iframeWindow.document;
 
-      // Decorate icons with page origin
-      this.decorateIcons(iframeBody, origin);
+      // When in dev mode, decorate icons with page origin
+      /* c8 ignore next 3 */
+      if (isDev()) {
+        this.decorateIcons(iframeBody, origin);
+      }
 
       // On scroll remove the popover
       frame.contentDocument.addEventListener('scroll', () => {

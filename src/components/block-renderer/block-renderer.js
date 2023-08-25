@@ -316,6 +316,7 @@ export class BlockRenderer extends LitElement {
       const { body: iframeBody } = iframeWindow.document;
 
       // When in dev mode, decorate icons with page origin
+      /* c8 ignore next 3 */
       if (isDev()) {
         this.decorateIcons(iframeBody, origin);
       }

@@ -1,3 +1,10 @@
+## [1.5.4](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.3...v1.5.4) (2023-08-25)
+
+
+### Bug Fixes
+
+* only call decorateIcons in devMode ([#62](https://github.com/adobe/franklin-sidekick-library/issues/62)) ([3d555b4](https://github.com/adobe/franklin-sidekick-library/commit/3d555b46e2354401345f5a5c64bf92b982aee6d1))
+
 ## [1.5.3](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.2...v1.5.3) (2023-07-28)
 
 

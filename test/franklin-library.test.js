@@ -14,7 +14,7 @@
 
 import { html } from 'lit';
 import {
-  fixture, expect, waitUntil,
+  fixture, expect, waitUntil, fixtureCleanup,
 } from '@open-wc/testing';
 import fetchMock from 'fetch-mock/esm/client';
 import { recursiveQuery, recursiveQueryAll, simulateTyping } from './test-utils.js';
@@ -29,11 +29,13 @@ import {
   multiSheetUrl,
   mockFetchSheetLibraryWithUnknownPluginSuccess,
   unknownPluginSheetUrl,
+  sheetWithTemplate,
+  mockFetchSheetWithTemplateSuccess,
 } from './fixtures/libraries.js';
 import { mockFetchEnLocalesSuccess } from './fixtures/locales.js';
-import { mockFetchCardsPlainHTMLSuccess, mockFetchColumnsPlainHTMLSuccess } from './fixtures/blocks.js';
+import { mockFetchCardsPlainHTMLSuccess, mockFetchColumnsPlainHTMLSuccess, mockFetchTemplatePlainHTMLSuccess } from './fixtures/blocks.js';
 import { setURLParams } from '../src/utils/dom.js';
-import { mockFetchColumnsDocumentSuccess, mockFetchInlinePageDependenciesSuccess } from './fixtures/pages.js';
+import { mockFetchColumnsDocumentSuccess, mockFetchInlinePageDependenciesSuccess, mockFetchTemplateDocumentSuccess } from './fixtures/pages.js';
 
 describe('FranklinLibrary', () => {
   beforeEach(() => {
@@ -44,10 +46,14 @@ describe('FranklinLibrary', () => {
     mockFetchCardsPlainHTMLSuccess();
     mockFetchColumnsPlainHTMLSuccess();
     mockFetchColumnsDocumentSuccess();
+    mockFetchSheetWithTemplateSuccess();
+    mockFetchTemplateDocumentSuccess();
+    mockFetchTemplatePlainHTMLSuccess();
   });
 
   afterEach(() => {
     fetchMock.restore();
+    fixtureCleanup();
   });
 
   it('renders container', async () => {
@@ -225,7 +231,12 @@ describe('FranklinLibrary', () => {
     expect(expandedItem).to.not.be.null;
     expect(expandedItem.getAttribute('label')).to.equal('Columns');
 
-    const blockTitle = recursiveQuery(library, '.block-title');
+    await waitUntil(
+      () => recursiveQuery(library, '.details-container .action-bar .title'),
+      'Element did not render children',
+    );
+
+    const blockTitle = recursiveQuery(library, '.details-container .action-bar .title');
     expect(blockTitle.textContent).to.equal('columns (center, background)');
 
     const blockRenderer = recursiveQuery(library, 'block-renderer');
@@ -238,6 +249,49 @@ describe('FranklinLibrary', () => {
     const columnsBlock = iframe.contentDocument.querySelector('.columns');
     const h2 = columnsBlock.querySelector('h2');
     expect(h2.textContent).to.equal('Lorem Ipsum');
+  });
+
+  it('deep linking to a template', async () => {
+    console.log('my test');
+    setURLParams([['plugin', 'blocks'], ['path', '/tools/sidekick/blocks/blog-post/blog-post']], ['index']);
+    const library = document.createElement('sidekick-library');
+    library.config = {
+      base: sheetWithTemplate,
+    };
+
+    await fixture(library);
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-menu-item'),
+      'Element did not render children',
+    );
+
+    await waitUntil(
+      () => recursiveQuery(library, 'sp-sidenav-item[expanded]'),
+      'Element did not render children',
+    );
+
+    const expandedItem = recursiveQuery(library, 'sp-sidenav-item[expanded]');
+    expect(expandedItem).to.not.be.null;
+    expect(expandedItem.getAttribute('label')).to.equal('Templates');
+
+    await waitUntil(
+      () => recursiveQuery(library, '.action-bar .title'),
+      'Element did not render children',
+    );
+
+    const blockTitle = recursiveQuery(library, '.details-container .action-bar .title');
+    expect(blockTitle.textContent).to.equal('Blog Post Template');
+
+    const blockRenderer = recursiveQuery(library, 'block-renderer');
+    const iframe = blockRenderer.shadowRoot.querySelector('iframe');
+    await waitUntil(
+      () => recursiveQuery(iframe.contentDocument, '.blockquote'),
+      'Element did not render children',
+    );
+
+    const blockquote = iframe.contentDocument.querySelector('.blockquote');
+    expect(blockquote).to.exist;
   });
 
   it('deep linking to tags plugin', async () => {

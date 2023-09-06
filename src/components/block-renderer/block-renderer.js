@@ -15,8 +15,8 @@
 import { LitElement, html, css } from 'lit';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { createTag } from '../../utils/dom.js';
-import AppModel from '../../models/app-model.js';
 import { isDev } from '../../utils/library.js';
+import AppModel from '../../models/app-model.js';
 
 export class BlockRenderer extends LitElement {
   iframe = createRef();
@@ -196,6 +196,11 @@ export class BlockRenderer extends LitElement {
             el.setAttribute('height', image.height);
           });
           el.src = reader.result;
+
+          // Set all picture sources as well
+          el.parentElement.querySelectorAll('source').forEach((source) => {
+            source.setAttribute('srcset', reader.result);
+          });
         });
       });
     });
@@ -249,7 +254,7 @@ export class BlockRenderer extends LitElement {
    * @param {HTMLElement} hostContainer The host container to render the iframe into
    */
   // eslint-disable-next-line no-unused-vars
-  async loadBlock(blockName, blockData, blockWrapper, hostContainer) {
+  async loadBlock(blockName, blockData, blockWrapper, defaultLibraryMetadata, hostContainer) {
     const { context } = AppModel.appStore;
     const { url: blockURL } = blockData;
     const origin = blockData.extended
@@ -270,20 +275,24 @@ export class BlockRenderer extends LitElement {
     // Assume what we are trying to load is a block and not an autoblock or default content
     this.isBlock = true;
 
-    let block = this.getBlockElement();
+    // Assign any block to the content by default
+    let content = this.getBlockElement();
 
-    // If there is no block, then we are rendering an autoblock or default content
-    if (!block) {
+    // If there is no block, then we are rendering an autoblock, default content or a page
+    // Pages contain blocks so we need to explicity check for page type in default metadata
+    if (!content || (defaultLibraryMetadata && defaultLibraryMetadata.type === 'template')) {
       this.isBlock = false;
-      block = this.getBlockWrapper();
+
+      // Set the element to the block wrapper instead
+      content = this.blockWrapperHTML;
     }
 
     // Add the sidekick-library class to the block element
     const sidekickLibraryClass = 'sidekick-library';
-    block?.classList.add(sidekickLibraryClass);
+    content?.classList.add(sidekickLibraryClass);
 
     // Decorate the block with ids
-    this.decorateEditableElements(block);
+    this.decorateEditableElements(content);
 
     // Clone the block and decorate it
     const blockClone = blockWrapper.cloneNode(true);
@@ -367,8 +376,10 @@ export class BlockRenderer extends LitElement {
       // Load the block and lazy CSS
       const codePath = `${origin}${hlx?.codeBasePath ?? ''}`;
 
-      // If we are rendering a block, load the block CSS
-      if (this.isBlock) {
+      // If we are in dev mode will need to manually load the block CSS
+      // If we are loading a template the blockName will be an empty string, in this case
+      // we don't want to load the block CSS
+      if (isDev() && blockName !== '') {
         const styleLink = createTag('link', { rel: 'stylesheet', href: `${codePath}/blocks/${blockName}/${blockName}.css` });
         frame.contentWindow.document.head.append(styleLink);
       }

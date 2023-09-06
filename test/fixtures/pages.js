@@ -17,6 +17,14 @@ import { stubHead, stubPage } from './stubs/pages.js';
 import { ALL_EDITABLE_STUB } from './stubs/editable.js';
 import { DEFAULT_CONTENT_STUB } from './stubs/default-content.js';
 import { COLUMNS_CENTER_BACKGROUND_STUB, COLUMNS_DEFAULT_STUB } from './stubs/columns.js';
+import {
+  TABS_DEFAULT_STUB_SECTION_1,
+  TABS_DEFAULT_STUB_SECTION_2,
+  TABS_DEFAULT_STUB_SECTION_3,
+  TABS_DEFAULT_STUB_SECTION_4,
+} from './stubs/tabs.js';
+import { COMPOUND_BLOCK_STUB } from './stubs/compound-block.js';
+import { TEMPLATE_STUB } from './stubs/template.js';
 
 export function mockBlock(html, variants = [], wrap = false) {
   const clone = html.cloneNode(true);
@@ -36,6 +44,27 @@ export const columnsPageUrl = 'https://example.hlx.test/tools/sidekick/blocks/co
 export const mockFetchColumnsDocumentSuccess = () => fetchMock.get(columnsPageUrl, {
   status: 200,
   body: stubPage(stubHead('columns'), [mockBlock(COLUMNS_DEFAULT_STUB, [], true), mockBlock(COLUMNS_CENTER_BACKGROUND_STUB, [], true)]),
+});
+
+export const tabsContentPageUrl = 'https://example.hlx.test/tools/sidekick/blocks/tabs/tabs';
+export const mockFetchTabsDocumentSuccess = () => fetchMock.get(tabsContentPageUrl, {
+  status: 200,
+  body: stubPage(stubHead('tabs'), [mockBlock(TABS_DEFAULT_STUB_SECTION_1, [], false),
+    mockBlock(TABS_DEFAULT_STUB_SECTION_2, [], false),
+    mockBlock(TABS_DEFAULT_STUB_SECTION_3, [], false),
+    mockBlock(TABS_DEFAULT_STUB_SECTION_4, [], false)]),
+});
+
+export const compoundBlockPageUrl = 'https://example.hlx.test/tools/sidekick/blocks/compound-block/compound-block';
+export const mockFetchCompoundBlockDocumentSuccess = () => fetchMock.get(compoundBlockPageUrl, {
+  status: 200,
+  body: stubPage(stubHead('compound-block'), [mockBlock(COMPOUND_BLOCK_STUB, [], false)]),
+});
+
+export const templatePageUrl = 'https://example.hlx.test/tools/sidekick/blocks/blog-post/blog-post';
+export const mockFetchTemplateDocumentSuccess = () => fetchMock.get(templatePageUrl, {
+  status: 200,
+  body: stubPage(stubHead('blog-post'), [mockBlock(TEMPLATE_STUB, [], false)]),
 });
 
 export const allEditablePageUrl = 'https://example.hlx.test/tools/sidekick/blocks/alleditable/alleditable';

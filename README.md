@@ -45,9 +45,27 @@ To generate content for the blocks plugin, you need to prepare a separate Word d
 
 ![Library.xlsx](https://github.com/adobe/franklin-sidekick-library/assets/3231084/5f645ab8-cc30-4cd6-932b-94024d01713b)
 
-### (Optional) Authoring block names and descriptions.
+## Library Metadata
+The blocks plugins supports a special type of block called `library metadata` which provides a way for developers to tell the blocks plugin some information about the block or how it should be rendered.
 
-By default the block name (with variation) will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label when it’s rendered in the blocks plugin. This can be customized by creating a library metadata section within the same section as the block. Library metadata can also be used to author a description of the block as well as adding `searchTags` to include an alias for the block when using the search feature.
+### Supported library metadata options
+| Key Name     | Value                                          | Description                                                                                                                                                       | Required |
+|--------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| name         | Name of the block                              | Allows you to set a custom name for the block                                                                                                                     | false    |
+| description  | A description of the block                     | Allows you to set a custom description for a block                                                                                                                | false    |
+| type         | The type of the block                          | This tells the blocks plugin how to group the content that makes up your block. Possible options are `template` or `section` (details below)                      | false    |
+| include next | How many sections to include in the block item | Use if your block requires content from subsequence sections in order to render. Should be a number value that indicates how much subsequent sections to include. | false    |
+| searchtags   | A comma seperated list of search terms         | Allows you to define other terms that could be used when searching for this block in the blocks plugin                                                            | false    |
+
+### Default Library metadata vs Library metadata
+
+There are two types of `library metadata`. Library metadata that lives within a section containing the block, or `default library metadata` that applies to the document as a whole and lives in a section on it's own (only child in a section).
+
+Let's take an example of a hero block that has 5 variants. Suppose you want to add the same description for each variation of the block, rather than duplicating the `library metadata` with the description into each section containing the variations. You could instead use `default library metadata` to apply the same description to every variation of the block. If you decide that one variation actually needs a slightly different description you could add `library metadata` to the section containing the variation and it would override the `default library metadata` description when it's rendered within the blocks plugin.
+
+### Authoring block names and descriptions using Library Metadata
+
+By default the block name (with variation) will be used to render the item in the blocks plugin. For example, if the name of the block is `columns (center, background)` than that name will be used as the label when it’s rendered in the blocks plugin. This can be customized by creating a `library metadata` section within the same section as the block. Library metadata can also be used to author a description of the block as well as adding `searchTags` to include an alias for the block when using the search feature.
 
 Example block with custom name and description
 
@@ -62,6 +80,30 @@ Example block with custom name and description
 ### Autoblocks and Default Content
 
 The blocks plugin is capable of rendering [default content](https://www.hlx.live/developer/markup-sections-blocks#default-content) and [autoblocks](https://www.hlx.live/developer/markup-sections-blocks#auto-blocking). In order to achieve this, it is necessary to place your `default content` or `autoblock` within a dedicated section, which should include a library metadata table defining a name property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
+
+### Multi-section Blocks
+
+Multi-section blocks are a way to group multiple sections into a single item in the blocks plugin. Some block implementations require multiple sections of content. A common example of this is a tabs block where the subsequent sections after the block is declared contain the content for each tab.
+
+In order to tell the block plugin to include an `n` number of subsequent sections you can use the `include next` property in `library metadata`.
+
+In the example above, the block plugin will group this section and the 3 sections after into a single item. 
+
+### Compound Blocks
+
+Compound blocks are a way to group multiple blocks and section metadata into a single element in the sidekick library
+
+To use compound blocks put all the blocks and section metadata into a single section and tell the sidekick library to treat everything in the section as a single item by setting `type` to `section` in the `library metadata` block.
+
+### Templates
+
+Templates are a way to group an entire document into a single element in the sidekick library. To mark a document as a template set `type` to `template` in `default library metadata`.
+
+> Important, the `library metadata` needs to be in it's own section and be the only child to be considered `default library metadata`.
+
+Supporting `metadata` is also desirable for templates. To add a metadata table to the template you can use a `Page metadata` block.
+
+When the template is copied a `metadata` with the values will be added along with the content to the clipboard.
 
 ## Sidekick plugin setup
 

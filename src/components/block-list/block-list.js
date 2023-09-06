@@ -341,7 +341,7 @@ export class BlockList extends LitElement {
                     // Pull out the next sibling and append it to the body element
                     const nextSibling = blockWrapper.nextElementSibling;
                     bodyElement.append(nextSibling);
-                    i++;
+                    i += 1;
                   }
 
                   // Prepend the original blockWrapper to the body element

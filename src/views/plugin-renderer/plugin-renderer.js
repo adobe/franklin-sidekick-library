@@ -48,9 +48,6 @@ export class PluginRenderer extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     EventBus.instance.addEventListener(APP_EVENTS.PLUGIN_LOADED, async () => {
-      // Reset the render root
-      this.renderRoot.innerHTML = '';
-
       const root = createTag('div', { class: 'plugin-root', 'data-testid': 'plugin-root' });
       this.renderRoot.prepend(root);
 

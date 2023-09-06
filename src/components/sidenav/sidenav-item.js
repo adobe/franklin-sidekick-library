@@ -39,6 +39,14 @@ export class SideNavItem extends SPSideNavItem {
           display: block;
         }
 
+        #item-link .spacer{
+          width: 16px;
+        }
+
+        :host {
+          padding-right: 5px;
+        }
+
         :host([expanded]) .disclosureArrow {
           transform: rotate(90deg);
         }
@@ -83,7 +91,7 @@ export class SideNavItem extends SPSideNavItem {
         id="item-link"
         aria-current=${ifDefined(this.selected && this.href ? 'page' : undefined)}
       >
-        ${this.disclosureArrow ? html`<sp-icon-chevron-right class="disclosureArrow" size="s"></sp-icon-chevron-right>` : ''}
+        ${this.disclosureArrow ? html`<sp-icon-chevron-right class="disclosureArrow" size="s"></sp-icon-chevron-right>` : html`<span class="spacer"></span>`}
         <slot name="icon"></slot>
         <div class="container">
           ${this.label}

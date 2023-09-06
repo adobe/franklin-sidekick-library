@@ -120,14 +120,14 @@ export function isPath(str) {
  * @param {Element} block The block element
  * @returns {object} The block config
  */
-export function readBlockConfig(block) {
+export function readBlockConfig(block, convertKeys = true) {
   const config = {};
   block.querySelectorAll(':scope > div').forEach((row) => {
     if (row.children) {
       const cols = [...row.children];
       if (cols[1]) {
         const col = cols[1];
-        const name = toClassName(cols[0].textContent);
+        const name = convertKeys ? toClassName(cols[0].textContent) : cols[0].textContent;
         let value = '';
         if (col.querySelector('a')) {
           const as = [...col.querySelectorAll('a')];

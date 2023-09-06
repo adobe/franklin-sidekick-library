@@ -18,14 +18,18 @@ import {
 } from '../../utils/dom.js';
 import { sampleRUM } from '../../utils/rum.js';
 
-export function blockToObject(blockElement, excludes = []) {
+export function blockToObject(blockElement, excludes = [], convertKeys = true) {
   if (blockElement) {
     const result = {};
-    const config = readBlockConfig(blockElement);
+    const config = readBlockConfig(blockElement, convertKeys);
     Object.keys(config).forEach((key) => {
       if (excludes.includes(key)) return;
 
-      result[toCamelCase(key)] = config[key];
+      if (convertKeys) {
+        result[toCamelCase(key)] = config[key];
+      } else {
+        result[key] = config[key];
+      }
     });
 
     return result;
@@ -55,7 +59,7 @@ export function getLibraryMetadata(block) {
 export function getPageMetadata(block) {
   const pageMetadata = block.querySelector('.page-metadata');
   if (pageMetadata) {
-    const metadata = blockToObject(pageMetadata);
+    const metadata = blockToObject(pageMetadata, [], false);
     pageMetadata.remove();
 
     return metadata;

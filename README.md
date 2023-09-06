@@ -79,13 +79,15 @@ Example block with custom name and description
 
 ### Autoblocks and Default Content
 
-The blocks plugin is capable of rendering [default content](https://www.hlx.live/developer/markup-sections-blocks#default-content) and [autoblocks](https://www.hlx.live/developer/markup-sections-blocks#auto-blocking). In order to achieve this, it is necessary to place your `default content` or `autoblock` within a dedicated section, which should include a library metadata table defining a name property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
+The blocks plugin is capable of rendering [default content](https://www.hlx.live/developer/markup-sections-blocks#default-content) and [autoblocks](https://www.hlx.live/developer/markup-sections-blocks#auto-blocking). In order to achieve this, it is necessary to place your `default content` or `autoblock` within a dedicated section, which should include a `library metadata` table defining a `name` property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
 
 ### Multi-section Blocks
 
 Multi-section blocks are a way to group multiple sections into a single item in the blocks plugin. Some block implementations require multiple sections of content. A common example of this is a tabs block where the subsequent sections after the block is declared contain the content for each tab.
 
 In order to tell the block plugin to include an `n` number of subsequent sections you can use the `include next` property in `library metadata`.
+
+![Screenshot 2023-09-06 at 1 22 12 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/15c21ee9-374c-4f18-b405-e4440dc33409)
 
 In the example above, the block plugin will group this section and the 3 sections after into a single item. 
 
@@ -95,6 +97,8 @@ Compound blocks are a way to group multiple blocks and section metadata into a s
 
 To use compound blocks put all the blocks and section metadata into a single section and tell the sidekick library to treat everything in the section as a single item by setting `type` to `section` in the `library metadata` block.
 
+![266065979-9a7fb3d9-d84c-4a1b-b36b-7d35075bb4a7](https://github.com/adobe/franklin-sidekick-library/assets/3231084/116c78f2-ad50-4c85-92fe-b71f690cd395)
+
 ### Templates
 
 Templates are a way to group an entire document into a single element in the sidekick library. To mark a document as a template set `type` to `template` in `default library metadata`.
@@ -102,6 +106,8 @@ Templates are a way to group an entire document into a single element in the sid
 > Important, the `library metadata` needs to be in it's own section and be the only child to be considered `default library metadata`.
 
 Supporting `metadata` is also desirable for templates. To add a metadata table to the template you can use a `Page metadata` block.
+
+![266064147-12883ee0-147b-4171-b89a-c313e33eef24](https://github.com/adobe/franklin-sidekick-library/assets/3231084/d4b6f9af-0829-4c73-815f-0cac036ce942)
 
 When the template is copied a `metadata` with the values will be added along with the content to the clipboard.
 

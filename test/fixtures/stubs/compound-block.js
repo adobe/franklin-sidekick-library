@@ -96,8 +96,4 @@ export const COMPOUND_BLOCK_STUB = createTag('div', {}, /* html */`
       <div>name</div>
       <div>Compound Block 1</div>
     </div>
-    <div>
-      <div>type</div>
-      <div>section</div>
-    </div>
   </div>`);

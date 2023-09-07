@@ -49,13 +49,13 @@ To generate content for the blocks plugin, you need to prepare a separate Word d
 The blocks plugins supports a special type of block called `library metadata` which provides a way for developers to tell the blocks plugin some information about the block or how it should be rendered.
 
 ### Supported library metadata options
-| Key Name     | Value                                          | Description                                                                                                                                                       | Required |
-|--------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| name         | Name of the block                              | Allows you to set a custom name for the block                                                                                                                     | false    |
-| description  | A description of the block                     | Allows you to set a custom description for a block                                                                                                                | false    |
-| type         | The type of the block                          | This tells the blocks plugin how to group the content that makes up your block. Possible options are `template` or `section` (details below)                      | false    |
-| include next | How many sections to include in the block item | Use if your block requires content from subsequence sections in order to render. Should be a number value that indicates how much subsequent sections to include. | false    |
-| searchtags   | A comma seperated list of search terms         | Allows you to define other terms that could be used when searching for this block in the blocks plugin                                                            | false    |
+| Key Name              | Value                                          | Description                                                                                                                                                       | Required |
+|-----------------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| name                  | Name of the block                              | Allows you to set a custom name for the block                                                                                                                     | false    |
+| description           | A description of the block                     | Allows you to set a custom description for a block                                                                                                                | false    |
+| type                  | The type of the block                          | This tells the blocks plugin how to group the content that makes up your block. Possible options are `template` or `section` (details below)                      | false    |
+| include next sections | How many sections to include in the block item | Use if your block requires content from subsequence sections in order to render. Should be a number value that indicates how much subsequent sections to include. | false    |
+| searchtags            | A comma seperated list of search terms         | Allows you to define other terms that could be used when searching for this block in the blocks plugin                                                            | false    |
 
 ### Default Library metadata vs Library metadata
 
@@ -85,19 +85,11 @@ The blocks plugin is capable of rendering [default content](https://www.hlx.live
 
 Multi-section blocks are a way to group multiple sections into a single item in the blocks plugin. Some block implementations require multiple sections of content. A common example of this is a tabs block where the subsequent sections after the block is declared contain the content for each tab.
 
-In order to tell the block plugin to include an `n` number of subsequent sections you can use the `include next` property in `library metadata`.
+In order to tell the block plugin to include an `n` number of subsequent sections you can use the `include next sections` property in `library metadata`.
 
 ![Screenshot 2023-09-06 at 1 22 12 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/15c21ee9-374c-4f18-b405-e4440dc33409)
 
 In the example above, the block plugin will group this section and the 3 sections after into a single item. 
-
-### Compound Blocks
-
-Compound blocks are a way to group multiple blocks and section metadata into a single element in the sidekick library
-
-To use compound blocks put all the blocks and section metadata into a single section and tell the sidekick library to treat everything in the section as a single item by setting `type` to `section` in the `library metadata` block.
-
-![266065979-9a7fb3d9-d84c-4a1b-b36b-7d35075bb4a7](https://github.com/adobe/franklin-sidekick-library/assets/3231084/116c78f2-ad50-4c85-92fe-b71f690cd395)
 
 ### Templates
 

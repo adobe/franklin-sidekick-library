@@ -285,7 +285,7 @@ export class BlockList extends LitElement {
             let skipNext = 0;
 
             pageBlocks.forEach((blockWrapper, index) => {
-              // If the previous block had an includeNext attribute (multi-section block)
+              // If the previous block had an includeNextSections attribute (multi-section block)
               // we need may need to skip the next n number of siblings since
               // they are part of the multi-section block
               if (skipNext > 0) {
@@ -324,20 +324,20 @@ export class BlockList extends LitElement {
                 blockVariantItem.setAttribute('data-search-tags', searchTags);
               }
 
-              // Check if the section has an includeNext attribute
+              // Check if the section has an includeNextSections attribute
               // If it does is this a multi-section block
-              if (sectionLibraryMetadata.includeNext) {
-                const includeNext = Number(sectionLibraryMetadata.includeNext);
+              if (sectionLibraryMetadata.includeNextSections) {
+                const includeNextSections = Number(sectionLibraryMetadata.includeNextSections);
 
                 // Make sure the includeNext value is a number, if not ignore
-                if (!Number.isNaN(includeNext)) {
+                if (!Number.isNaN(includeNextSections)) {
                   // We need to take all the sections that make up this block and
                   // append them to a new body element
                   const bodyElement = document.createElement('body');
 
                   let i = 0;
                   // Append the next x number of siblings to the blockWrapper
-                  while (i < includeNext) {
+                  while (i < includeNextSections) {
                     // Pull out the next sibling and append it to the body element
                     const nextSibling = blockWrapper.nextElementSibling;
                     bodyElement.append(nextSibling);
@@ -351,12 +351,12 @@ export class BlockList extends LitElement {
                   blockWrapper = bodyElement;
 
                   // Tell the next iteration to skip the next x number of siblings
-                  skipNext = includeNext;
+                  skipNext = includeNextSections;
 
                   // Remember this is a multi-section block
                   defaultLibraryMetadata.multiSectionBlock = true;
                 }
-              } else if (sectionLibraryMetadata.type === 'section') {
+              } else if (blockWrapper.querySelectorAll('div[class]:not(.section-metadata)').length > 1) {
                 // We need to take all the blocks in the section to make up the compound block and
                 // append them to a new body element
                 const compoundBodyElement = document.createElement('body');

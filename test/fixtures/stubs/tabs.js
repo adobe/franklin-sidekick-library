@@ -35,7 +35,7 @@ export const TABS_DEFAULT_STUB_SECTION_1 = createTag('div', {}, /* html */`
   </div>
   <div class="library-metadata">
     <div>
-      <div>Include next</div>
+      <div>Include next sections</div>
       <div>3</div>
     </div>
   </div>

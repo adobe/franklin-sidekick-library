@@ -87,7 +87,7 @@ Multi-section blocks are a way to group multiple sections into a single item in 
 
 In order to tell the block plugin to include an `n` number of subsequent sections you can use the `include next sections` property in `library metadata`.
 
-![Screenshot 2023-09-06 at 1 22 12 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/15c21ee9-374c-4f18-b405-e4440dc33409)
+![Screenshot 2023-09-07 at 2 42 13 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/09353409-9036-4e18-8f52-597897b4e1d2)
 
 In the example above, the block plugin will group this section and the 3 sections after into a single item. 
 

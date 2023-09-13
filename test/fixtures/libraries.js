@@ -24,6 +24,24 @@ export const COLUMNS_BLOCK_LIBRARY_ITEM = {
   url: 'https://example.hlx.test/tools/sidekick/blocks/columns/columns',
 };
 
+export const TABS_LIBRARY_ITEM = {
+  name: 'Tabs',
+  path: '/tools/sidekick/blocks/tabs/tabs',
+  url: 'https://example.hlx.test/tools/sidekick/blocks/tabs/tabs',
+};
+
+export const COMPOUND_BLOCK_LIBRARY_ITEM = {
+  name: 'Compound Block',
+  path: '/tools/sidekick/blocks/compound-block/compound-block',
+  url: 'https://example.hlx.test/tools/sidekick/blocks/compound-block/compound-block',
+};
+
+export const TEMPLATE_LIBRARY_ITEM = {
+  name: 'Blog Post',
+  path: '/tools/sidekick/blocks/blog-post/blog-post',
+  url: 'https://example.hlx.test/tools/sidekick/blocks/blog-post/blog-post',
+};
+
 export const NON_EXISTENT_BLOCK_LIBRARY_ITEM = {
   name: 'Columns',
   path: '/tools/sidekick/blocks/columns/path-does-not-exist',
@@ -34,6 +52,12 @@ export const DEFAULT_CONTENT_LIBRARY_ITEM = {
   name: 'Default Content',
   path: '/tools/sidekick/blocks/default-content/default-content',
   url: 'https://example.hlx.test/tools/sidekick/blocks/default-content/default-content',
+};
+
+export const PAGE_LIBRARY_ITEM = {
+  name: 'Template',
+  path: '/tools/sidekick/blocks/page-template/page-template',
+  url: 'https://example.hlx.test/tools/sidekick/blocks/page-template/page-template',
 };
 
 const constructSingleSheetJSONBody = data => ({
@@ -85,6 +109,12 @@ export const singleSheetUrl = 'https://example.hlx.test/tools/sidekick/library-s
 export const mockFetchSingleSheetLibrarySuccess = () => fetchMock.get(singleSheetUrl, {
   status: 200,
   ...constructSingleSheetJSONBody([CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM]),
+});
+
+export const sheetWithTemplate = 'https://example.hlx.test/tools/sidekick/library-single-sheet-with-template.json';
+export const mockFetchSheetWithTemplateSuccess = () => fetchMock.get(sheetWithTemplate, {
+  status: 200,
+  ...constructSingleSheetJSONBody([TEMPLATE_LIBRARY_ITEM]),
 });
 
 export const unknownPluginSheetUrl = 'https://example.hlx.test/tools/sidekick/unknown-plugin-sheet.json';

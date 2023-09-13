@@ -18,12 +18,14 @@ import {
   getBlockName,
   getDefaultLibraryMetadata,
   getLibraryMetadata,
+  getPageMetadata,
 } from '../../plugins/blocks/utils.js';
 import { createSideNavItem, createTag } from '../../utils/dom.js';
 
 export class BlockList extends LitElement {
   static properties = {
     mutationObserver: { state: false },
+    selectedItem: { state: false },
     type: { state: true },
   };
 
@@ -181,46 +183,41 @@ export class BlockList extends LitElement {
             throw new Error(`An error occurred fetching ${blockData.name}`);
           }
 
-          // Add block parent sidenav item
-          const blockParentItem = createSideNavItem(
-            blockData.name,
-            'sp-icon-file-template',
-            true,
-            true,
-            'sp-icon-preview',
-          );
-          blockParentItems.push(blockParentItem);
-
-          blockParentItem.addEventListener('OnAction', e => this.onPreview(e, blockURL));
-
           // Get the body container of the block variants, clone it so we don't mutate the original
           const { body } = blockDocument.cloneNode(true);
 
           // Check for default library metadata
           const defaultLibraryMetadata = getDefaultLibraryMetadata(body) ?? {};
 
-          // Query all variations of the block in the container
-          const pageBlocks = body.querySelectorAll(':scope > div');
+          // Get the block type
+          const blockType = defaultLibraryMetadata.type ?? undefined;
 
-          pageBlocks.forEach((blockWrapper, index) => {
-            // Check if the variation has library metadata
-            const sectionLibraryMetadata = getLibraryMetadata(blockWrapper) ?? {};
-            const blockElement = blockWrapper.querySelector('div[class]');
-            let itemName = sectionLibraryMetadata.name ?? getBlockName(blockElement);
-            const blockNameWithVariant = getBlockName(blockElement, true);
-            const searchTags = sectionLibraryMetadata.searchtags
-                                ?? sectionLibraryMetadata['search-tags']
-                                ?? defaultLibraryMetadata.searchtags
-                                ?? defaultLibraryMetadata['search-tags']
-                                ?? '';
+          // Check for page metadata
+          const pageMetadata = getPageMetadata(body);
 
-            // If the item doesn't have an authored or default
-            // name (default content), set to 'Unnamed Item'
-            if (!itemName || itemName === 'section-metadata') {
-              itemName = 'Unnamed Item';
+          // Parent item for templates
+          let templatesParentItem;
+
+          // Is this a template?
+          if (blockType && blockType.toLowerCase() === 'template') {
+            // If templates parent sidenav item doesn't exist, create it
+            if (!templatesParentItem) {
+              templatesParentItem = createSideNavItem(
+                'Templates',
+                'sp-icon-file-code',
+                true,
+                false,
+              );
+
+              blockParentItems.push(templatesParentItem);
             }
 
-            const blockVariantItem = createSideNavItem(
+            // For templates we pull the template name from default library metadata
+            // or the name given to the document in the library sheet.
+            const itemName = defaultLibraryMetadata.name ?? blockData.name;
+            const searchTags = defaultLibraryMetadata.searchtags ?? defaultLibraryMetadata['search-tags'] ?? '';
+
+            const pageItem = createSideNavItem(
               itemName,
               'sp-icon-file-code',
               false,
@@ -230,38 +227,196 @@ export class BlockList extends LitElement {
 
             // Add search tags to the sidenav item
             if (searchTags) {
-              blockVariantItem.setAttribute('data-search-tags', searchTags);
+              pageItem.setAttribute('data-search-tags', searchTags);
             }
 
-            blockVariantItem.classList.add('descendant');
-            blockVariantItem.setAttribute('data-index', index);
-            blockVariantItem.addEventListener('OnAction', (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              this.dispatchEvent(new CustomEvent('CopyBlock', { detail: { blockWrapper, blockNameWithVariant, blockURL } }));
-            });
-
-            // Add child variant to parent
-            blockParentItem.append(blockVariantItem);
-
-            // Construct a load payload
+            // Construct an event payload
             const eventPayload = {
               detail: {
-                blockWrapper, blockData, sectionLibraryMetadata, defaultLibraryMetadata, index,
+                blockWrapper: body,
+                blockData,
+                blockURL,
+                defaultLibraryMetadata,
+                pageMetadata,
               },
             };
 
-            // On item click
-            blockVariantItem.addEventListener('click', async () => {
-              this.dispatchEvent(new CustomEvent('LoadBlock', eventPayload));
+            // Handle sidenav item actions (copy)
+            pageItem.addEventListener('OnAction', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              this.dispatchEvent(new CustomEvent('CopyBlock', eventPayload));
             });
 
-            // If the block path and index match the URL params, load the block
-            if (dlPath === path && dlIndex === index.toString()) {
-              blockParentItem.setAttribute('expanded', true);
-              this.dispatchEvent(new CustomEvent('LoadBlock', eventPayload));
+            // Add the template to the templates sidenav item
+            templatesParentItem.append(pageItem);
+
+            // On item click.. Load the template
+            pageItem.addEventListener('click', async () => {
+              this.dispatchEvent(new CustomEvent('LoadTemplate', eventPayload));
+            });
+
+            // If the template path matches the URL params, load the block
+            if (dlPath === path) {
+              templatesParentItem.setAttribute('expanded', true);
+              this.selectedItem = pageItem;
+              this.dispatchEvent(new CustomEvent('LoadTemplate', eventPayload));
             }
-          });
+          } else {
+            // This is just a block.. single, compound or multi-section
+            // Add block parent sidenav item
+            const blockParentItem = createSideNavItem(
+              blockData.name,
+              'sp-icon-file-template',
+              true,
+              true,
+              'sp-icon-preview',
+            );
+
+            // Add to the block parent items array
+            blockParentItems.push(blockParentItem);
+
+            // Listen for preview events
+            blockParentItem.addEventListener('OnAction', e => this.onPreview(e, blockURL));
+
+            // Query all variations of the block in the container
+            const pageBlocks = body.querySelectorAll(':scope > div');
+
+            let skipNext = 0;
+
+            pageBlocks.forEach((blockWrapper, index) => {
+              // If the previous block had an includeNextSections attribute (multi-section block)
+              // we need may need to skip the next n number of siblings since
+              // they are part of the multi-section block
+              if (skipNext > 0) {
+                skipNext -= 1;
+                return;
+              }
+
+              // Check if the variation has library metadata
+              const sectionLibraryMetadata = getLibraryMetadata(blockWrapper) ?? {};
+              const blockElement = blockWrapper.querySelector('div[class]');
+              let itemName = sectionLibraryMetadata.name ?? getBlockName(blockElement);
+              const blockNameWithVariant = getBlockName(blockElement, true);
+              const searchTags = sectionLibraryMetadata.searchtags
+                                ?? sectionLibraryMetadata['search-tags']
+                                ?? defaultLibraryMetadata.searchtags
+                                ?? defaultLibraryMetadata['search-tags']
+                                ?? '';
+
+              // If the item doesn't have an authored or default
+              // name (default content), set to 'Unnamed Item'
+              if (!itemName || itemName === 'section-metadata') {
+                itemName = 'Unnamed Item';
+              }
+
+              // Create the sidenav item for the variant
+              const blockVariantItem = createSideNavItem(
+                itemName,
+                'sp-icon-file-code',
+                false,
+                true,
+                'sp-icon-copy',
+              );
+
+              // Add search tags to the sidenav item
+              if (searchTags) {
+                blockVariantItem.setAttribute('data-search-tags', searchTags);
+              }
+
+              // Check if the section has an includeNextSections attribute
+              // If it does is this a multi-section block
+              if (sectionLibraryMetadata.includeNextSections) {
+                const includeNextSections = Number(sectionLibraryMetadata.includeNextSections);
+
+                // Make sure the includeNext value is a number, if not ignore
+                if (!Number.isNaN(includeNextSections)) {
+                  // We need to take all the sections that make up this block and
+                  // append them to a new body element
+                  const bodyElement = document.createElement('body');
+
+                  let i = 0;
+                  // Append the next x number of siblings to the blockWrapper
+                  while (i < includeNextSections) {
+                    // Pull out the next sibling and append it to the body element
+                    const nextSibling = blockWrapper.nextElementSibling;
+                    bodyElement.append(nextSibling);
+                    i += 1;
+                  }
+
+                  // Prepend the original blockWrapper to the body element
+                  bodyElement.prepend(blockWrapper);
+
+                  // Reassign the blockWrapper to the new body element
+                  blockWrapper = bodyElement;
+
+                  // Tell the next iteration to skip the next x number of siblings
+                  skipNext = includeNextSections;
+
+                  // Remember this is a multi-section block
+                  defaultLibraryMetadata.multiSectionBlock = true;
+                }
+              } else if (blockWrapper.querySelectorAll('div[class]:not(.section-metadata)').length > 1) {
+                // We need to take all the blocks in the section to make up the compound block and
+                // append them to a new body element
+                const compoundBodyElement = document.createElement('body');
+
+                // Take the parent of this block and append to the compound body element
+                compoundBodyElement.append(blockWrapper);
+
+                // Reassign the blockWrapper to the new body element
+                blockWrapper = compoundBodyElement;
+
+                // Remember this is a compound block
+                defaultLibraryMetadata.compoundBlock = true;
+              }
+
+              // Construct an event payload
+              const eventPayload = {
+                detail: {
+                  blockWrapper,
+                  blockNameWithVariant,
+                  blockData,
+                  blockURL,
+                  sectionLibraryMetadata,
+                  defaultLibraryMetadata,
+                  pageMetadata,
+                  index,
+                },
+              };
+
+              // Set the expected block variant item attributes
+              blockVariantItem.classList.add('descendant');
+              blockVariantItem.setAttribute('data-index', index);
+
+              // Handle sidenav item actions (copy)
+              blockVariantItem.addEventListener('OnAction', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.dispatchEvent(new CustomEvent('CopyBlock', eventPayload));
+              });
+
+              // Add child variant to parent
+              blockParentItem.append(blockVariantItem);
+
+              // On item click
+              blockVariantItem.addEventListener('click', async () => {
+                if (this.selectedItem) {
+                  this.selectedItem.removeAttribute('selected');
+                }
+                blockVariantItem.setAttribute('selected', true);
+                this.selectedItem = blockVariantItem;
+                this.dispatchEvent(new CustomEvent('LoadBlock', eventPayload));
+              });
+
+              // If the block path and index match the URL params, load the block
+              if (dlPath === path && dlIndex === index.toString()) {
+                blockParentItem.setAttribute('expanded', true);
+                this.selectedItem = blockVariantItem;
+                this.dispatchEvent(new CustomEvent('LoadBlock', eventPayload));
+              }
+            });
+          }
 
           return blockPromise;
         } catch (e) {
@@ -271,7 +426,7 @@ export class BlockList extends LitElement {
         }
       });
 
-      // Wait for all promises to resolve
+      // Wait for all block loading promises to resolve
       await Promise.all(promises);
 
       // Sort results alphabetically
@@ -286,6 +441,13 @@ export class BlockList extends LitElement {
         }
         return 0;
       }));
+
+      // Seems to be the only way I can set the selected attribute on first load...
+      setTimeout(() => {
+        if (this.selectedItem) {
+          this.selectedItem.setAttribute('selected', true);
+        }
+      }, 1);
 
       if (sideNav.querySelectorAll('sp-sidenav-item').length === 0) {
         container.append(this.renderNoResults());

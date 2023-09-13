@@ -33,53 +33,48 @@ import {
   defaultContentPageUrl,
   mockFetchAllEditableDocumentSuccess,
   mockFetchCardsDocumentSuccess,
+  mockFetchCompoundBlockDocumentSuccess,
   mockFetchDefaultContentDocumentSuccess,
   mockFetchInlinePageDependenciesSuccess,
+  mockFetchTabsDocumentSuccess,
+  tabsContentPageUrl,
 } from '../../fixtures/pages.js';
 import { DEFAULT_CONTENT_STUB } from '../../fixtures/stubs/default-content.js';
+import {
+  TABS_DEFAULT_STUB_SECTION_1,
+  TABS_DEFAULT_STUB_SECTION_2,
+  TABS_DEFAULT_STUB_SECTION_3,
+  TABS_DEFAULT_STUB_SECTION_4,
+} from '../../fixtures/stubs/tabs.js';
+import { createTag } from '../../../src/utils/dom.js';
 
 describe('BlockRenderer', () => {
   let blockRenderer;
 
-  const renderCardsBlock = async (blockRendererMethod) => {
-    const cardsBlockName = 'cards';
-    const cardsBlockData = {
-      url: cardsPageUrl,
-      extended: false,
-    };
-    const cardsBlock = mockBlock(CARDS_DEFAULT_STUB, [], true);
-
-    await blockRendererMethod.loadBlock(cardsBlockName, cardsBlockData, cardsBlock);
-  };
-
-  const renderAllEditable = async (blockRendererMethod) => {
-    const allEditableBlockName = 'all-editable-elements';
-    const allEditableBlockData = {
-      url: allEditablePageUrl,
+  const renderContent = async (
+    name,
+    url,
+    contentStub,
+    defaultLibraryMetadata = {},
+    wrap = true,
+  ) => {
+    const blockData = {
+      url,
       extended: false,
     };
 
-    const allEditableBlock = mockBlock(ALL_EDITABLE_STUB, [], true);
+    let block;
+    if (Array.isArray(contentStub)) {
+      block = createTag('div', {}, contentStub.map(stubItem => mockBlock(stubItem, [], wrap).outerHTML).join(''));
+    } else {
+      block = mockBlock(contentStub, [], wrap);
+    }
 
-    await blockRendererMethod.loadBlock(
-      allEditableBlockName,
-      allEditableBlockData,
-      allEditableBlock,
-    );
-  };
-
-  const renderDefaultContent = async (blockRendererMethod) => {
-    const defaultContentBlockName = 'default content';
-    const defaultContentBlockData = {
-      url: defaultContentPageUrl,
-      extended: false,
-    };
-    const defaultContent = mockBlock(DEFAULT_CONTENT_STUB, [], false);
-
-    await blockRendererMethod.loadBlock(
-      defaultContentBlockName,
-      defaultContentBlockData,
-      defaultContent,
+    await blockRenderer.loadBlock(
+      name,
+      blockData,
+      block,
+      defaultLibraryMetadata,
     );
   };
 
@@ -101,6 +96,8 @@ describe('BlockRenderer', () => {
     mockFetchAllEditableDocumentSuccess();
     mockFetchInlinePageDependenciesSuccess();
     mockFetchDefaultContentDocumentSuccess();
+    mockFetchCompoundBlockDocumentSuccess();
+    mockFetchTabsDocumentSuccess();
     blockRenderer = await fixture(html`<block-renderer></block-renderer>`);
   });
 
@@ -110,8 +107,8 @@ describe('BlockRenderer', () => {
   });
 
   describe('getBlockElement', () => {
-    it('returns the block element', () => {
-      renderCardsBlock(blockRenderer);
+    it('returns the block element', async () => {
+      await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB);
       const blockElement = blockRenderer.getBlockElement();
       expect(blockElement).to.exist;
       expect(blockElement.tagName).to.equal('DIV');
@@ -120,8 +117,8 @@ describe('BlockRenderer', () => {
   });
 
   describe('getBlockWrapper', () => {
-    it('returns the block wrapper', () => {
-      renderCardsBlock(blockRenderer);
+    it('returns the block wrapper', async () => {
+      await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB);
       const blockWrapper = blockRenderer.getBlockWrapper();
       expect(blockWrapper).to.exist;
       expect(blockWrapper.tagName).to.equal('DIV');
@@ -130,8 +127,8 @@ describe('BlockRenderer', () => {
   });
 
   describe('getBlockData', () => {
-    it('returns the block data', () => {
-      renderCardsBlock(blockRenderer);
+    it('returns the block data', async () => {
+      await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB);
       const blockData = blockRenderer.getBlockData();
       expect(blockData).to.exist;
       expect(blockData).to.deep.equal({
@@ -144,7 +141,7 @@ describe('BlockRenderer', () => {
   describe('decorateEditableElements', () => {
     it('check for contenteditable and data-library-id', async () => {
       mockFetchInlinePageDependenciesSuccess('all-editable-elements');
-      await renderAllEditable(blockRenderer);
+      await renderContent('all-editable-elements', allEditablePageUrl, ALL_EDITABLE_STUB);
 
       const iframe = blockRenderer.shadowRoot.querySelector('iframe');
       await waitUntil(
@@ -200,7 +197,7 @@ describe('BlockRenderer', () => {
 
   describe('loadBlock', () => {
     it('should load a block page', async () => {
-      renderCardsBlock(blockRenderer);
+      await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB);
 
       const iframe = blockRenderer.shadowRoot.querySelector('iframe');
       await waitUntil(
@@ -208,7 +205,8 @@ describe('BlockRenderer', () => {
         'Element did not render children',
       );
 
-      const cardsBlock = recursiveQuery(iframe.contentDocument, '.cards');
+      const { contentDocument } = iframe;
+      const cardsBlock = contentDocument.querySelector('.cards');
       expect(cardsBlock).to.exist;
       expect(iframe.contentDocument.body.classList.contains('sidekick-library')).to.eq(true);
     });
@@ -299,7 +297,7 @@ describe('BlockRenderer', () => {
 
   describe('default content', () => {
     it('default content should render', async () => {
-      await renderDefaultContent(blockRenderer);
+      await renderContent('default content', defaultContentPageUrl, DEFAULT_CONTENT_STUB);
 
       const iframe = blockRenderer.shadowRoot.querySelector('iframe');
       await waitUntil(
@@ -307,18 +305,50 @@ describe('BlockRenderer', () => {
         'Element did not render children',
       );
 
-      const heading = recursiveQuery(iframe.contentDocument, '#this-is-a-heading');
+      const { contentDocument } = iframe;
+      const heading = contentDocument.querySelector('#this-is-a-heading');
       expect(heading).to.exist;
 
-      const img = recursiveQuery(iframe.contentDocument, 'img');
+      const img = contentDocument.querySelector('img');
       expect(img.src).to.equal('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
-      expect(iframe.contentDocument.body.classList.contains('sidekick-library')).to.eq(true);
+      expect(contentDocument.body.classList.contains('sidekick-library')).to.eq(true);
+    });
+  });
+
+  describe('multi-section content', () => {
+    it('multi section blocks should render', async () => {
+      await renderContent('multi-section content', tabsContentPageUrl, [
+        TABS_DEFAULT_STUB_SECTION_1,
+        TABS_DEFAULT_STUB_SECTION_2,
+        TABS_DEFAULT_STUB_SECTION_3,
+        TABS_DEFAULT_STUB_SECTION_4,
+      ]);
+
+      const iframe = blockRenderer.shadowRoot.querySelector('iframe');
+      await waitUntil(
+        () => recursiveQuery(iframe.contentDocument, '.tabs'),
+        'Element did not render children',
+      );
+
+      const { contentDocument } = iframe;
+
+      const heading = contentDocument.querySelector('#tab-2-content');
+      expect(heading).to.exist;
+
+      const img = contentDocument.querySelector('img');
+      expect(img.src).to.equal('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
+
+      expect(contentDocument.querySelectorAll(':scope main > div > div').length).to.eq(4);
+      expect(contentDocument.querySelectorAll('table').length).to.eq(0);
+      expect(contentDocument.querySelectorAll('h2').length).to.eq(4);
+      expect(contentDocument.querySelector('h2').textContent).to.eq('Tab 2 content');
+      expect(contentDocument.querySelectorAll(':scope ol li').length).to.eq(3);
     });
   });
 
   describe('editable content', () => {
     it('content should be editable', async () => {
-      await renderCardsBlock(blockRenderer);
+      await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB);
 
       const iframe = blockRenderer.shadowRoot.querySelector('iframe');
       await waitUntil(
@@ -352,7 +382,7 @@ describe('BlockRenderer', () => {
 
     describe('enableImageDragDrop', () => {
       it('drag events', async () => {
-        renderCardsBlock(blockRenderer);
+        await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB);
 
         const iframe = blockRenderer.shadowRoot.querySelector('iframe');
         await waitUntil(
@@ -388,6 +418,10 @@ describe('BlockRenderer', () => {
         expect(img.style.outline).to.equal('initial');
         expect(img.style.outlineRadius).to.equal('initial');
         expect(img.src).to.equal(IMAGE);
+
+        img.parentElement.querySelectorAll('source').forEach((source) => {
+          expect(source.srcset).to.equal(IMAGE);
+        });
 
         img.dispatchEvent(new Event('dragleave', { target: img }));
         expect(img.style.outline).to.equal('initial');

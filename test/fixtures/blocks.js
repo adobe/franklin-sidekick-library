@@ -14,7 +14,15 @@ import fetchMock from 'fetch-mock/esm/client';
 import { createTag } from '../../src/utils/dom.js';
 import { CARDS_DEFAULT_STUB, CARDS_LOGOS_STUB } from './stubs/cards.js';
 import { COLUMNS_CENTER_BACKGROUND_STUB, COLUMNS_DEFAULT_STUB } from './stubs/columns.js';
+import {
+  TABS_DEFAULT_STUB_SECTION_1,
+  TABS_DEFAULT_STUB_SECTION_2,
+  TABS_DEFAULT_STUB_SECTION_3,
+  TABS_DEFAULT_STUB_SECTION_4,
+} from './stubs/tabs.js';
 import { DEFAULT_CONTENT_STUB } from './stubs/default-content.js';
+import { COMPOUND_BLOCK_STUB } from './stubs/compound-block.js';
+import { TEMPLATE_STUB } from './stubs/template.js';
 
 export function mockBlock(html, variants = [], wrap = false) {
   const clone = html.cloneNode(true);
@@ -86,7 +94,28 @@ export const mockFetchDefaultContentPlainHTMLSuccess = () => fetchMock.get(defau
   body: [mockBlock(DEFAULT_CONTENT_STUB, [], false).outerHTML, mockBlock(DEFAULT_CONTENT_STUB, [], false).outerHTML].join('\n'),
 });
 
+export const compoundBlockUrl = 'https://example.hlx.test/tools/sidekick/blocks/compound-block/compound-block.plain.html';
+export const mockFetchCompoundBlockPlainHTMLSuccess = () => fetchMock.get(compoundBlockUrl, {
+  status: 200,
+  body: [mockBlock(COMPOUND_BLOCK_STUB, [], false).outerHTML].join('\n'),
+});
+
+export const templateUrl = 'https://example.hlx.test/tools/sidekick/blocks/blog-post/blog-post.plain.html';
+export const mockFetchTemplatePlainHTMLSuccess = () => fetchMock.get(templateUrl, {
+  status: 200,
+  body: [mockBlock(TEMPLATE_STUB, [], false).innerHTML].join('\n'),
+});
+
 export const nonExistentBlockUrl = 'https://example.hlx.test/tools/sidekick/blocks/columns/path-does-not-exist.plain.html';
 export const mockFetchNonExistantPlainHTMLFailure = () => fetchMock.get(nonExistentBlockUrl, {
   status: 404,
+});
+
+export const tabsBlockUrl = 'https://example.hlx.test/tools/sidekick/blocks/tabs/tabs.plain.html';
+export const mockFetchTabsPlainHTMLSuccess = () => fetchMock.get(tabsBlockUrl, {
+  status: 200,
+  body: [mockBlock(TABS_DEFAULT_STUB_SECTION_1, [], false).outerHTML,
+    mockBlock(TABS_DEFAULT_STUB_SECTION_2, [], false).outerHTML,
+    mockBlock(TABS_DEFAULT_STUB_SECTION_3, [], false).outerHTML,
+    mockBlock(TABS_DEFAULT_STUB_SECTION_4, [], false).outerHTML].join('\n'),
 });

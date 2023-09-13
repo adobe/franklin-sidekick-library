@@ -25,7 +25,7 @@ export const stubHead = (blockName = 'cards') => /* html */`
       <meta name="twitter:title" content="Lorem ipsum dolor sit amet">
       <meta name="twitter:description" content="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ...">
       <meta name="twitter:image" content="https://example.hlx.test/blocks/${blockName}/${blockName}/media_1b75ba147e2eed6fd71c7f0264441ea63155a85e0.jpeg?width=1200&#x26;format=pjpg&#x26;optimize=medium">
-      <script src="/scripts.js" type="module"></script>
+      <script src="/scripts/scripts.js" type="module"></script>
     </head>
   `;
 

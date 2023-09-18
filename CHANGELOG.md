@@ -1,3 +1,10 @@
+## [1.5.5](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.4...v1.5.5) (2023-09-18)
+
+
+### Bug Fixes
+
+* group all templates under a single `Templates` parent. ([#70](https://github.com/adobe/franklin-sidekick-library/issues/70)) ([6a191d6](https://github.com/adobe/franklin-sidekick-library/commit/6a191d667f657aeef552dd82cf36a05f07069ffe))
+
 ## [1.5.4](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.3...v1.5.4) (2023-08-25)
 
 

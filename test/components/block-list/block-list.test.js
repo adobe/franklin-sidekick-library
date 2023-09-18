@@ -19,8 +19,8 @@ import { spy } from 'sinon';
 import '../../../src/components/block-list/block-list.js';
 import fetchMock from 'fetch-mock/esm/client';
 import { createTag } from '../../../src/utils/dom.js';
-import { CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM } from '../../fixtures/libraries.js';
-import { mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess, mockFetchColumnsPlainHTMLSuccess } from '../../fixtures/blocks.js';
+import { CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM, TEMPLATE_LIBRARY_ITEM } from '../../fixtures/libraries.js';
+import { mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess, mockFetchColumnsPlainHTMLSuccess, mockFetchTemplatePlainHTMLSuccess } from '../../fixtures/blocks.js';
 import { recursiveQuery } from '../../test-utils.js';
 
 describe('BlockRenderer', () => {
@@ -29,6 +29,7 @@ describe('BlockRenderer', () => {
 
   beforeEach(async () => {
     mockFetchColumnsPlainHTMLSuccess();
+    mockFetchTemplatePlainHTMLSuccess();
     mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess({ name: 'Cards Authored Name', searchTags: 'foobar' });
     blockList = await fixture(html`<block-list></block-list>`);
     container = createTag('div');
@@ -77,6 +78,19 @@ describe('BlockRenderer', () => {
       const blockWithDefaultSearchTags = sideNav.querySelector('sp-sidenav-item[label="cards (logos)"]');
       expect(blockWithDefaultSearchTags).to.exist;
       expect(blockWithDefaultSearchTags.getAttribute('data-search-tags')).to.equal('Default Search Tag');
+    });
+
+    it('multiple templates should live under a single templates parent', async () => {
+      await blockList.loadBlocks([TEMPLATE_LIBRARY_ITEM, TEMPLATE_LIBRARY_ITEM], container);
+      await waitUntil(
+        () => recursiveQuery(blockList, 'sp-sidenav'),
+        'Element did not render children',
+      );
+
+      const sideNav = recursiveQuery(blockList, 'sp-sidenav');
+      const templatesList = sideNav.querySelectorAll('sp-sidenav-item[label="Templates"]');
+      expect(templatesList).to.exist;
+      expect(templatesList.length).to.equal(1);
     });
 
     it('preview block', async () => {

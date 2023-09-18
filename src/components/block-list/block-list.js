@@ -172,6 +172,9 @@ export class BlockList extends LitElement {
 
       const blockParentItems = [];
 
+      // Parent item for templates
+      let templatesParentItem;
+
       // Create an array of promises for each block
       const promises = data.map(async (blockData) => {
         const { url: blockURL, path } = blockData;
@@ -194,9 +197,6 @@ export class BlockList extends LitElement {
 
           // Check for page metadata
           const pageMetadata = getPageMetadata(body);
-
-          // Parent item for templates
-          let templatesParentItem;
 
           // Is this a template?
           if (blockType && blockType.toLowerCase() === 'template') {

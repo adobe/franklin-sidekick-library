@@ -356,7 +356,7 @@ export class BlockList extends LitElement {
                   // Remember this is a multi-section block
                   defaultLibraryMetadata.multiSectionBlock = true;
                 }
-              } else if (blockWrapper.querySelectorAll('div[class]:not(.section-metadata)').length > 1) {
+              } else if (blockWrapper.querySelectorAll('div[class]:not(.section-metadata), body > :scope > p').length > 1) {
                 // We need to take all the blocks in the section to make up the compound block and
                 // append them to a new body element
                 const compoundBodyElement = document.createElement('body');

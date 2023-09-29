@@ -85,6 +85,8 @@ The blocks plugin is capable of rendering [default content](https://www.hlx.live
 
 There are situations where developers may want a block to consist of content from subsequent sections. This pattern is discouraged for reasons stated [here](https://www.hlx.live/docs/davidsmodel#rule-3-limit-row-and-column-spans), but if you choose to use it the blocks plugin can render these items using the `include next sections` property in `library metadata`.
 
+![Screenshot 2023-09-07 at 2 42 13 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/32442f30-5147-4997-9048-cef9180c4ec2)
+
 ### Templates
 
 Templates are a way to group an entire document into a single element in the sidekick library. To mark a document as a template set `type` to `template` in `default library metadata`.

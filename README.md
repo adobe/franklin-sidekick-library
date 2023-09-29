@@ -81,15 +81,9 @@ Example block with custom name and description
 
 The blocks plugin is capable of rendering [default content](https://www.hlx.live/developer/markup-sections-blocks#default-content) and [autoblocks](https://www.hlx.live/developer/markup-sections-blocks#auto-blocking). In order to achieve this, it is necessary to place your `default content` or `autoblock` within a dedicated section, which should include a `library metadata` table defining a `name` property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
 
-### Multi-section Blocks
+### Blocks composed of content in subsequent sections
 
-Multi-section blocks are a way to group multiple sections into a single item in the blocks plugin. Some block implementations require multiple sections of content. A common example of this is a tabs block where the subsequent sections after the block is declared contain the content for each tab.
-
-In order to tell the block plugin to include an `n` number of subsequent sections you can use the `include next sections` property in `library metadata`.
-
-![Screenshot 2023-09-07 at 2 42 13 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/09353409-9036-4e18-8f52-597897b4e1d2)
-
-In the example above, the block plugin will group this section and the 3 sections after into a single item. 
+There are situations where developers may want a block to consist of content from subsequent sections. This pattern is discouraged for reasons stated [here](https://www.hlx.live/docs/davidsmodel#rule-3-limit-row-and-column-spans), but if you choose to use it the blocks plugin can render these items using the `include next sections` property in `library metadata`.
 
 ### Templates
 

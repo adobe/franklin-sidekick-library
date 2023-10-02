@@ -324,6 +324,9 @@ export class BlockList extends LitElement {
                 blockVariantItem.setAttribute('data-search-tags', searchTags);
               }
 
+              // Get the number of blocks in the section
+              const blocksInSection = blockWrapper.querySelectorAll('div[class]:not(.section-metadata)').length ?? 0;
+
               // Check if the section has an includeNextSections attribute
               // If it does is this a multi-section block
               if (sectionLibraryMetadata.includeNextSections) {
@@ -356,19 +359,23 @@ export class BlockList extends LitElement {
                   // Remember this is a multi-section block
                   defaultLibraryMetadata.multiSectionBlock = true;
                 }
-              } else if (blockWrapper.querySelectorAll('div[class]:not(.section-metadata)').length > 1) {
+              } else if (blocksInSection > 0) {
+                // Ok great.. there is at least one block,
+                // but is there also default content or multiple blocks?
+                if (blockWrapper.querySelectorAll('body > :scope > p').length > 0 || blocksInSection > 1) {
                 // We need to take all the blocks in the section to make up the compound block and
                 // append them to a new body element
-                const compoundBodyElement = document.createElement('body');
+                  const compoundBodyElement = document.createElement('body');
 
-                // Take the parent of this block and append to the compound body element
-                compoundBodyElement.append(blockWrapper);
+                  // Take the parent of this block and append to the compound body element
+                  compoundBodyElement.append(blockWrapper);
 
-                // Reassign the blockWrapper to the new body element
-                blockWrapper = compoundBodyElement;
+                  // Reassign the blockWrapper to the new body element
+                  blockWrapper = compoundBodyElement;
 
-                // Remember this is a compound block
-                defaultLibraryMetadata.compoundBlock = true;
+                  // Remember this is a compound block
+                  defaultLibraryMetadata.compoundBlock = true;
+                }
               }
 
               // Construct an event payload

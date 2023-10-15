@@ -100,6 +100,12 @@ export const mockFetchCompoundBlockPlainHTMLSuccess = () => fetchMock.get(compou
   body: [mockBlock(COMPOUND_BLOCK_STUB, [], false).outerHTML].join('\n'),
 });
 
+export const mixedBlockUrl = 'https://example.hlx.test/tools/sidekick/blocks/mixed/mixed.plain.html';
+export const mockFetchMixedBlockPlainHTMLSuccess = () => fetchMock.get(mixedBlockUrl, {
+  status: 200,
+  body: [mockBlock(COMPOUND_BLOCK_STUB, [], false).outerHTML, mockBlock(COLUMNS_DEFAULT_STUB, [], true).outerHTML].join('\n'),
+});
+
 export const templateUrl = 'https://example.hlx.test/tools/sidekick/blocks/blog-post/blog-post.plain.html';
 export const mockFetchTemplatePlainHTMLSuccess = () => fetchMock.get(templateUrl, {
   status: 200,

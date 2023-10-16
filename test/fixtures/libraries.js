@@ -123,12 +123,6 @@ export const mockFetchSheetWithTemplateSuccess = () => fetchMock.get(sheetWithTe
   ...constructSingleSheetJSONBody([TEMPLATE_LIBRARY_ITEM]),
 });
 
-export const mixedSectionsContent = 'https://example.hlx.test/tools/sidekick/mixed.json';
-export const mixedSectionsContentSuccess = () => fetchMock.get(mixedSectionsContent, {
-  status: 200,
-  ...constructSingleSheetJSONBody([MIXED_LIBRARY_ITEM]),
-});
-
 export const unknownPluginSheetUrl = 'https://example.hlx.test/tools/sidekick/unknown-plugin-sheet.json';
 export const mockFetchSheetLibraryWithUnknownPluginSuccess = () => {
   const unknownPlugin = constructPlugin('foobar', [{ one: 'foo' }, { two: 'bar' }]);

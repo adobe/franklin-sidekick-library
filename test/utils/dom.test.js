@@ -14,7 +14,9 @@
 
 import { expect } from '@open-wc/testing';
 
-import { createTag, getMetadata, loadCSS } from '../../src/utils/dom.js';
+import {
+  createTag, getMetadata, loadCSS, readBlockConfig,
+} from '../../src/utils/dom.js';
 
 describe('Dom Util Tests', () => {
   describe('createTag', () => {
@@ -172,6 +174,91 @@ describe('Dom Util Tests', () => {
         expect(status).to.be.oneOf(['load', 'error']);
         done();
       });
+    });
+
+    it('should not load a CSS file that has already been loaded', (done) => {
+      const link = document.createElement('link');
+      link.setAttribute('rel', 'stylesheet');
+      link.setAttribute('href', cssPath);
+      document.head.appendChild(link);
+
+      loadCSS(cssPath, (status) => {
+        expect(status).to.equal('noop');
+        expect(document.querySelectorAll(`head > link[href="${cssPath}"]`)).to.have.lengthOf(1);
+        done();
+      });
+    });
+
+    it('should call the callback function with the status', (done) => {
+      loadCSS(cssPath, (status) => {
+        expect(status).to.be.oneOf(['load', 'error']);
+        done();
+      });
+    });
+  });
+
+  describe('readBlockConfig', () => {
+    it('should ignore description properties', () => {
+      const libraryMetadata = document.createElement('div');
+      libraryMetadata.innerHTML = `
+        <div>
+          <div>name</div>
+          <div>Z-Pattern (Author Agnostic)</div>
+        </div>
+        <div>
+          <div>description</div>
+          <div>
+            <h3 id="author-agnostic">Author Agnostic</h3>
+            <p>This means this and that</p>
+            <p><a href="https://hlx.live">This is a link</a></p>
+            <ul>
+              <li>This is one thing</li>
+              <li>This is the second thing</li>
+              <li>This is the <em><u>third</u></em> thing</li>
+            </ul>
+          </div>
+        </div>
+      `;
+
+      const config = readBlockConfig(libraryMetadata, false);
+      expect(config.name).to.eq('Z-Pattern (Author Agnostic)');
+      expect(config.description instanceof HTMLElement).to.eq(true);
+    });
+
+    it('should parse other types correctly', () => {
+      const libraryMetadata = document.createElement('div');
+      libraryMetadata.innerHTML = `
+        <div>
+          <div>webpage</div>
+          <div>
+            <a href="https://hlx.live">This is a link</a>
+          </div>
+        </div>
+        <div>
+          <div>hero</div>
+          <div>
+            <img src="https://hlx.live"></img>
+          </div>
+        </div>
+        <div>
+          <div>content</div>
+          <div>
+            <p>foo</p>
+          </div>
+        </div>
+        <div>
+          <div>fallback</div>
+          <div>
+            <p>bar</p>
+          </div>
+        </div>
+      `;
+
+      const config = readBlockConfig(libraryMetadata, false);
+      expect(config.webpage).to.eq('https://hlx.live/');
+      expect(config.hero).to.eq('https://hlx.live/');
+      expect(config.content).to.eq('foo');
+      expect(config.fallback).to.eq('bar');
     });
   });
 });

@@ -1,3 +1,11 @@
+## [1.5.6](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.5...v1.5.6) (2023-10-19)
+
+
+### Bug Fixes
+
+* don't try and parse descriptions in library metadata.. treat as HTML ([#77](https://github.com/adobe/franklin-sidekick-library/issues/77)) ([4ca0359](https://github.com/adobe/franklin-sidekick-library/commit/4ca035903a3bf08c9a6b788b943cddb1884dcfcc))
+* store compound block flag in sectionMetadata instead of defaultMetadata ([#76](https://github.com/adobe/franklin-sidekick-library/issues/76)) ([c5c6b86](https://github.com/adobe/franklin-sidekick-library/commit/c5c6b86f88c90326c30224cc67235294ecf47d77))
+
 ## [1.5.5](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.4...v1.5.5) (2023-09-18)
 
 

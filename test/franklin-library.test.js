@@ -252,7 +252,6 @@ describe('FranklinLibrary', () => {
   });
 
   it('deep linking to a template', async () => {
-    console.log('my test');
     setURLParams([['plugin', 'blocks'], ['path', '/tools/sidekick/blocks/blog-post/blog-post']], ['index']);
     const library = document.createElement('sidekick-library');
     library.config = {

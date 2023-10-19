@@ -19,8 +19,15 @@ import { spy } from 'sinon';
 import '../../../src/components/block-list/block-list.js';
 import fetchMock from 'fetch-mock/esm/client';
 import { createTag } from '../../../src/utils/dom.js';
-import { CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM, TEMPLATE_LIBRARY_ITEM } from '../../fixtures/libraries.js';
-import { mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess, mockFetchColumnsPlainHTMLSuccess, mockFetchTemplatePlainHTMLSuccess } from '../../fixtures/blocks.js';
+import {
+  CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM, MIXED_LIBRARY_ITEM, TEMPLATE_LIBRARY_ITEM,
+} from '../../fixtures/libraries.js';
+import {
+  mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess,
+  mockFetchColumnsPlainHTMLSuccess,
+  mockFetchMixedBlockPlainHTMLSuccess,
+  mockFetchTemplatePlainHTMLSuccess,
+} from '../../fixtures/blocks.js';
 import { recursiveQuery } from '../../test-utils.js';
 
 describe('BlockRenderer', () => {
@@ -30,6 +37,7 @@ describe('BlockRenderer', () => {
   beforeEach(async () => {
     mockFetchColumnsPlainHTMLSuccess();
     mockFetchTemplatePlainHTMLSuccess();
+    mockFetchMixedBlockPlainHTMLSuccess();
     mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess({ name: 'Cards Authored Name', searchTags: 'foobar' });
     blockList = await fixture(html`<block-list></block-list>`);
     container = createTag('div');
@@ -91,6 +99,30 @@ describe('BlockRenderer', () => {
       const templatesList = sideNav.querySelectorAll('sp-sidenav-item[label="Templates"]');
       expect(templatesList).to.exist;
       expect(templatesList.length).to.equal(1);
+    });
+
+    it('blocks and compound blocks in the same item should have the correct type (compoundBlock) set in section metadata', async () => {
+      const loadBlockSpy = spy();
+      await blockList.loadBlocks([MIXED_LIBRARY_ITEM], container);
+      blockList.addEventListener('LoadBlock', loadBlockSpy);
+
+      await waitUntil(
+        () => recursiveQuery(blockList, 'sp-sidenav'),
+        'Element did not render children',
+      );
+
+      const sideNav = recursiveQuery(blockList, 'sp-sidenav');
+      const compoundBlock = sideNav.querySelector('sp-sidenav-item[label="Compound Block 1"]');
+      expect(compoundBlock).to.exist;
+
+      compoundBlock.dispatchEvent(new Event('click'));
+      expect(loadBlockSpy.args[0][0].detail.sectionLibraryMetadata.compoundBlock).to.be.true;
+
+      const columnsBlock = sideNav.querySelector('sp-sidenav-item[label="columns"]');
+      expect(columnsBlock).to.exist;
+
+      columnsBlock.dispatchEvent(new Event('click'));
+      expect(loadBlockSpy.args[1][0].detail.sectionLibraryMetadata.compoundBlock).to.be.false;
     });
 
     it('preview block', async () => {

@@ -42,6 +42,12 @@ export const TEMPLATE_LIBRARY_ITEM = {
   url: 'https://example.hlx.test/tools/sidekick/blocks/blog-post/blog-post',
 };
 
+export const MIXED_LIBRARY_ITEM = {
+  name: 'Mixed item with both compound and regular blocks',
+  path: '/tools/sidekick/blocks/mixed/mixed',
+  url: 'https://example.hlx.test/tools/sidekick/blocks/mixed/mixed',
+};
+
 export const NON_EXISTENT_BLOCK_LIBRARY_ITEM = {
   name: 'Columns',
   path: '/tools/sidekick/blocks/columns/path-does-not-exist',

@@ -324,6 +324,9 @@ export class BlockList extends LitElement {
                 blockVariantItem.setAttribute('data-search-tags', searchTags);
               }
 
+              // Assume this is not a compound block
+              sectionLibraryMetadata.compoundBlock = false;
+
               // Get the number of blocks in the section
               const blocksInSection = blockWrapper.querySelectorAll('div[class]:not(.section-metadata)').length ?? 0;
 
@@ -357,7 +360,7 @@ export class BlockList extends LitElement {
                   skipNext = includeNextSections;
 
                   // Remember this is a multi-section block
-                  defaultLibraryMetadata.multiSectionBlock = true;
+                  sectionLibraryMetadata.multiSectionBlock = true;
                 }
               } else if (blocksInSection > 0) {
                 // Ok great.. there is at least one block,
@@ -374,7 +377,7 @@ export class BlockList extends LitElement {
                   blockWrapper = compoundBodyElement;
 
                   // Remember this is a compound block
-                  defaultLibraryMetadata.compoundBlock = true;
+                  sectionLibraryMetadata.compoundBlock = true;
                 }
               }
 

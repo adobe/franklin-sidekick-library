@@ -152,7 +152,7 @@ Since the sidekick library is hosted on the same origin as the content, a static
 </html>
 ```
 
-In the code above we load the sidekick library from `aem.live` and then create a custom `sidekick-library` element and add it to the page. The `sidekick-library` element accepts a `config` object that is required to configure the sidekick library.
+In the code above we load the sidekick library from `hlx.live` and then create a custom `sidekick-library` element and add it to the page. The `sidekick-library` element accepts a `config` object that is required to configure the sidekick library.
 
 ### Supported configuration parameters
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |

@@ -138,7 +138,7 @@ Since the sidekick library is hosted on the same origin as the content, a static
   <body>
     <script
       type="module"
-      src="https://www.aem.live/tools/sidekick/library/index.js"
+      src="https://www.hlx.live/tools/sidekick/library/index.js"
     ></script>
     <script>
       const library = document.createElement('sidekick-library')
@@ -362,7 +362,7 @@ Plugin authors can dispatch events from their plugin to the parent sidekick libr
 #### Toast Messages
 
 ```js
-import { PLUGIN_EVENTS } from 'https://www.aem.live/tools/sidekick/library/events/events.js';
+import { PLUGIN_EVENTS } from 'https://www.hlx.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show a toast message
@@ -373,7 +373,7 @@ export async function decorate(container, data, query) {
 #### Show and Hide Loader
 
 ```js
-import { PLUGIN_EVENTS } from 'https://www.aem.live/tools/sidekick/library/events/events.js';
+import { PLUGIN_EVENTS } from 'https://www.hlx.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show loader

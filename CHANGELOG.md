@@ -1,3 +1,10 @@
+## [1.5.7](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.6...v1.5.7) (2023-10-27)
+
+
+### Bug Fixes
+
+* make block names author friendly when pasted ([#83](https://github.com/adobe/franklin-sidekick-library/issues/83)) ([52353d7](https://github.com/adobe/franklin-sidekick-library/commit/52353d781ef38134a905bd9b4d331c91c384df3a))
+
 ## [1.5.6](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.5...v1.5.6) (2023-10-19)
 
 

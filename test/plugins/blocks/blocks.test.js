@@ -480,9 +480,9 @@ describe('Blocks Plugin', () => {
 
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(1);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('z-pattern');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('banner (small, left)');
-      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Z Pattern');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Banner (Small, Left)');
+      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section Metadata');
     });
 
     it('should copy template from block-list', async () => {
@@ -509,8 +509,8 @@ describe('Blocks Plugin', () => {
       const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(2);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('blockquote');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Section metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Blockquote');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Section Metadata');
 
       // eslint-disable-next-line max-len
       // expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Metadata');
@@ -604,9 +604,9 @@ describe('Blocks Plugin', () => {
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector(':scope h2').textContent).to.eq('Heading');
       expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('z-pattern');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('banner (small, left)');
-      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Z Pattern');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Banner (Small, Left)');
+      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section Metadata');
     });
 
     it('copy template via details panel', async () => {
@@ -627,8 +627,8 @@ describe('Blocks Plugin', () => {
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector(':scope h1').textContent).to.eq('My blog post about a subject');
       expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1e24f72d6bb08f4cec2618ef688691fe591e57746.jpeg?width=750&format=jpeg&optimize=medium');
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('blockquote');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Section metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Blockquote');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Section Metadata');
 
       // See above for this sillyness
       copiedHTML.querySelectorAll(':scope table').forEach((table, index) => {
@@ -660,7 +660,7 @@ describe('Blocks Plugin', () => {
       expect(copiedHTML.querySelector('table')).to.not.be.null;
       expect(copiedHTML.querySelector('td:nth-of-type(2)').style.width).to.eq('50%');
 
-      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section metadata');
+      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section Metadata');
       expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(1)').textContent).to.eq('style');
       expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(2)').textContent).to.eq('dark');
     });
@@ -676,7 +676,7 @@ describe('Blocks Plugin', () => {
       expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
       expect(copiedHTML.querySelector('p:last-of-type').textContent).to.eq(':home:');
 
-      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section metadata');
+      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section Metadata');
       expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(1)').textContent).to.eq('name');
       expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(2)').textContent).to.eq('Home Hero');
     });

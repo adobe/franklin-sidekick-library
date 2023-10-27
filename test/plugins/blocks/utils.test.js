@@ -13,7 +13,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from '@open-wc/testing';
-import { getBlockName } from '../../../src/plugins/blocks/utils.js';
+import { getBlockName, getAuthorFriendlyName } from '../../../src/plugins/blocks/utils.js';
 import { mockBlock } from '../../fixtures/blocks.js';
 import { CARDS_DEFAULT_STUB } from '../../fixtures/stubs/cards.js';
 
@@ -41,6 +41,14 @@ describe('Blocks Util', () => {
       const cardsBlock = mockBlock(CARDS_DEFAULT_STUB);
       const blockName = getBlockName(cardsBlock, true);
       expect(blockName).to.equal('cards');
+    });
+  });
+  describe('getAuthorFriendlyName()', () => {
+    it('returns author friendly names', async () => {
+      expect(getAuthorFriendlyName('hero-main')).to.equal('Hero Main');
+      expect(getAuthorFriendlyName('hero-main (layer-1)')).to.equal('Hero Main (Layer 1)');
+      expect(getAuthorFriendlyName('hero-main (layer-1, Bold-italic)')).to.equal('Hero Main (Layer 1, Bold Italic)');
+      expect(getAuthorFriendlyName('hero-main-foo-bar (layer-1, bold-italic, Underline)')).to.equal('Hero Main Foo Bar (Layer 1, Bold Italic, Underline)');
     });
   });
 });

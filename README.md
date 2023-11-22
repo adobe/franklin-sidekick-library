@@ -158,7 +158,7 @@ In the code above we load the sidekick library from `hlx.live` and then create a
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
 |----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
 | base           | Path to the library               | The base library to be loaded                                                                                                   | true     |
-| extended       | Absolute URL to the extended library      | A library to extend the base library with                                                                                       | false    |
+| extends       | Absolute URL to the extended library      | A library to extend the base library with                                                                                       | false    |
 | {plugin-name}  | Path to the custom plugin js file | For custom plugins, the parameter name should be the name of the plugin and the value should be a URL to the plugin source (js) | false    |
 
 If you have custom plugins for the sidekick library they can be added by including the plugin name in the config and then the path to the plugin. Ideally the plugin code is host same origin as the `library.html` document.

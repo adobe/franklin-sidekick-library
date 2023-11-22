@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.0...v1.6.1) (2023-11-22)
+
+
+### Bug Fixes
+
+* **release:** update package.json upon release, but don't publish to NPM ([e56f875](https://github.com/adobe/franklin-sidekick-library/commit/e56f875853c087f29cfb37aea3ba8421300305d7))
+
 # [1.6.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.7...v1.6.0) (2023-11-22)
 
 

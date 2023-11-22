@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.7...v1.6.0) (2023-11-22)
+
+
+### Features
+
+* **release:** announce releases on discord ([28de448](https://github.com/adobe/franklin-sidekick-library/commit/28de44898ba51695662bff88ad5ccba375804c76))
+
 ## [1.5.7](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.6...v1.5.7) (2023-10-27)
 
 

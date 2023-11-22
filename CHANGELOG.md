@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.1...v1.6.2) (2023-11-22)
+
+
+### Bug Fixes
+
+* **release:** combine both release actions in one workflow ([29ed3fc](https://github.com/adobe/franklin-sidekick-library/commit/29ed3fcdb24837794f7a849f3a263a75808e15c5))
+
 ## [1.6.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.0...v1.6.1) (2023-11-22)
 
 

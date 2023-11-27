@@ -158,7 +158,7 @@ In the code above we load the sidekick library from `hlx.live` and then create a
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
 |----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
 | base           | Path to the library               | The base library to be loaded                                                                                                   | true     |
-| extended       | Absolute URL to the extended library      | A library to extend the base library with                                                                                       | false    |
+| extends       | Absolute URL to the extended library      | A library to extend the base library with                                                                                       | false    |
 | plugins  | An object containing plugins to register with the sidekick library. | The plugins object can be used to register plugins and configure data that should be passed to the plugin | false    |
 
 The blocks plugin supports the following configuration properties that can be set using the `plugins` object.

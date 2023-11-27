@@ -1,3 +1,24 @@
+## [1.6.2](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.1...v1.6.2) (2023-11-22)
+
+
+### Bug Fixes
+
+* **release:** combine both release actions in one workflow ([29ed3fc](https://github.com/adobe/franklin-sidekick-library/commit/29ed3fcdb24837794f7a849f3a263a75808e15c5))
+
+## [1.6.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.0...v1.6.1) (2023-11-22)
+
+
+### Bug Fixes
+
+* **release:** update package.json upon release, but don't publish to NPM ([e56f875](https://github.com/adobe/franklin-sidekick-library/commit/e56f875853c087f29cfb37aea3ba8421300305d7))
+
+# [1.6.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.7...v1.6.0) (2023-11-22)
+
+
+### Features
+
+* **release:** announce releases on discord ([28de448](https://github.com/adobe/franklin-sidekick-library/commit/28de44898ba51695662bff88ad5ccba375804c76))
+
 ## [1.5.7](https://github.com/adobe/franklin-sidekick-library/compare/v1.5.6...v1.5.7) (2023-10-27)
 
 

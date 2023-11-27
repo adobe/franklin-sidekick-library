@@ -184,7 +184,7 @@ library.config = {
 
 ### Custom plugin setup
 
-The example below defines a tags plugin in the config. The keys of the plugins object should must match the name of the plugin, any other properties defined in the plugin object will be available to the plugin via the context argument of the [decorate](#building-a-plugin) method.
+The example below defines a tags plugin in the config. The keys of the plugins object must match the name of the plugin, any other properties defined in the plugin object will be available to the plugin via the context argument of the [decorate](#building-a-plugin) method.
 
 ```javascript
 const library = document.createElement('sidekick-library')

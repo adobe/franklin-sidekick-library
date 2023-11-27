@@ -200,7 +200,7 @@ async function imageUrlToBase64(url) {
       };
       reader.readAsDataURL(blob);
     } catch (e) {
-      /* c8 ignore next 1 */
+      /* c8 ignore next 2 */
       reject(e);
     }
   });
@@ -226,7 +226,7 @@ export async function prepareImagesForCopy(context, element, url, columnWidthPer
           const dataURL = await imageUrlToBase64(`${imgSrc.origin}${imgSrc.pathname}`);
           img.src = dataURL;
         } catch (e) {
-          /* c8 ignore next 2 */
+          /* c8 ignore next 3 */
           // eslint-disable-next-line no-console
           console.error(e);
         }
@@ -366,7 +366,7 @@ export function copyToClipboard(context, data, prepare) {
             const blob = new Blob([html.outerHTML], { type: 'text/html' });
             resolve(blob);
           } catch (e) {
-            /* c8 ignore next 1 */
+            /* c8 ignore next 2 */
             reject(e);
           }
         });

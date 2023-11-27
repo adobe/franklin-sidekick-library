@@ -225,6 +225,7 @@ export async function prepareImagesForCopy(context, element, url, columnWidthPer
           const dataURL = await imageUrlToBase64(`${imgSrc.origin}${imgSrc.pathname}`);
           img.src = dataURL;
         } catch (e) {
+          // eslint-disable-next-line no-console
           console.error(e);
         }
       } else {
@@ -457,7 +458,6 @@ export async function copyDefaultContentToClipboard(context, wrapper, blockURL) 
   };
 
   const copied = await copyToClipboard(context, data, prepare);
-  console.log('copied', copied);
 
   // Track block copy event
   sampleRUM('library:blockcopied', { target: blockURL });

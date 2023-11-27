@@ -23,7 +23,7 @@ import {
   CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM, MIXED_LIBRARY_ITEM, TEMPLATE_LIBRARY_ITEM,
 } from '../../fixtures/libraries.js';
 import {
-  mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess,
+  mockFetchCardsPlainHTMLWithMetadataSuccess,
   mockFetchColumnsPlainHTMLSuccess,
   mockFetchMixedBlockPlainHTMLSuccess,
   mockFetchTemplatePlainHTMLSuccess,
@@ -38,7 +38,7 @@ describe('BlockRenderer', () => {
     mockFetchColumnsPlainHTMLSuccess();
     mockFetchTemplatePlainHTMLSuccess();
     mockFetchMixedBlockPlainHTMLSuccess();
-    mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess({ name: 'Cards Authored Name', searchTags: 'foobar' });
+    mockFetchCardsPlainHTMLWithMetadataSuccess({ name: 'Cards Authored Name', searchTags: 'foobar' });
     blockList = await fixture(html`<block-list></block-list>`);
     container = createTag('div');
   });

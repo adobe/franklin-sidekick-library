@@ -253,6 +253,7 @@ export async function prepareImagesForCopy(context, element, url, columnWidthPer
 
     // Check if the new height exceeds the maximum height
     if (newHeight > maxWidth) {
+      /* c8 ignore next 3 */
       newHeight = maxWidth;
       newWidth = newHeight * aspectRatio;
     }

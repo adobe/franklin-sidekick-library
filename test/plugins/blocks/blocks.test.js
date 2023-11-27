@@ -30,13 +30,14 @@ import AppModel from '../../../src/models/app-model.js';
 import { simulateTyping } from '../../test-utils.js';
 import {
   mockFetchCardsPlainHTMLSuccess,
-  mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess,
+  mockFetchCardsPlainHTMLWithMetadataSuccess,
   mockFetchColumnsPlainHTMLSuccess,
   mockFetchDefaultContentPlainHTMLSuccess,
   mockFetchTabsPlainHTMLSuccess,
   mockFetchNonExistantPlainHTMLFailure,
   mockFetchCompoundBlockPlainHTMLSuccess,
   mockFetchTemplatePlainHTMLSuccess,
+  mockFetchDefaultContentPlainHTMLWithMetadataSuccess,
 } from '../../fixtures/blocks.js';
 import {
   CARDS_BLOCK_LIBRARY_ITEM,
@@ -62,9 +63,8 @@ describe('Blocks Plugin', () => {
     let container;
     let clipboardStub;
     const ENCODED_IMAGE = 'data:image/jpeg;base64,Zm9vYmFy';
-
     const loadBlock = async () => {
-      mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess({ description: 'foobar' });
+      mockFetchCardsPlainHTMLWithMetadataSuccess({ description: 'foobar' }, { foo: 'bar' });
       mockFetchCardsDocumentSuccess();
       mockFetchInlinePageDependenciesSuccess();
 
@@ -106,7 +106,7 @@ describe('Blocks Plugin', () => {
     };
 
     const loadDefaultContent = async () => {
-      mockFetchDefaultContentPlainHTMLSuccess();
+      mockFetchDefaultContentPlainHTMLWithMetadataSuccess({ foo: 'bar' });
       mockFetchDefaultContentDocumentSuccess();
       mockFetchInlinePageDependenciesSuccess();
 
@@ -632,6 +632,11 @@ describe('Blocks Plugin', () => {
       const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelector('p:first-of-type').textContent).to.eq('Unmatched speed');
 
+      // Make sure section metadata was copied
+      const tds = copiedHTML.querySelectorAll('td');
+      const targetTd = Array.from(tds).find(td => td.textContent.trim() === 'Section Metadata');
+      expect(targetTd).to.exist;
+
       return copiedHTML;
     }
 
@@ -677,6 +682,11 @@ describe('Blocks Plugin', () => {
       const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelector('h1').textContent).to.eq('This is a heading');
       expect(copiedHTML.querySelector('p:last-of-type').textContent).to.eq(':home:');
+
+      // Make sure section metadata was copied
+      const tds = copiedHTML.querySelectorAll('td');
+      const targetTd = Array.from(tds).find(td => td.textContent.trim() === 'Section Metadata');
+      expect(targetTd).to.exist;
 
       return copiedHTML;
     }

@@ -310,7 +310,7 @@ describe('BlockRenderer', () => {
       expect(heading).to.exist;
 
       const img = contentDocument.querySelector('img');
-      expect(img.src).to.equal('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
+      expect(img.src).to.equal('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
       expect(contentDocument.body.classList.contains('sidekick-library')).to.eq(true);
     });
   });
@@ -336,7 +336,7 @@ describe('BlockRenderer', () => {
       expect(heading).to.exist;
 
       const img = contentDocument.querySelector('img');
-      expect(img.src).to.equal('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
+      expect(img.src).to.equal('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
 
       expect(contentDocument.querySelectorAll(':scope main > div > div').length).to.eq(4);
       expect(contentDocument.querySelectorAll('table').length).to.eq(0);

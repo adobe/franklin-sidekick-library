@@ -15,10 +15,10 @@ import { createTag } from '../../../src/utils/dom.js';
 export const DEFAULT_CONTENT_STUB = createTag('div', {}, /* html */`
 <p>
   <picture>
-    <source type="image/webp" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-    <source type="image/webp" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&#x26;format=webply&#x26;optimize=medium">
-    <source type="image/png" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-    <img loading="lazy" alt="" src="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&#x26;format=png&#x26;optimize=medium" width="584" height="482">
+    <source type="image/webp" srcset="./media_1.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+    <source type="image/webp" srcset="./media_1.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+    <source type="image/jpeg" srcset="./media_1.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+    <img loading="lazy" alt="" src="./media_1.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="584" height="482">
   </picture>
 </p>
 <h1 id="this-is-a-heading">This is a heading</h1>
@@ -30,10 +30,10 @@ export const DEFAULT_CONTENT_STUB = createTag('div', {}, /* html */`
 export const DEFAULT_CONTENT_STUB_WITH_LIBRARY_METADATA = createTag('div', {}, /* html */`
 <p>
   <picture>
-    <source type="image/webp" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-    <source type="image/webp" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&#x26;format=webply&#x26;optimize=medium">
-    <source type="image/png" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-    <img loading="lazy" alt="" src="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&#x26;format=png&#x26;optimize=medium" width="584" height="482">
+    <source type="image/webp" srcset="./media_1.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+    <source type="image/webp" srcset="./media_1.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+    <source type="image/jpeg" srcset="./media_1.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+    <img loading="lazy" alt="" src="./media_1.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="584" height="482">
   </picture>
 </p>
 <h1 id="this-is-a-heading">This is a heading</h1>
@@ -51,10 +51,10 @@ export const DEFAULT_CONTENT_STUB_WITH_LIBRARY_METADATA = createTag('div', {}, /
 export const DEFAULT_CONTENT_STUB_WITH_SECTION_METADATA = createTag('div', {}, /* html */`
 <p>
   <picture>
-    <source type="image/webp" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-    <source type="image/webp" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&#x26;format=webply&#x26;optimize=medium">
-    <source type="image/png" srcset="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-    <img loading="lazy" alt="" src="./media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&#x26;format=png&#x26;optimize=medium" width="584" height="482">
+    <source type="image/webp" srcset="./media_1.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+    <source type="image/webp" srcset="./media_1.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+    <source type="image/jpeg" srcset="./media_1.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+    <img loading="lazy" alt="" src="./media_1.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="584" height="482">
   </picture>
 </p>
 <h1 id="this-is-a-heading">This is a heading</h1>

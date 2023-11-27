@@ -17,10 +17,10 @@ export const TEMPLATE_STUB = createTag('div', {}, /* html */`
    <h1 id="my-blog-post-about-a-subject">My blog post about a subject</h1>
    <p>
       <picture>
-         <source type="image/webp" srcset="./media_1e24f72d6bb08f4cec2618ef688691fe591e57746.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-         <source type="image/webp" srcset="./media_1e24f72d6bb08f4cec2618ef688691fe591e57746.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
-         <source type="image/jpeg" srcset="./media_1e24f72d6bb08f4cec2618ef688691fe591e57746.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
-         <img loading="lazy" alt="" src="./media_1e24f72d6bb08f4cec2618ef688691fe591e57746.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="1600" height="1200">
+         <source type="image/webp" srcset="./media_1.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+         <source type="image/webp" srcset="./media_1.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+         <source type="image/jpeg" srcset="./media_1.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+         <img loading="lazy" alt="" src="./media_1.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="1600" height="1200">
       </picture>
    </p>
    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>

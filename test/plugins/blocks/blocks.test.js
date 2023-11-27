@@ -23,17 +23,12 @@ import '../../../src/views/plugin-renderer/plugin-renderer.js';
 import '../../../src/components/block-list/block-list.js';
 import '../../../src/components/block-renderer/block-renderer.js';
 import '../../../src/components/split-view/split-view.js';
-import { copyBlockToClipboard, copyDefaultContentToClipboard } from '../../../src/plugins/blocks/utils.js';
 import { decorate } from '../../../src/plugins/blocks/blocks.js';
 import { APP_EVENTS, PLUGIN_EVENTS } from '../../../src/events/events.js';
 import { EventBus } from '../../../src/events/eventbus.js';
 import AppModel from '../../../src/models/app-model.js';
 import { simulateTyping } from '../../test-utils.js';
 import {
-  addSectionMetadata,
-  cardsBlockUrl,
-  defaultContentBlockUrl,
-  mockBlock,
   mockFetchCardsPlainHTMLSuccess,
   mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess,
   mockFetchColumnsPlainHTMLSuccess,
@@ -60,13 +55,13 @@ import {
   mockFetchTabsDocumentSuccess,
   mockFetchTemplateDocumentSuccess,
 } from '../../fixtures/pages.js';
-import { DEFAULT_CONTENT_STUB_WITH_SECTION_METADATA } from '../../fixtures/stubs/default-content.js';
-import { CARDS_DEFAULT_STUB } from '../../fixtures/stubs/cards.js';
 import { createTag } from '../../../src/utils/dom.js';
 
 describe('Blocks Plugin', () => {
   describe('decorate()', () => {
     let container;
+    let clipboardStub;
+    const ENCODED_IMAGE = 'data:image/jpeg;base64,Zm9vYmFy';
 
     const loadBlock = async () => {
       mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess({ description: 'foobar' });
@@ -76,7 +71,7 @@ describe('Blocks Plugin', () => {
       const loadBlockSpy = sinon.spy();
       const mockData = [CARDS_BLOCK_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
@@ -118,7 +113,7 @@ describe('Blocks Plugin', () => {
       const loadBlockSpy = sinon.spy();
       const mockData = [DEFAULT_CONTENT_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
@@ -149,7 +144,7 @@ describe('Blocks Plugin', () => {
       expect(heading).to.not.be.null;
 
       const img = iframe.contentDocument.querySelector('img');
-      expect(img.src).to.eq('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
+      expect(img.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
 
       const p = iframe.contentDocument.querySelector('p:nth-of-type(2)');
       expect(p.getAttribute('contenteditable')).to.eq('true');
@@ -164,7 +159,7 @@ describe('Blocks Plugin', () => {
       const loadBlockSpy = sinon.spy();
       const mockData = [TABS_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
@@ -192,7 +187,7 @@ describe('Blocks Plugin', () => {
       );
 
       const img = iframe.contentDocument.querySelector('img');
-      expect(img.src).to.eq('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
+      expect(img.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     };
 
     const loadCompoundBlockContent = async () => {
@@ -203,7 +198,7 @@ describe('Blocks Plugin', () => {
       const loadBlockSpy = sinon.spy();
       const mockData = [COMPOUND_BLOCK_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
@@ -231,7 +226,7 @@ describe('Blocks Plugin', () => {
       );
 
       const img = iframe.contentDocument.querySelector('img');
-      expect(img.src).to.eq('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
+      expect(img.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     };
 
     const loadTemplateContent = async () => {
@@ -242,7 +237,7 @@ describe('Blocks Plugin', () => {
       const loadBlockSpy = sinon.spy();
       const mockData = [TEMPLATE_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
@@ -268,7 +263,7 @@ describe('Blocks Plugin', () => {
       );
 
       const img = iframe.contentDocument.querySelector('img');
-      expect(img.src).to.eq('https://example.hlx.test/media_1e24f72d6bb08f4cec2618ef688691fe591e57746.jpeg?width=750&format=jpeg&optimize=medium');
+      expect(img.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     };
 
     beforeEach(async () => {
@@ -290,11 +285,29 @@ describe('Blocks Plugin', () => {
 
       const pluginLoadedEvent = new CustomEvent(APP_EVENTS.PLUGIN_LOADED);
       EventBus.instance.dispatchEvent(pluginLoadedEvent);
+
+      // Create a stub for clipboard
+      clipboardStub = {
+        write: sinon.stub().resolves(),
+        read: sinon.stub().resolves('mocked text'),
+      };
+
+      // Replace the real navigator.clipboard with the stub
+      Object.defineProperty(navigator, 'clipboard', {
+        value: clipboardStub,
+        configurable: true,
+      });
     });
 
     afterEach(() => {
       fetchMock.restore();
     });
+
+    async function getClipboardHTML() {
+      const clipboardItem = clipboardStub.write.firstCall.args[0][0];
+      const blob = await clipboardItem.getType('text/html');
+      return blob.text();
+    }
 
     it('should render a list of blocks', async () => {
       const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
@@ -402,6 +415,12 @@ describe('Blocks Plugin', () => {
       firstCardChild.dispatchEvent(new Event('OnAction'));
 
       expect(copyBlockSpy.calledOnce).to.be.true;
+
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(toastSpy.calledOnce).to.be.true;
     });
 
@@ -423,16 +442,23 @@ describe('Blocks Plugin', () => {
       firstCardChild.dispatchEvent(new Event('OnAction'));
 
       expect(copyBlockSpy.calledOnce).to.be.true;
+
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(toastSpy.calledOnce).to.be.true;
     });
 
-    it('should copy multi section block from block-list', async () => {
+    async function testMultiSectionCopy() {
       mockFetchTabsPlainHTMLSuccess();
+
       const toastSpy = sinon.spy();
       const copyBlockSpy = sinon.spy();
       const mockData = [TABS_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('CopyBlock', copyBlockSpy);
@@ -445,23 +471,43 @@ describe('Blocks Plugin', () => {
       firstCardChild.dispatchEvent(new Event('OnAction'));
 
       expect(copyBlockSpy.calledOnce).to.be.true;
-      expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
+      expect(toastSpy.calledOnce).to.be.true;
+      const clipboardHTML = await getClipboardHTML();
+
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(4);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(5);
       expect(copiedHTML.querySelector(':scope h2').textContent).to.eq('Heading');
       expect(copiedHTML.querySelectorAll(':scope ol li').length).to.eq(3);
-      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
+
+      return copiedHTML;
+    }
+
+    it('should copy multi section block from block-list', async () => {
+      const copiedHTML = await testMultiSectionCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     });
 
-    it('should copy compound block from block-list', async () => {
+    it('should copy multi section block from block-list with encoding', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testMultiSectionCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq(ENCODED_IMAGE);
+    });
+
+    async function testCompoundBlockCopy() {
       mockFetchCompoundBlockPlainHTMLSuccess();
       const toastSpy = sinon.spy();
       const copyBlockSpy = sinon.spy();
       const mockData = [COMPOUND_BLOCK_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('CopyBlock', copyBlockSpy);
@@ -473,25 +519,45 @@ describe('Blocks Plugin', () => {
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');
       firstCardChild.dispatchEvent(new Event('OnAction'));
 
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(copyBlockSpy.calledOnce).to.be.true;
       expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      const clipboardHTML = await getClipboardHTML();
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
 
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(1);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Z Pattern');
       expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Banner (Small, Left)');
       expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section Metadata');
+
+      return copiedHTML;
+    }
+
+    it('should copy compound block from block-list', async () => {
+      const copiedHTML = await testCompoundBlockCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     });
 
-    it('should copy template from block-list', async () => {
+    it('should copy compound block from block-list with encoding', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testCompoundBlockCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq(ENCODED_IMAGE);
+    });
+
+    async function testTemplateCopy() {
       mockFetchTemplatePlainHTMLSuccess();
       const toastSpy = sinon.spy();
       const copyBlockSpy = sinon.spy();
       const mockData = [TEMPLATE_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('CopyBlock', copyBlockSpy);
@@ -503,10 +569,16 @@ describe('Blocks Plugin', () => {
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');
       firstCardChild.dispatchEvent(new Event('OnAction'));
 
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(copyBlockSpy.calledOnce).to.be.true;
       expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      const clipboardHTML = await getClipboardHTML();
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(2);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Blockquote');
@@ -522,9 +594,23 @@ describe('Blocks Plugin', () => {
           expect(table.querySelector('tr td').textContent).to.eq('Metadata');
         }
       });
+
+      return copiedHTML;
+    }
+
+    it('should copy template from block-list', async () => {
+      const copiedHTML = await testTemplateCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     });
 
-    it('copy block via details panel', async () => {
+    it('should copy template from block-list with encoding', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testTemplateCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq(ENCODED_IMAGE);
+    });
+
+    async function testDetailsBlockCopy() {
       const toastSpy = sinon.spy();
       await loadBlock();
 
@@ -535,10 +621,22 @@ describe('Blocks Plugin', () => {
       const copyButton = actionBar.querySelector('sp-button');
       copyButton.dispatchEvent(new Event('click'));
 
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      const clipboardHTML = await getClipboardHTML();
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelector('p:first-of-type').textContent).to.eq('Unmatched speed');
+
+      return copiedHTML;
+    }
+
+    it('copy block via details panel', async () => {
+      const copiedHTML = await testDetailsBlockCopy();
 
       const firstImage = copiedHTML.querySelector('img');
       expect(firstImage.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
@@ -546,7 +644,18 @@ describe('Blocks Plugin', () => {
       expect(firstImage.height).to.eq(153);
     });
 
-    it('copy default content via details panel', async () => {
+    it('copy block via details panel with encodings', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testDetailsBlockCopy();
+
+      const firstImage = copiedHTML.querySelector('img');
+      expect(firstImage.src).to.eq(ENCODED_IMAGE);
+      expect(firstImage.width).to.eq(270);
+      expect(firstImage.height).to.eq(153);
+    });
+
+    async function testDetailsDefaultContentCopy() {
       const toastSpy = sinon.spy();
       await loadDefaultContent();
 
@@ -557,15 +666,36 @@ describe('Blocks Plugin', () => {
       const copyButton = actionBar.querySelector('sp-button');
       copyButton.dispatchEvent(new Event('click'));
 
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      const clipboardHTML = await getClipboardHTML();
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelector('h1').textContent).to.eq('This is a heading');
       expect(copiedHTML.querySelector('p:last-of-type').textContent).to.eq(':home:');
-      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
+
+      return copiedHTML;
+    }
+
+    it('copy default content via details panel', async () => {
+      const copiedHTML = await testDetailsDefaultContentCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     });
 
-    it('copy multi section block via details panel', async () => {
+    it('copy default content via details panel with encoding', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testDetailsDefaultContentCopy();
+
+      const firstImage = copiedHTML.querySelector('img');
+      expect(firstImage.src).to.eq(ENCODED_IMAGE);
+    });
+
+    async function testDetailsMultiSectionBlocksCopy() {
       const toastSpy = sinon.spy();
       await loadMultiSectionContent();
 
@@ -576,17 +706,38 @@ describe('Blocks Plugin', () => {
       const copyButton = actionBar.querySelector('sp-button');
       copyButton.dispatchEvent(new Event('click'));
 
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      const clipboardHTML = await getClipboardHTML();
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(4);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(5);
       expect(copiedHTML.querySelector(':scope h2').textContent).to.eq('Heading');
       expect(copiedHTML.querySelectorAll(':scope ol li').length).to.eq(3);
-      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
+
+      return copiedHTML;
+    }
+
+    it('copy multi section block via details panel', async () => {
+      const copiedHTML = await testDetailsMultiSectionBlocksCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     });
 
-    it('copy compound block via details panel', async () => {
+    it('copy multi section block via details panel with encoding', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testDetailsMultiSectionBlocksCopy();
+
+      const firstImage = copiedHTML.querySelector('img');
+      expect(firstImage.src).to.eq(ENCODED_IMAGE);
+    });
+
+    async function testDetailsCompondBlockCopy() {
       const toastSpy = sinon.spy();
       await loadCompoundBlockContent();
 
@@ -597,19 +748,40 @@ describe('Blocks Plugin', () => {
       const copyButton = actionBar.querySelector('sp-button');
       copyButton.dispatchEvent(new Event('click'));
 
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      const clipboardHTML = await getClipboardHTML();
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(1);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector(':scope h2').textContent).to.eq('Heading');
-      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&format=png&optimize=medium');
       expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Z Pattern');
       expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Banner (Small, Left)');
       expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section Metadata');
+
+      return copiedHTML;
+    }
+
+    it('copy compound block via details panel', async () => {
+      const copiedHTML = await testDetailsCompondBlockCopy();
+      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
     });
 
-    it('copy template via details panel', async () => {
+    it('copy compound block via details panel with encodings', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testDetailsCompondBlockCopy();
+
+      const firstImage = copiedHTML.querySelector('img');
+      expect(firstImage.src).to.eq(ENCODED_IMAGE);
+    });
+
+    async function testDetailsTemplateCopy() {
       const toastSpy = sinon.spy();
       await loadTemplateContent();
 
@@ -620,13 +792,18 @@ describe('Blocks Plugin', () => {
       const copyButton = actionBar.querySelector('sp-button');
       copyButton.dispatchEvent(new Event('click'));
 
+      await waitUntil(
+        () => toastSpy.calledOnce,
+        'Wait for toast',
+      );
+
       expect(toastSpy.calledOnce).to.be.true;
 
-      const copiedHTML = createTag('div', undefined, toastSpy.firstCall.args[0].detail.result);
+      const clipboardHTML = await getClipboardHTML();
+      const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(2);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector(':scope h1').textContent).to.eq('My blog post about a subject');
-      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1e24f72d6bb08f4cec2618ef688691fe591e57746.jpeg?width=750&format=jpeg&optimize=medium');
       expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Blockquote');
       expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Section Metadata');
 
@@ -636,49 +813,22 @@ describe('Blocks Plugin', () => {
           expect(table.querySelector('tr td').textContent).to.eq('Metadata');
         }
       });
-    });
 
-    it('copyBlockToClipboard', async () => {
-      const defaultCardsBlock = mockBlock(CARDS_DEFAULT_STUB, [], true);
-      addSectionMetadata(defaultCardsBlock, { style: 'dark' });
+      return copiedHTML;
+    }
 
-      const wrapper = defaultCardsBlock;
-      const copied = copyBlockToClipboard(wrapper, 'cards', cardsBlockUrl);
-      const copiedHTML = createTag('div', undefined, copied);
-      const copiedMetadata = createTag('div', undefined, copiedHTML.querySelector('table:nth-of-type(2)'));
-
-      const img = wrapper.querySelector('img');
-      expect(img.src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
-
-      const spanIcon = wrapper.querySelector('span.icon');
-      expect(spanIcon).to.be.null;
-
-      const sectionMetadata = wrapper.querySelector('.section-metadata');
-      expect(sectionMetadata).to.not.be.null;
-
+    it('copy template via details panel', async () => {
+      const copiedHTML = await testDetailsTemplateCopy();
       expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1.jpeg?width=750&format=jpeg&optimize=medium');
-      expect(copiedHTML.querySelector('table')).to.not.be.null;
-      expect(copiedHTML.querySelector('td:nth-of-type(2)').style.width).to.eq('50%');
-
-      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section Metadata');
-      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(1)').textContent).to.eq('style');
-      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(2)').textContent).to.eq('dark');
     });
 
-    it('copyDefaultContentToClipboard', async () => {
-      const wrapper = DEFAULT_CONTENT_STUB_WITH_SECTION_METADATA;
-      const url = new URL(defaultContentBlockUrl);
+    it('copy template via details panel with encodings', async () => {
+      mockFetchInlinePageDependenciesSuccess();
+      AppModel.appStore.context.encodeImages = true;
+      const copiedHTML = await testDetailsTemplateCopy();
 
-      const copied = copyDefaultContentToClipboard(wrapper, url);
-      const copiedHTML = createTag('div', undefined, copied);
-      const copiedMetadata = createTag('div', undefined, copiedHTML.querySelector('table'));
-
-      expect(copiedHTML.querySelector('img').src).to.eq('https://example.hlx.test/media_1dda29fc47b8402ff940c87a2659813e503b01d2d.png?width=750&format=png&optimize=medium');
-      expect(copiedHTML.querySelector('p:last-of-type').textContent).to.eq(':home:');
-
-      expect(copiedMetadata.querySelector('td:nth-of-type(1)').textContent).to.eq('Section Metadata');
-      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(1)').textContent).to.eq('name');
-      expect(copiedMetadata.querySelector('tr:nth-of-type(2) td:nth-of-type(2)').textContent).to.eq('Home Hero');
+      const firstImage = copiedHTML.querySelector('img');
+      expect(firstImage.src).to.eq(ENCODED_IMAGE);
     });
 
     it('switch iframe view sizes', async () => {

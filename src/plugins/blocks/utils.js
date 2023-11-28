@@ -222,8 +222,11 @@ export async function prepareImagesForCopy(context, element, url, columnWidthPer
       // If we are encoding images, convert the image to a data URL
       if (context.encodeImages) {
         try {
-          const imgSrc = new URL(img.src);
-          const dataURL = await imageUrlToBase64(`${imgSrc.origin}${imgSrc.pathname}`);
+          const imgURL = new URL(img.src);
+
+          // Limit image width to 2000px
+          imgURL.searchParams.set('width', '2000');
+          const dataURL = await imageUrlToBase64(imgURL.href);
           img.src = dataURL;
         } catch (e) {
           /* c8 ignore next 3 */

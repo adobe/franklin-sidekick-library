@@ -12,7 +12,9 @@
 
 import sinon from 'sinon';
 import { expect } from '@open-wc/testing';
-import { loadPlugin, unloadPlugin } from '../../src/utils/plugin.js';
+import {
+  loadPlugin, unloadPlugin, getPluginPathFromPlugins, getPluginPathFromConfig,
+} from '../../src/utils/plugin.js';
 import { APP_EVENTS } from '../../src/events/events.js';
 import { EventBus } from '../../src/events/eventbus.js';
 
@@ -59,6 +61,52 @@ describe('Plugin Util Tests', () => {
       unloadPlugin(appModel);
       expect(appModel.appStore.context.activePlugin).equals(undefined);
       expect(eventSpy.calledOnce).equals(true);
+    });
+  });
+
+  describe('getPluginPathFromPlugins', () => {
+    it('should return undefined if the plugin does not exist', () => {
+      const context = { plugins: {} };
+      const result = getPluginPathFromPlugins('nonExistentPlugin', context);
+      expect(result).to.be.undefined;
+    });
+
+    it('should return undefined if the plugin has no src property', () => {
+      const context = { plugins: { testPlugin: {} } };
+      const result = getPluginPathFromPlugins('testPlugin', context);
+      expect(result).to.be.undefined;
+    });
+
+    it('should return src as is if it is not a path', () => {
+      const context = { plugins: { testPlugin: { src: 'http://example.com/plugin' } } };
+      const result = getPluginPathFromPlugins('testPlugin', context);
+      expect(result).to.equal('http://example.com/plugin');
+    });
+
+    it('should prepend baseLibraryOrigin to src if it is a path', () => {
+      const context = { baseLibraryOrigin: 'http://localhost', plugins: { testPlugin: { src: '/plugin' } } };
+      const result = getPluginPathFromPlugins('testPlugin', context);
+      expect(result).to.equal('http://localhost/plugin');
+    });
+  });
+
+  describe('getPluginPathFromConfig', () => {
+    it('should return undefined if the plugin is not in the context', () => {
+      const context = {};
+      const result = getPluginPathFromConfig('nonExistentPlugin', context);
+      expect(result).to.be.undefined;
+    });
+
+    it('should return configPlugin as is if it is not a path', () => {
+      const context = { testPlugin: 'http://example.com/plugin' };
+      const result = getPluginPathFromConfig('testPlugin', context);
+      expect(result).to.equal('http://example.com/plugin');
+    });
+
+    it('should prepend baseLibraryOrigin to configPlugin if it is a path', () => {
+      const context = { baseLibraryOrigin: 'http://localhost', testPlugin: '/plugin' };
+      const result = getPluginPathFromConfig('testPlugin', context);
+      expect(result).to.equal('http://localhost/plugin');
     });
   });
 });

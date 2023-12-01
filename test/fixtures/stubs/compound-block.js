@@ -17,10 +17,10 @@ export const COMPOUND_BLOCK_STUB = createTag('div', {}, /* html */`
     <div>
       <div>
         <picture>
-          <source type="image/webp" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-          <source type="image/webp" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&#x26;format=webply&#x26;optimize=medium">
-          <source type="image/png" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-          <img loading="lazy" alt="" src="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&#x26;format=png&#x26;optimize=medium" width="600" height="300">
+          <source type="image/webp" srcset="./media_1.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+          <source type="image/webp" srcset="./media_1.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+          <source type="image/jpeg" srcset="./media_1.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+          <img loading="lazy" alt="" src="./media_1.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="600" height="300">
         </picture>
       </div>
       <div>
@@ -33,10 +33,10 @@ export const COMPOUND_BLOCK_STUB = createTag('div', {}, /* html */`
     <div>
       <div>
         <picture>
-          <source type="image/webp" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-          <source type="image/webp" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&#x26;format=webply&#x26;optimize=medium">
-          <source type="image/png" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-          <img loading="lazy" alt="" src="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&#x26;format=png&#x26;optimize=medium" width="600" height="300">
+          <source type="image/webp" srcset="./media_2.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+          <source type="image/webp" srcset="./media_2.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+          <source type="image/jpeg" srcset="./media_2.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+          <img loading="lazy" alt="" src="./media_2.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="600" height="300">
         </picture>
       </div>
       <div>
@@ -49,10 +49,10 @@ export const COMPOUND_BLOCK_STUB = createTag('div', {}, /* html */`
     <div>
       <div>
         <picture>
-          <source type="image/webp" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-          <source type="image/webp" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&#x26;format=webply&#x26;optimize=medium">
-          <source type="image/png" srcset="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-          <img loading="lazy" alt="" src="./media_1ec4de4b5a7398fdbeb9a2150fb69acc74100e0d0.png?width=750&#x26;format=png&#x26;optimize=medium" width="600" height="300">
+          <source type="image/webp" srcset="./media_3.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+          <source type="image/webp" srcset="./media_3.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+          <source type="image/jpeg" srcset="./media_3.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+          <img loading="lazy" alt="" src="./media_3.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="600" height="300">
         </picture>
       </div>
       <div>
@@ -67,10 +67,10 @@ export const COMPOUND_BLOCK_STUB = createTag('div', {}, /* html */`
     <div>
       <div>
         <picture>
-          <source type="image/webp" srcset="./media_1c5a59f79bccbcb08d716129c7f0fdb6913cc0ded.png?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
-          <source type="image/webp" srcset="./media_1c5a59f79bccbcb08d716129c7f0fdb6913cc0ded.png?width=750&#x26;format=webply&#x26;optimize=medium">
-          <source type="image/png" srcset="./media_1c5a59f79bccbcb08d716129c7f0fdb6913cc0ded.png?width=2000&#x26;format=png&#x26;optimize=medium" media="(min-width: 600px)">
-          <img loading="lazy" alt="" src="./media_1c5a59f79bccbcb08d716129c7f0fdb6913cc0ded.png?width=750&#x26;format=png&#x26;optimize=medium" width="1440" height="660">
+          <source type="image/webp" srcset="./media_4.jpeg?width=2000&#x26;format=webply&#x26;optimize=medium" media="(min-width: 600px)">
+          <source type="image/webp" srcset="./media_4.jpeg?width=750&#x26;format=webply&#x26;optimize=medium">
+          <source type="image/jpeg" srcset="./media_4.jpeg?width=2000&#x26;format=jpeg&#x26;optimize=medium" media="(min-width: 600px)">
+          <img loading="lazy" alt="" src="./media_4.jpeg?width=750&#x26;format=jpeg&#x26;optimize=medium" width="1440" height="660">
         </picture>
       </div>
       <div>

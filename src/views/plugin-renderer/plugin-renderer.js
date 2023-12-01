@@ -60,10 +60,14 @@ export class PluginRenderer extends LitElement {
 
       const { context } = AppModel.appStore;
       const { activePlugin } = context;
+      const pluginConfig = context.plugins
+        ? context.plugins[activePlugin.config.title.toLowerCase()] : {};
+
       activePlugin.decorate(
         root,
         activePlugin.data,
         AppModel.appStore.searchQuery,
+        pluginConfig,
       );
 
       // Set the id of the render root element to the plugin name
@@ -85,7 +89,9 @@ export class PluginRenderer extends LitElement {
         root.innerHTML = '';
         const { context } = AppModel.appStore;
         const { activePlugin } = context;
-        activePlugin.decorate(root, activePlugin.data, AppModel.appStore.searchQuery);
+        const pluginConfig = context.plugins
+          ? context.plugins[activePlugin.config.title.toLowerCase()] : {};
+        activePlugin.decorate(root, activePlugin.data, AppModel.appStore.searchQuery, pluginConfig);
       }
     });
   }

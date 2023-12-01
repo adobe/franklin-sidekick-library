@@ -80,14 +80,20 @@ export const mockFetchDefaultContentDocumentSuccess = () => fetchMock.get(defaul
 }, { overwriteRoutes: true });
 
 export const mockFetchInlinePageDependenciesSuccess = (blockName = 'cards') => {
-  fetchMock.get('https://example.hlx.test/scripts/scripts.js', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get(`https://example.hlx.test/blocks/${blockName}/${blockName}.css`, { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/styles/lazy-styles.css', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/icons/arrow.svg', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/icons/home.svg', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/media_1.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/media_2.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/media_3.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/media_4.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
-  fetchMock.get('https://example.hlx.test/media_5.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/scripts/scripts.js', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get(`path:/blocks/${blockName}/${blockName}.css`, { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/styles/lazy-styles.css', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/icons/arrow.svg', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/icons/home.svg', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_1.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_2.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_3.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_4.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_5.jpeg?width=2000&format=webply&optimize=medium', { status: 200 }, { overwriteRoutes: true });
+
+  fetchMock.get('path:/media_1.jpeg', { status: 200, body: 'foobar', headers: { 'content-type': 'image/jpeg' } }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_2.jpeg', { status: 200, body: 'foobar', headers: { 'content-type': 'image/jpeg' } }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_3.jpeg', { status: 200, body: 'foobar', headers: { 'content-type': 'image/jpeg' } }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_4.jpeg', { status: 200, body: 'foobar', headers: { 'content-type': 'image/jpeg' } }, { overwriteRoutes: true });
+  fetchMock.get('path:/media_5.jpeg', { status: 200, body: 'foobar', headers: { 'content-type': 'image/jpeg' } }, { overwriteRoutes: true });
 };

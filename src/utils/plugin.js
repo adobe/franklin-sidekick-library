@@ -17,6 +17,36 @@ import { isDev } from './library.js';
 import { isPath } from './dom.js';
 
 /**
+ * Attempts to get the path to a plugin from the config
+ * @param {String} pluginName The name of the plugin
+ * @param {Object} contex The context object
+ * @returns {String} The path to the plugin
+ */
+export function getPluginPathFromConfig(pluginName, context) {
+  const configPlugin = context[pluginName];
+  if (!configPlugin) {
+    return undefined;
+  }
+
+  return isPath(configPlugin) ? `${context.baseLibraryOrigin}${configPlugin}` : configPlugin;
+}
+
+/**
+ * Attempts to get the path to a plugin from the plugins object in the context
+ * @param {String} pluginName The name of the plugin
+ * @param {Object} context The context object
+ * @returns {String | undefined} The path to the plugin
+ */
+export function getPluginPathFromPlugins(pluginName, context) {
+  const plugin = context.plugins[pluginName];
+  if (plugin && 'src' in plugin) {
+    const { src } = plugin;
+    return isPath(src) ? `${context.baseLibraryOrigin}${src}` : src;
+  }
+  return undefined;
+}
+
+/**
  * Loads a plugin into the application
  * @param {AppModel} appModel The app model
  * @param {String} name The name of the plugin
@@ -26,16 +56,19 @@ export async function loadPlugin(appModel, name) {
   const { appStore } = appModel;
   const { context } = appStore;
 
-  const plugins = {
+  const defaultPlugins = {
     blocks: isDev() ? '../../src/plugins/blocks/blocks.js' : `${AppModel.libraryHost}/plugins/blocks/blocks.js`,
     tags: isDev() ? '../../src/plugins/tags/tags.js' : `${AppModel.libraryHost}/plugins/tags/tags.js`,
     'api-test': isDev() ? '../../src/plugins/api-test/api-test.js' : `${AppModel.libraryHost}/plugins/api-test/api-test.js`,
   };
 
-  let pluginPath = plugins[name];
-  const configPlugin = context[name];
-  if (configPlugin) {
-    pluginPath = isPath(configPlugin) ? `${context.baseLibraryOrigin}${configPlugin}` : configPlugin;
+  // First try and load plugins from the plugins object in the context,
+  // then try and load from the config
+  let pluginPath = 'plugins' in context ? getPluginPathFromPlugins(name, context) : getPluginPathFromConfig(name, context);
+
+  // If we still haven't found the plugin, try and load from the default plugins
+  if (!pluginPath) {
+    pluginPath = defaultPlugins[name];
   }
 
   if (pluginPath) {

@@ -66,12 +66,16 @@ export const mockFetchCardsPlainHTMLSuccess = (libraryMetadata) => {
   });
 };
 
-export const mockFetchCardsPlainHTMLWithDefaultLibraryMetadataSuccess = (libraryMetadata) => {
+export const mockFetchCardsPlainHTMLWithMetadataSuccess = (libraryMetadata, sectionMetadata) => {
   const defaultCardsBlock = mockBlock(CARDS_DEFAULT_STUB, [], true);
   const logoCardsBlock = mockBlock(CARDS_LOGOS_STUB, [], true);
 
   if (libraryMetadata) {
     addLibraryMetadata(defaultCardsBlock, libraryMetadata);
+  }
+
+  if (sectionMetadata) {
+    addSectionMetadata(defaultCardsBlock, sectionMetadata);
   }
 
   const defaultLibraryMetadata = createTag('div', {}, createMetadataElement('library-metadata', { searchtags: 'Default Search Tag' }));
@@ -93,6 +97,19 @@ export const mockFetchDefaultContentPlainHTMLSuccess = () => fetchMock.get(defau
   status: 200,
   body: [mockBlock(DEFAULT_CONTENT_STUB, [], false).outerHTML, mockBlock(DEFAULT_CONTENT_STUB, [], false).outerHTML].join('\n'),
 });
+
+export const mockFetchDefaultContentPlainHTMLWithMetadataSuccess = (sectionMetadata) => {
+  const defaultContent = mockBlock(DEFAULT_CONTENT_STUB, [], false);
+
+  if (sectionMetadata) {
+    addSectionMetadata(defaultContent, sectionMetadata);
+  }
+
+  return fetchMock.get(defaultContentBlockUrl, {
+    status: 200,
+    body: [defaultContent.outerHTML].join('\n'),
+  }, { overwriteRoutes: true });
+};
 
 export const compoundBlockUrl = 'https://example.hlx.test/tools/sidekick/blocks/compound-block/compound-block.plain.html';
 export const mockFetchCompoundBlockPlainHTMLSuccess = () => fetchMock.get(compoundBlockUrl, {

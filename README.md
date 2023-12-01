@@ -158,20 +158,44 @@ In the code above we load the sidekick library from `hlx.live` and then create a
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
 |----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
 | base           | Path to the library               | The base library to be loaded                                                                                                   | true     |
-| extends       | Absolute URL to the extended library      | A library to extend the base library with                                                                                       | false    |
-| {plugin-name}  | Path to the custom plugin js file | For custom plugins, the parameter name should be the name of the plugin and the value should be a URL to the plugin source (js) | false    |
+| extends       | Absolute URL to the extended library      | A library to extend the base library with 
+| plugins  | An object containing plugins to register with the sidekick library. | The plugins object can be used to register plugins and configure data that should be passed to the plugin | false    |
 
-If you have custom plugins for the sidekick library they can be added by including the plugin name in the config and then the path to the plugin. Ideally the plugin code is host same origin as the `library.html` document.
+The blocks plugin supports the following configuration properties that can be set using the `plugins` object.
 
-### Custom plugin setup
+### Blocks plugin configuration parameters
+| Parameter Name | Value                                     | Description                                                                                                                     | Required |
+|----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
+| encodeImages           | A boolean value that indicates if images should be encoded during copy operations               | If your site has a Zero trust network access (ZTNA) service enabled such as Cloudflare Access then images should be encoded for copy/paste operations to work correctly with images.                                                                                                   | false     |
 
-The example below of defines a tags plugin in the config.
+#### Example
 
 ```javascript
 const library = document.createElement('sidekick-library')
 library.config = {
   base: '/tools/sidekick/library.json',
-  tags: '/tools/sidekick/plugins/tags/tags.js',
+  plugins: {
+    blocks: {
+      encodeImages: true,
+    }
+  }
+}
+```
+
+### Custom plugin setup
+
+The example below defines a tags plugin in the config. The keys of the plugins object must match the name of the plugin, any other properties defined in the plugin object will be available to the plugin via the context argument of the [decorate](#building-a-plugin) method.
+
+```javascript
+const library = document.createElement('sidekick-library')
+library.config = {
+  base: '/tools/sidekick/library.json',
+  plugins: {
+    tags: {
+      src: '/tools/sidekick/plugins/tags/tags.js',
+      foo: 'bar'
+    }
+  }
 }
 ```
 
@@ -288,8 +312,9 @@ Developing a plugin is similar to constructing a block in Franklin. Once a user 
  * @param {HTMLElement} container The container to render the plugin in
  * @param {Object} data The data contained in the plugin sheet
  * @param {String} query If search is active, the current search query
+ * @param {Object} context contains any properties set when the plugin was registered
  */
-export async function decorate(container, data, query) {
+export async function decorate(container, data, query, context) {
   // Render your plugin
 }
 ```

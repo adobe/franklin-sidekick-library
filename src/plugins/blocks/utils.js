@@ -111,8 +111,7 @@ function getPreferedForegroundColor() {
 }
 
 export function getAuthorFriendlyName(name) {
-  return name.replace(/-/g, ' ')
-    .replace(/\b\w/g, char => char.toLowerCase());
+  return name.replace(/-/g, ' ');
 }
 
 export async function convertBlockToTable(context, block, name, path) {

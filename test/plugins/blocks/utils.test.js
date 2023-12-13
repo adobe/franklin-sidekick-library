@@ -47,8 +47,8 @@ describe('Blocks Util', () => {
     it('returns author friendly names', async () => {
       expect(getAuthorFriendlyName('hero-main')).to.equal('hero main');
       expect(getAuthorFriendlyName('hero-main (layer-1)')).to.equal('hero main (layer 1)');
-      expect(getAuthorFriendlyName('hero-main (layer-1, Bold-italic)')).to.equal('hero main (layer 1, bold italic)');
-      expect(getAuthorFriendlyName('hero-main-foo-bar (layer-1, bold-italic, Underline)')).to.equal('hero main foo bar (layer 1, bold italic, underline)');
+      expect(getAuthorFriendlyName('hero-main (layer-1, bold-italic)')).to.equal('hero main (layer 1, bold italic)');
+      expect(getAuthorFriendlyName('hero-main-foo-bar (layer-1, bold-italic, underline)')).to.equal('hero main foo bar (layer 1, bold italic, underline)');
     });
   });
 });

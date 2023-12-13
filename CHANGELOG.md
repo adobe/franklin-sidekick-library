@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.3...v1.6.4) (2023-12-13)
+
+
+### Bug Fixes
+
+* lowercase block names when copied ([#93](https://github.com/adobe/franklin-sidekick-library/issues/93)) ([f0b5656](https://github.com/adobe/franklin-sidekick-library/commit/f0b565635e67a300f86195e9ba9d4a584142a728))
+
 ## [1.6.3](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.2...v1.6.3) (2023-12-13)
 
 

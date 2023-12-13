@@ -112,7 +112,7 @@ function getPreferedForegroundColor() {
 
 export function getAuthorFriendlyName(name) {
   return name.replace(/-/g, ' ')
-    .replace(/\b\w/g, char => char.toUpperCase());
+    .replace(/\b\w/g, char => char.toLowerCase());
 }
 
 export async function convertBlockToTable(context, block, name, path) {
@@ -347,7 +347,7 @@ async function getSectionMetadata(context, block, baseURL) {
     return convertBlockToTable(
       context,
       sectionMetadata,
-      'Section metadata',
+      'section metadata',
       baseURL,
     );
   }
@@ -530,7 +530,7 @@ export async function copyPageToClipboard(context, wrapper, blockURL, pageMetada
     }
 
     if (pageMeta) {
-      const pageMetadataTable = convertObjectToTable('Metadata', pageMeta);
+      const pageMetadataTable = convertObjectToTable('metadata', pageMeta);
       wrapperClone.append(pageMetadataTable);
     }
 

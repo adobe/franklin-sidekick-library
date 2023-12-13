@@ -45,10 +45,10 @@ describe('Blocks Util', () => {
   });
   describe('getAuthorFriendlyName()', () => {
     it('returns author friendly names', async () => {
-      expect(getAuthorFriendlyName('hero-main')).to.equal('Hero Main');
-      expect(getAuthorFriendlyName('hero-main (layer-1)')).to.equal('Hero Main (Layer 1)');
-      expect(getAuthorFriendlyName('hero-main (layer-1, Bold-italic)')).to.equal('Hero Main (Layer 1, Bold Italic)');
-      expect(getAuthorFriendlyName('hero-main-foo-bar (layer-1, bold-italic, Underline)')).to.equal('Hero Main Foo Bar (Layer 1, Bold Italic, Underline)');
+      expect(getAuthorFriendlyName('hero-main')).to.equal('hero main');
+      expect(getAuthorFriendlyName('hero-main (layer-1)')).to.equal('hero main (layer 1)');
+      expect(getAuthorFriendlyName('hero-main (layer-1, Bold-italic)')).to.equal('hero main (layer 1, bold italic)');
+      expect(getAuthorFriendlyName('hero-main-foo-bar (layer-1, bold-italic, Underline)')).to.equal('hero main foo bar (layer 1, bold italic, underline)');
     });
   });
 });

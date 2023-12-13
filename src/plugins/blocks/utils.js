@@ -144,6 +144,14 @@ export async function convertBlockToTable(context, block, name, path) {
         td.setAttribute('style', `width: ${columnWidthPercentage}%`);
       }
 
+      if (col.hasAttribute('data-align')) {
+        td.setAttribute('data-align', col.getAttribute('data-align'));
+      }
+
+      if (col.hasAttribute('data-valign')) {
+        td.setAttribute('data-valign', col.getAttribute('data-valign'));
+      }
+
       await prepareImagesForCopy(context, col, url, columnWidthPercentage);
 
       td.innerHTML = col.innerHTML;

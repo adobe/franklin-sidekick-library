@@ -239,3 +239,44 @@ export const CARDS_LEFT_QUIET_STUB = createTag('div', { class: 'cards left quiet
     <h2 id="at-vero-eos-et-accusamus-5">At vero eos et accusamus</h2>
   </div>
 </div>`);
+
+export const CARDS_WITH_ALIGNMENT_STUB = createTag('div', { class: 'cards left quiet' }, /* html */`
+<div>
+  <div data-align="center" data-valign="middle">
+    <picture>
+      <source type="image/webp" srcset="./media_1.jpeg?width=2000&amp;format=webply&amp;optimize=medium" media="(min-width: 600px)">
+      <source type="image/webp" srcset="./media_1.jpeg?width=750&amp;format=webply&amp;optimize=medium">
+      <source type="image/jpeg" srcset="./media_1.jpeg?width=2000&amp;format=jpeg&amp;optimize=medium" media="(min-width: 600px)">
+      <img loading="lazy" alt="toasted wheat bread with fried egg" src="./media_1.jpeg?width=750&amp;format=jpeg&amp;optimize=medium" width="1000" height="1000">
+    </picture>
+  </div>
+  <div data-align="center" data-valign="middle">
+    <h2 id="at-vero-eos-et-accusamus-1">At vero eos et accusamus</h2>
+  </div>
+</div>
+<div>
+  <div data-align="center">
+    <picture>
+      <source type="image/webp" srcset="./media_2.jpeg?width=2000&amp;format=webply&amp;optimize=medium" media="(min-width: 600px)">
+      <source type="image/webp" srcset="./media_2.jpeg?width=750&amp;format=webply&amp;optimize=medium">
+      <source type="image/jpeg" srcset="./media_2.jpeg?width=2000&amp;format=jpeg&amp;optimize=medium" media="(min-width: 600px)">
+      <img loading="lazy" alt="low angle photography of steel trusses" src="./media_2.jpeg?width=750&amp;format=jpeg&amp;optimize=medium" width="1000" height="958">
+    </picture>
+  </div>
+  <div data-align="center">
+    <h2 id="at-vero-eos-et-accusamus-2">At vero eos et accusamus</h2>
+  </div>
+</div>
+<div>
+  <div data-valign="middle">
+    <picture>
+      <source type="image/webp" srcset="./media_3.jpeg?width=2000&amp;format=webply&amp;optimize=medium" media="(min-width: 600px)">
+      <source type="image/webp" srcset="./media_3.jpeg?width=750&amp;format=webply&amp;optimize=medium">
+      <source type="image/jpeg" srcset="./media_3.jpeg?width=2000&amp;format=jpeg&amp;optimize=medium" media="(min-width: 600px)">
+      <img loading="lazy" alt="vegetable and meat on bowl" src="./media_3.jpeg?width=750&amp;format=jpeg&amp;optimize=medium" width="1000" height="1000">
+    </picture>
+  </div>
+  <div data-valign="middle">
+    <h2 id="at-vero-eos-et-accusamus-3">At vero eos et accusamus</h2>
+  </div>
+</div>`);

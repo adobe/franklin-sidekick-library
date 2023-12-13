@@ -13,9 +13,9 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from '@open-wc/testing';
-import { getBlockName, getAuthorFriendlyName } from '../../../src/plugins/blocks/utils.js';
+import { getBlockName, getAuthorFriendlyName, convertBlockToTable } from '../../../src/plugins/blocks/utils.js';
 import { mockBlock } from '../../fixtures/blocks.js';
-import { CARDS_DEFAULT_STUB } from '../../fixtures/stubs/cards.js';
+import { CARDS_DEFAULT_STUB, CARDS_WITH_ALIGNMENT_STUB } from '../../fixtures/stubs/cards.js';
 
 describe('Blocks Util', () => {
   describe('getBlockName()', () => {
@@ -49,6 +49,24 @@ describe('Blocks Util', () => {
       expect(getAuthorFriendlyName('hero-main (layer-1)')).to.equal('Hero Main (Layer 1)');
       expect(getAuthorFriendlyName('hero-main (layer-1, Bold-italic)')).to.equal('Hero Main (Layer 1, Bold Italic)');
       expect(getAuthorFriendlyName('hero-main-foo-bar (layer-1, bold-italic, Underline)')).to.equal('Hero Main Foo Bar (Layer 1, Bold Italic, Underline)');
+    });
+  });
+
+  describe('convertBlockToTable()', () => {
+    it('should preserve data-align & data-valign', async () => {
+      const cardsBlock = mockBlock(CARDS_WITH_ALIGNMENT_STUB);
+      const table = await convertBlockToTable({}, cardsBlock, 'cards', 'https://localhost:3000');
+      const firstDataRow = table.querySelector('tr:nth-of-type(2)');
+      expect(firstDataRow.querySelector('td:first-of-type').getAttribute('data-align')).to.equal('center');
+      expect(firstDataRow.querySelector('td:first-of-type').getAttribute('data-valign')).to.equal('middle');
+
+      const secondDataRow = table.querySelector('tr:nth-of-type(3)');
+      expect(secondDataRow.querySelector('td:first-of-type').getAttribute('data-align')).to.equal('center');
+      expect(secondDataRow.querySelector('td:nth-of-type(2)').getAttribute('data-align')).to.equal('center');
+
+      const thirdDataRow = table.querySelector('tr:nth-of-type(4)');
+      expect(thirdDataRow.querySelector('td:first-of-type').getAttribute('data-valign')).to.equal('middle');
+      expect(thirdDataRow.querySelector('td:nth-of-type(2)').getAttribute('data-valign')).to.equal('middle');
     });
   });
 });

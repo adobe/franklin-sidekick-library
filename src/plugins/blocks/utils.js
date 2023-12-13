@@ -110,7 +110,7 @@ function getPreferedForegroundColor() {
     .getPropertyValue('--sk-table-fg-color') || '#ffffff';
 }
 
-export function getAuthorFriendlyName(name) {
+export function normalizeBlockName(name) {
   return name.replace(/-/g, ' ');
 }
 
@@ -130,7 +130,7 @@ export async function convertBlockToTable(context, block, name, path) {
   table.setAttribute('style', 'width:100%;');
 
   const headerRow = document.createElement('tr');
-  headerRow.append(createTag('td', { colspan: maxCols, style: `background-color: ${getPreferedBackgroundColor()}; color: ${getPreferedForegroundColor()};` }, getAuthorFriendlyName(name)));
+  headerRow.append(createTag('td', { colspan: maxCols, style: `background-color: ${getPreferedBackgroundColor()}; color: ${getPreferedForegroundColor()};` }, normalizeBlockName(name)));
   table.append(headerRow);
   for (const row of rows) {
     const columns = [...row.children];
@@ -162,7 +162,7 @@ export function convertObjectToTable(name, object) {
   table.setAttribute('style', 'width:100%;');
 
   const headerRow = document.createElement('tr');
-  headerRow.append(createTag('td', { colspan: 2, style: `background-color: ${getPreferedBackgroundColor()}; color: ${getPreferedForegroundColor()};` }, getAuthorFriendlyName(name)));
+  headerRow.append(createTag('td', { colspan: 2, style: `background-color: ${getPreferedBackgroundColor()}; color: ${getPreferedForegroundColor()};` }, normalizeBlockName(name)));
   table.append(headerRow);
 
   for (const [key, value] of Object.entries(object)) {

@@ -13,7 +13,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { expect } from '@open-wc/testing';
-import { getBlockName, getAuthorFriendlyName } from '../../../src/plugins/blocks/utils.js';
+import { getBlockName, normalizeBlockName } from '../../../src/plugins/blocks/utils.js';
 import { mockBlock } from '../../fixtures/blocks.js';
 import { CARDS_DEFAULT_STUB } from '../../fixtures/stubs/cards.js';
 
@@ -43,12 +43,12 @@ describe('Blocks Util', () => {
       expect(blockName).to.equal('cards');
     });
   });
-  describe('getAuthorFriendlyName()', () => {
+  describe('normalizeBlockName()', () => {
     it('returns author friendly names', async () => {
-      expect(getAuthorFriendlyName('hero-main')).to.equal('hero main');
-      expect(getAuthorFriendlyName('hero-main (layer-1)')).to.equal('hero main (layer 1)');
-      expect(getAuthorFriendlyName('hero-main (layer-1, bold-italic)')).to.equal('hero main (layer 1, bold italic)');
-      expect(getAuthorFriendlyName('hero-main-foo-bar (layer-1, bold-italic, underline)')).to.equal('hero main foo bar (layer 1, bold italic, underline)');
+      expect(normalizeBlockName('hero-main')).to.equal('hero main');
+      expect(normalizeBlockName('hero-main (layer-1)')).to.equal('hero main (layer 1)');
+      expect(normalizeBlockName('hero-main (layer-1, bold-italic)')).to.equal('hero main (layer 1, bold italic)');
+      expect(normalizeBlockName('hero-main-foo-bar (layer-1, bold-italic, underline)')).to.equal('hero main foo bar (layer 1, bold italic, underline)');
     });
   });
 });

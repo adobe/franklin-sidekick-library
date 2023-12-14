@@ -532,9 +532,9 @@ describe('Blocks Plugin', () => {
 
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(1);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Z Pattern');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Banner (Small, Left)');
-      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section Metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('z pattern');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('banner (small, left)');
+      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('section metadata');
 
       return copiedHTML;
     }
@@ -581,8 +581,8 @@ describe('Blocks Plugin', () => {
       const copiedHTML = createTag('div', undefined, clipboardHTML);
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(2);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Blockquote');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Section Metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('blockquote');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('section metadata');
 
       // eslint-disable-next-line max-len
       // expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Metadata');
@@ -591,7 +591,7 @@ describe('Blocks Plugin', () => {
       // There should be 3 tables as per assert above.
       copiedHTML.querySelectorAll(':scope table').forEach((table, index) => {
         if (index === 2) {
-          expect(table.querySelector('tr td').textContent).to.eq('Metadata');
+          expect(table.querySelector('tr td').textContent).to.eq('metadata');
         }
       });
 
@@ -634,7 +634,7 @@ describe('Blocks Plugin', () => {
 
       // Make sure section metadata was copied
       const tds = copiedHTML.querySelectorAll('td');
-      const targetTd = Array.from(tds).find(td => td.textContent.trim() === 'Section Metadata');
+      const targetTd = Array.from(tds).find(td => td.textContent.trim() === 'section metadata');
       expect(targetTd).to.exist;
 
       return copiedHTML;
@@ -685,7 +685,7 @@ describe('Blocks Plugin', () => {
 
       // Make sure section metadata was copied
       const tds = copiedHTML.querySelectorAll('td');
-      const targetTd = Array.from(tds).find(td => td.textContent.trim() === 'Section Metadata');
+      const targetTd = Array.from(tds).find(td => td.textContent.trim() === 'section metadata');
       expect(targetTd).to.exist;
 
       return copiedHTML;
@@ -770,9 +770,9 @@ describe('Blocks Plugin', () => {
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(1);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector(':scope h2').textContent).to.eq('Heading');
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Z Pattern');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Banner (Small, Left)');
-      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('Section Metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('z pattern');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('banner (small, left)');
+      expect(copiedHTML.querySelector('table:nth-of-type(3) tr td').textContent).to.eq('section metadata');
 
       return copiedHTML;
     }
@@ -814,13 +814,13 @@ describe('Blocks Plugin', () => {
       expect(copiedHTML.querySelectorAll(':scope > div').length).to.eq(2);
       expect(copiedHTML.querySelectorAll(':scope table').length).to.eq(3);
       expect(copiedHTML.querySelector(':scope h1').textContent).to.eq('My blog post about a subject');
-      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('Blockquote');
-      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('Section Metadata');
+      expect(copiedHTML.querySelector('table:nth-of-type(1) tr td').textContent).to.eq('blockquote');
+      expect(copiedHTML.querySelector('table:nth-of-type(2) tr td').textContent).to.eq('section metadata');
 
       // See above for this sillyness
       copiedHTML.querySelectorAll(':scope table').forEach((table, index) => {
         if (index === 2) {
-          expect(table.querySelector('tr td').textContent).to.eq('Metadata');
+          expect(table.querySelector('tr td').textContent).to.eq('metadata');
         }
       });
 

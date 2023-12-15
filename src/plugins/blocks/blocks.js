@@ -64,12 +64,12 @@ function renderScaffolding() {
 function getViewPorts(contextViewPorts) {
   const viewPorts = [
     {
-      width: '480px',
+      width: '599px',
       label: 'Mobile',
       icon: 'device-phone',
     },
     {
-      width: '768px',
+      width: '899px',
       label: 'Tablet',
       icon: 'device-tablet',
     },

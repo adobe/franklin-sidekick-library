@@ -854,12 +854,12 @@ describe('Blocks Plugin', () => {
       const tableViewButton = actionBar.querySelector('sp-action-button[value="viewPort1"]');
       tableViewButton.dispatchEvent(new Event('click'));
 
-      expect(frameView.style.width).to.eq('768px');
+      expect(frameView.style.width).to.eq('899px');
 
       const mobileViewButton = actionBar.querySelector('sp-action-button[value="viewPort0"]');
       mobileViewButton.dispatchEvent(new Event('click'));
 
-      expect(frameView.style.width).to.eq('480px');
+      expect(frameView.style.width).to.eq('599px');
 
       const desktopViewButton = actionBar.querySelector('sp-action-button[value="viewPort2"]');
       desktopViewButton.dispatchEvent(new Event('click'));

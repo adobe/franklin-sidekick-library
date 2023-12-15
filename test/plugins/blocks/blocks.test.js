@@ -846,19 +846,78 @@ describe('Blocks Plugin', () => {
 
       const blockLibrary = container.querySelector('.block-library');
 
+      const frameView = blockLibrary.querySelector('.frame-view');
+      expect(frameView.style.width).to.eq('100%');
+
       const actionBar = blockLibrary.querySelector('sp-split-view .content .view .action-bar');
-      const tableViewButton = actionBar.querySelector('sp-action-button[value="tablet"]');
+
+      const tableViewButton = actionBar.querySelector('sp-action-button[value="viewPort1"]');
       tableViewButton.dispatchEvent(new Event('click'));
 
-      const frameView = blockLibrary.querySelector('.frame-view');
-      expect(frameView.style.width).to.eq('768px');
+      expect(frameView.style.width).to.eq('899px');
 
-      const mobileViewButton = actionBar.querySelector('sp-action-button[value="mobile"]');
+      const mobileViewButton = actionBar.querySelector('sp-action-button[value="viewPort0"]');
       mobileViewButton.dispatchEvent(new Event('click'));
 
-      expect(frameView.style.width).to.eq('480px');
+      expect(frameView.style.width).to.eq('599px');
 
-      const desktopViewButton = actionBar.querySelector('sp-action-button[value="desktop"]');
+      const desktopViewButton = actionBar.querySelector('sp-action-button[value="viewPort2"]');
+      desktopViewButton.dispatchEvent(new Event('click'));
+
+      expect(frameView.style.width).to.eq('100%');
+    });
+
+    it('custom viewport configuration', async () => {
+      AppModel.appStore.context.viewPorts = [
+        {
+          width: '500px',
+          label: 'Small',
+          icon: 'device-phone',
+          default: true,
+        },
+        {
+          width: '100%',
+          label: 'Large',
+          icon: 'device-desktop',
+        },
+      ];
+
+      await loadBlock();
+
+      const blockLibrary = container.querySelector('.block-library');
+      const frameView = blockLibrary.querySelector('.frame-view');
+
+      expect(frameView.style.width).to.eq('500px');
+
+      const actionBar = blockLibrary.querySelector('sp-split-view .content .view .action-bar');
+      const largeViewButton = actionBar.querySelector('sp-action-button[value="viewPort1"]');
+      largeViewButton.dispatchEvent(new Event('click'));
+
+      expect(frameView.style.width).to.eq('100%');
+    });
+
+    it('simplified custom viewport configuration', async () => {
+      AppModel.appStore.context.viewPorts = [600, 900];
+
+      await loadBlock();
+
+      const blockLibrary = container.querySelector('.block-library');
+      const frameView = blockLibrary.querySelector('.frame-view');
+
+      expect(frameView.style.width).to.eq('100%');
+
+      const actionBar = blockLibrary.querySelector('sp-split-view .content .view .action-bar');
+      const mobileViewButton = actionBar.querySelector('sp-action-button[value="viewPort0"]');
+      mobileViewButton.dispatchEvent(new Event('click'));
+
+      expect(frameView.style.width).to.eq('599px');
+
+      const tabletViewButton = actionBar.querySelector('sp-action-button[value="viewPort1"]');
+      tabletViewButton.dispatchEvent(new Event('click'));
+
+      expect(frameView.style.width).to.eq('899px');
+
+      const desktopViewButton = actionBar.querySelector('sp-action-button[value="viewPort2"]');
       desktopViewButton.dispatchEvent(new Event('click'));
 
       expect(frameView.style.width).to.eq('100%');

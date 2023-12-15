@@ -166,9 +166,10 @@ The blocks plugin supports the following configuration properties that can be se
 ### Blocks plugin configuration parameters
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
 |----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
-| encodeImages           | A boolean value that indicates if images should be encoded during copy operations               | If your site has a Zero trust network access (ZTNA) service enabled such as Cloudflare Access then images should be encoded for copy/paste operations to work correctly with images.                                                                                                   | false     |
+| encodeImage    | A boolean value that indicates if images should be encoded during copy operations               | If your site has a Zero trust network access (ZTNA) service enabled such as Cloudflare Access then images should be encoded for copy/paste operations to work correctly with images. | false     |
+| viewPorts      | Full or simplified configuration object, see examples below.                                    | Configuration to overwrite the default viewport sizes. The default is 480px fo mobile, 768px for tablet and 100% of the current window for desktop.                                  | false     |
 
-#### Example
+#### Examples
 
 ```javascript
 const library = document.createElement('sidekick-library')
@@ -177,6 +178,47 @@ library.config = {
   plugins: {
     blocks: {
       encodeImages: true,
+    }
+  }
+}
+```
+
+```javascript
+const library = document.createElement('sidekick-library')
+library.config = {
+  base: '/tools/sidekick/library.json',
+  plugins: {
+    blocks: {
+      viewPorts: [600, 900],
+    }
+  }
+}
+```
+
+```javascript
+const library = document.createElement('sidekick-library')
+library.config = {
+  base: '/tools/sidekick/library.json',
+  plugins: {
+    blocks: {
+      viewPorts: [
+        {
+          width: '599px',
+          label: 'Small',
+          icon: 'device-phone',
+        },
+        {
+          width: '899px',
+          label: 'Medium',
+          icon: 'device-tablet',
+        },
+        {
+          width: '100%',
+          label: 'Large',
+          icon: 'device-desktop',
+          default: true,
+        },
+      ],
     }
   }
 }

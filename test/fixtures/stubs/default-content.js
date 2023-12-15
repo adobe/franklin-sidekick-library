@@ -23,8 +23,8 @@ export const DEFAULT_CONTENT_STUB = createTag('div', {}, /* html */`
 </p>
 <h1 id="this-is-a-heading">This is a heading</h1>
 <p>Some text about a subject</p>
-<p><strong><a href="https://www.hlx.live">Get Started</a></strong></p>
-<p><em><a href="https://www.hlx.live">Request Demo</a></em></p>
+<p><strong><a href="https://www.aem.live">Get Started</a></strong></p>
+<p><em><a href="https://www.aem.live">Request Demo</a></em></p>
 <p><span class="icon icon-home"></span></p>`);
 
 export const DEFAULT_CONTENT_STUB_WITH_LIBRARY_METADATA = createTag('div', {}, /* html */`
@@ -38,8 +38,8 @@ export const DEFAULT_CONTENT_STUB_WITH_LIBRARY_METADATA = createTag('div', {}, /
 </p>
 <h1 id="this-is-a-heading">This is a heading</h1>
 <p>Some text about a subject</p>
-<p><strong><a href="https://www.hlx.live">Get Started</a></strong></p>
-<p><em><a href="https://www.hlx.live">Request Demo</a></em></p>
+<p><strong><a href="https://www.aem.live">Get Started</a></strong></p>
+<p><em><a href="https://www.aem.live">Request Demo</a></em></p>
 <p><span class="icon icon-home"></span></p>
 <div class="library-metadata">
   <div>
@@ -59,8 +59,8 @@ export const DEFAULT_CONTENT_STUB_WITH_SECTION_METADATA = createTag('div', {}, /
 </p>
 <h1 id="this-is-a-heading">This is a heading</h1>
 <p>Some text about a subject</p>
-<p><strong><a href="https://www.hlx.live">Get Started</a></strong></p>
-<p><em><a href="https://www.hlx.live">Request Demo</a></em></p>
+<p><strong><a href="https://www.aem.live">Get Started</a></strong></p>
+<p><em><a href="https://www.aem.live">Request Demo</a></em></p>
 <p><span class="icon icon-home"></span></p>
 <div class="section-metadata">
   <div>

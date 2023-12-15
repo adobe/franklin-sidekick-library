@@ -33,10 +33,10 @@ export const ALL_EDITABLE_STUB = createTag('div', { class: 'all-editable-element
       <li>bar</li>
     </ul>
     <a href="https://www.adobe.com">Adobe</a>
-    <p><a href="https://www.hlx.live">Just a link</a></p>
-    <p><strong><a href="https://www.hlx.live">A Bold Link</a></strong></p>
-    <p><a href="https://www.hlx.live"><em>A Italic Link</em></a></p>
-    <p><em><a href="https://www.hlx.live"><strong>A Bold and Italic Link</strong></a></em></p>
+    <p><a href="https://www.aem.live">Just a link</a></p>
+    <p><strong><a href="https://www.aem.live">A Bold Link</a></strong></p>
+    <p><a href="https://www.aem.live"><em>A Italic Link</em></a></p>
+    <p><em><a href="https://www.aem.live"><strong>A Bold and Italic Link</strong></a></em></p>
     <span class="icon icon-arrow"></span>
   </div>
 </div>

@@ -372,7 +372,6 @@ describe('BlockRenderer', () => {
 
       const img = cardsBlock.querySelector('img');
       img.src = IMAGE;
-      await aTimeout(1000);
       const wrapper = blockRenderer.getBlockWrapper();
       const modifiedBlock = wrapper.querySelector('.cards');
 

@@ -375,7 +375,7 @@ describe('BlockRenderer', () => {
       await aTimeout(1000);
       const wrapper = blockRenderer.getBlockWrapper();
       const modifiedBlock = wrapper.querySelector('.cards');
-      expect(modifiedBlock.querySelector('p:nth-of-type(2)').textContent).to.equal('hello world 2Helix is the fastest way to publish, create, and serve websites');
+      expect(modifiedBlock.querySelector('p:nth-of-type(2)').textContent).to.equal('Helix is the fastest way to publish, create, and serve websites');
       expect(modifiedBlock.querySelector('img').src).to.equal(IMAGE);
     });
 

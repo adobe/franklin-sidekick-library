@@ -217,11 +217,13 @@ function attachCopyButtonEventListener(
         pageMetadata,
       );
     } else if (blockRenderer.isBlock) {
+      const tableStyle = getBlockTableStyle(defaultLibraryMetadata, sectionLibraryMetadata);
       await copyBlockToClipboard(
         context,
         copyWrapper,
         getBlockName(copyElement, true),
         copyBlockData.url,
+        tableStyle,
       );
     } else {
       await copyDefaultContentToClipboard(context, copyWrapper, copyBlockData.url);

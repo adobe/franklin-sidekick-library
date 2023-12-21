@@ -102,12 +102,12 @@ export function getBlockName(block, includeVariants = true) {
 
 export function getPreferedBackgroundColor(blockName) {
   const defaultBackgroundColor = '#ff8012';
-  if (blockName === 'section metadata') {
+  if (blockName === 'Section Metadata') {
     return getComputedStyle(document.documentElement)
       .getPropertyValue('--sk-section-metadata-table-background-color') || defaultBackgroundColor;
   }
 
-  if (blockName === 'metadata') {
+  if (blockName === 'Metadata') {
     return getComputedStyle(document.documentElement)
       .getPropertyValue('--sk-metadata-table-background-color') || defaultBackgroundColor;
   }
@@ -118,12 +118,12 @@ export function getPreferedBackgroundColor(blockName) {
 
 export function getPreferedForegroundColor(blockName) {
   const defaultBackgroundColor = '#ffffff';
-  if (blockName === 'section metadata') {
+  if (blockName === 'Section Metadata') {
     return getComputedStyle(document.documentElement)
       .getPropertyValue('--sk-section-metadata-table-foreground-color') || defaultBackgroundColor;
   }
 
-  if (blockName === 'metadata') {
+  if (blockName === 'Metadata') {
     return getComputedStyle(document.documentElement)
       .getPropertyValue('--sk-metadata-table-foreground-color') || defaultBackgroundColor;
   }
@@ -591,16 +591,16 @@ export async function copyPageToClipboard(context, wrapper, blockURL, pageMetada
 export function getBlockTableStyle(defaultLibraryMetadata, sectionLibraryMetadata) {
   const tableStyle = {};
 
-  if (sectionLibraryMetadata.tableHeaderBackgroundColor) {
-    tableStyle.tableHeaderBackgroundColor = sectionLibraryMetadata.tableHeaderBackgroundColor;
-  } else if (defaultLibraryMetadata.tableHeaderBackgroundColor) {
-    tableStyle.tableHeaderBackgroundColor = defaultLibraryMetadata.tableHeaderBackgroundColor;
+  if (sectionLibraryMetadata.tableheaderbackgroundcolor) {
+    tableStyle.tableHeaderBackgroundColor = sectionLibraryMetadata.tableheaderbackgroundcolor;
+  } else if (defaultLibraryMetadata.tableheaderbackgroundcolor) {
+    tableStyle.tableHeaderBackgroundColor = defaultLibraryMetadata.tableheaderbackgroundcolor;
   }
 
-  if (sectionLibraryMetadata.tableHeaderForegroundColor) {
-    tableStyle.tableHeaderForegroundColor = sectionLibraryMetadata.tableHeaderForegroundColor;
-  } else if (defaultLibraryMetadata.tableHeaderForegroundColor) {
-    tableStyle.tableHeaderForegroundColor = defaultLibraryMetadata.tableHeaderForegroundColor;
+  if (sectionLibraryMetadata.tableheaderforegroundcolor) {
+    tableStyle.tableHeaderForegroundColor = sectionLibraryMetadata.tableheaderforegroundcolor;
+  } else if (defaultLibraryMetadata.tableheaderforegroundcolor) {
+    tableStyle.tableHeaderForegroundColor = defaultLibraryMetadata.tableheaderforegroundcolor;
   }
 
   return tableStyle;

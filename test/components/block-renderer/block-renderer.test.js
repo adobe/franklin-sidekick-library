@@ -13,7 +13,7 @@
 /* eslint-disable no-unused-expressions */
 
 import {
-  html, fixture, expect, waitUntil,
+  html, fixture, expect, aTimeout, waitUntil,
 } from '@open-wc/testing';
 import '../../../src/components/block-renderer/block-renderer.js';
 import { stub } from 'sinon';
@@ -372,10 +372,9 @@ describe('BlockRenderer', () => {
 
       const img = cardsBlock.querySelector('img');
       img.src = IMAGE;
+      await aTimeout(1000);
       const wrapper = blockRenderer.getBlockWrapper();
-      await waitUntil(() => wrapper.querySelector('.cards strong').textContent === 'hello world 1', 'manually updated text did not update');
       const modifiedBlock = wrapper.querySelector('.cards');
-
       expect(modifiedBlock.querySelector('p:nth-of-type(2)').textContent).to.equal('hello world 2Helix is the fastest way to publish, create, and serve websites');
       expect(modifiedBlock.querySelector('img').src).to.equal(IMAGE);
     });

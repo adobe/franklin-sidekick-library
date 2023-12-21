@@ -98,12 +98,12 @@ describe('Blocks Util', () => {
   describe('getBlockTableStyle', () => {
     it('prefers section library metadata over default library metadata', () => {
       const defaultMetadata = {
-        tableHeaderBackgroundColor: 'red',
-        tableHeaderForegroundColor: 'blue',
+        tableheaderbackgroundcolor: 'red',
+        tableheaderforegroundcolor: 'blue',
       };
       const sectionMetadata = {
-        tableHeaderBackgroundColor: 'green',
-        tableHeaderForegroundColor: 'yellow',
+        tableheaderbackgroundcolor: 'green',
+        tableheaderforegroundcolor: 'yellow',
       };
       const result = getBlockTableStyle(defaultMetadata, sectionMetadata);
       expect(result).to.deep.equal({
@@ -114,8 +114,8 @@ describe('Blocks Util', () => {
 
     it('falls back to default library metadata if section library metadata is missing', () => {
       const defaultMetadata = {
-        tableHeaderBackgroundColor: 'red',
-        tableHeaderForegroundColor: 'blue',
+        tableheaderbackgroundcolor: 'red',
+        tableheaderforegroundcolor: 'blue',
       };
       const sectionMetadata = {};
       const result = getBlockTableStyle(defaultMetadata, sectionMetadata);
@@ -136,48 +136,48 @@ describe('Blocks Util', () => {
   describe('getPreferedBackgroundColor', () => {
     it('returns the correct color for "section metadata" block', () => {
       document.documentElement.style.setProperty('--sk-section-metadata-table-background-color', '#123456');
-      expect(getPreferedBackgroundColor('section metadata')).to.equal('#123456');
+      expect(getPreferedBackgroundColor('Section Metadata')).to.equal('#123456');
     });
 
     it('returns the correct color for "metadata" block', () => {
       document.documentElement.style.setProperty('--sk-metadata-table-background-color', '#654321');
-      expect(getPreferedBackgroundColor('metadata')).to.equal('#654321');
+      expect(getPreferedBackgroundColor('Metadata')).to.equal('#654321');
     });
 
     it('returns the correct color for an unspecified block', () => {
       document.documentElement.style.setProperty('--sk-block-table-background-color', '#abcdef');
-      expect(getPreferedBackgroundColor('some other block')).to.equal('#abcdef');
+      expect(getPreferedBackgroundColor('Some Other Block')).to.equal('#abcdef');
     });
 
     it('falls back to default color if the CSS variable is not set', () => {
       document.documentElement.style.removeProperty('--sk-section-metadata-table-background-color');
       document.documentElement.style.removeProperty('--sk-metadata-table-background-color');
       document.documentElement.style.removeProperty('--sk-block-table-background-color');
-      expect(getPreferedBackgroundColor('section metadata')).to.equal('#ff8012');
+      expect(getPreferedBackgroundColor('Section Metadata')).to.equal('#ff8012');
     });
   });
 
   describe('getPreferedForegroundColor', () => {
     it('returns the correct color for "section metadata" block', () => {
       document.documentElement.style.setProperty('--sk-section-metadata-table-foreground-color', '#123456');
-      expect(getPreferedForegroundColor('section metadata')).to.equal('#123456');
+      expect(getPreferedForegroundColor('Section Metadata')).to.equal('#123456');
     });
 
     it('returns the correct color for "metadata" block', () => {
       document.documentElement.style.setProperty('--sk-metadata-table-foreground-color', '#654321');
-      expect(getPreferedForegroundColor('metadata')).to.equal('#654321');
+      expect(getPreferedForegroundColor('Metadata')).to.equal('#654321');
     });
 
     it('returns the correct color for an unspecified block', () => {
       document.documentElement.style.setProperty('--sk-block-table-foreground-color', '#abcdef');
-      expect(getPreferedForegroundColor('some other block')).to.equal('#abcdef');
+      expect(getPreferedForegroundColor('Some Other Block')).to.equal('#abcdef');
     });
 
     it('falls back to default color if the CSS variable is not set', () => {
       document.documentElement.style.removeProperty('--sk-section-metadata-table-foreground-color');
       document.documentElement.style.removeProperty('--sk-metadata-table-foreground-color');
       document.documentElement.style.removeProperty('--sk-block-table-foreground-color');
-      expect(getPreferedForegroundColor('section metadata')).to.equal('#ffffff');
+      expect(getPreferedForegroundColor('Section Metadata')).to.equal('#ffffff');
     });
   });
 });

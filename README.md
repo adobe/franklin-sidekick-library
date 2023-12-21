@@ -56,6 +56,8 @@ The blocks plugins supports a special type of block called `library metadata` wh
 | type                  | The type of the block                          | This tells the blocks plugin how to group the content that makes up your block. Possible options are `template` or `section` (details below)                      | false    |
 | include next sections | How many sections to include in the block item | Use if your block requires content from subsequence sections in order to render. Should be a number value that indicates how much subsequent sections to include. | false    |
 | searchtags            | A comma seperated list of search terms         | Allows you to define other terms that could be used when searching for this block in the blocks plugin                                                            | false    |
+| tableHeaderBackgroundColor            | A hex string color (ex '#ff3300')         | Overrides the table header background color for any blocks in the section or page.                                                            | false    |
+| tableHeaderForegroundColor            | A hex string color (ex '#ffffff')         | Overrides the table header foreground color for any blocks in the section or page.                                                            | false    |
 
 ### Default Library metadata vs Library metadata
 
@@ -223,6 +225,30 @@ library.config = {
   }
 }
 ```
+
+### Custom table header colors
+You can customize the table header background and foreground color when pasting a block, section metadata or metadata that was copied from the blocks plugin.
+
+Default styles can be set in set in `library.html` using css variables.
+
+```html
+  <style>
+    :root {
+      --sk-block-table-background-color: #03A;
+      --sk-block-table-foreground-color: #fff;
+
+      --sk-section-metadata-table-background-color: #f30;
+      --sk-section-metadata-table-foreground-color: #000;
+
+      --sk-metadata-table-background-color: #000;
+      --sk-metadata-table-foreground-color: #fff;
+    }
+  </style>
+``` 
+
+There values can be overridden using [library metadata](#supported-library-metadata-options).
+
+> Depending on the system color scheme selected for the users computer (dark mode), Word may alter the choosen colors in an attempt to improve accessibility.
 
 ### Custom plugin setup
 

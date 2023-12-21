@@ -22,6 +22,7 @@ import {
   copyBlockToClipboard,
   copyPageToClipboard,
   copyDefaultContentToClipboard,
+  getBlockTableStyle,
 } from './utils.js';
 import {
   createTag, removeAllEventListeners, setURLParams,
@@ -246,7 +247,8 @@ async function onBlockListCopyButtonClicked(context, event, container) {
   if (defaultLibraryMetadata && (defaultLibraryMetadata.type === 'template' || sectionLibraryMetadata.multiSectionBlock || sectionLibraryMetadata.compoundBlock)) {
     await copyPageToClipboard(context, wrapper, blockURL, pageMetadata);
   } else if (block) {
-    await copyBlockToClipboard(context, wrapper, name, blockURL);
+    const tableStyle = getBlockTableStyle(defaultLibraryMetadata, sectionLibraryMetadata);
+    await copyBlockToClipboard(context, wrapper, name, blockURL, tableStyle);
   } else {
     await copyDefaultContentToClipboard(context, wrapper, blockURL);
   }

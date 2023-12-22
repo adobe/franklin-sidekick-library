@@ -61,9 +61,9 @@ The blocks plugins supports a special type of block called `library metadata` wh
 
 ### Default Library metadata vs Library metadata
 
-There are two types of `library metadata`. Library metadata that lives within a section containing the block, or `default library metadata` that applies to the document as a whole and lives in a section on it's own (only child in a section).
+There are two types of `library metadata`. Library metadata that lives within a section containing the block, or _default_ `library metadata` that applies to the document as a whole and lives in a section on it's own (a block called `library metadata` as the only child in a section).
 
-Let's take an example of a hero block that has 5 variants. Suppose you want to add the same description for each variation of the block, rather than duplicating the `library metadata` with the description into each section containing the variations. You could instead use `default library metadata` to apply the same description to every variation of the block. If you decide that one variation actually needs a slightly different description you could add `library metadata` to the section containing the variation and it would override the `default library metadata` description when it's rendered within the blocks plugin.
+Let's take an example of a hero block that has 5 variants. Suppose you want to add the same description for each variation of the block, rather than duplicating the `library metadata` with the description into each section containing the variations. You could instead use _default_ `library metadata` to apply the same description to every variation of the block. If you decide that one variation actually needs a slightly different description you could add `library metadata` to the section containing the variation and it would override the _default_ `library metadata` description when it's rendered within the blocks plugin.
 
 ### Authoring block names and descriptions using Library Metadata
 

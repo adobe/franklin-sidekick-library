@@ -129,7 +129,7 @@ export function getPreferedForegroundColor(blockName) {
   }
 
   return getComputedStyle(document.documentElement)
-    .getPropertyValue('--sk-block-table-foreground-color') || defaultBackgroundColor;
+    .getPropertyValue('--sk-block-table-foreground-color') || defaultForegroundColor;
 }
 
 export function normalizeBlockName(name) {

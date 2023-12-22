@@ -117,15 +117,15 @@ export function getPreferedBackgroundColor(blockName) {
 }
 
 export function getPreferedForegroundColor(blockName) {
-  const defaultBackgroundColor = '#ffffff';
+  const defaultForegroundColor = '#ffffff';
   if (blockName === 'Section Metadata') {
     return getComputedStyle(document.documentElement)
-      .getPropertyValue('--sk-section-metadata-table-foreground-color') || defaultBackgroundColor;
+      .getPropertyValue('--sk-section-metadata-table-foreground-color') || defaultForegroundColor;
   }
 
   if (blockName === 'Metadata') {
     return getComputedStyle(document.documentElement)
-      .getPropertyValue('--sk-metadata-table-foreground-color') || defaultBackgroundColor;
+      .getPropertyValue('--sk-metadata-table-foreground-color') || defaultForegroundColor;
   }
 
   return getComputedStyle(document.documentElement)

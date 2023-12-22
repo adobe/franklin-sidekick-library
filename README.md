@@ -168,7 +168,7 @@ The blocks plugin supports the following configuration properties that can be se
 ### Blocks plugin configuration parameters
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
 |----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
-| encodeImage    | A boolean value that indicates if images should be encoded during copy operations               | If your site has a Zero trust network access (ZTNA) service enabled such as Cloudflare Access then images should be encoded for copy/paste operations to work correctly with images. | false     |
+| encodeImages    | A boolean value that indicates if images should be encoded during copy operations               | If your site has a Zero trust network access (ZTNA) service enabled such as Cloudflare Access then images should be encoded for copy/paste operations to work correctly with images. | false     |
 | viewPorts      | Full or simplified configuration object, see examples below.                                    | Configuration to overwrite the default viewport sizes. The default is 480px fo mobile, 768px for tablet and 100% of the current window for desktop.                                  | false     |
 
 #### Examples

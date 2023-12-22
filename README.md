@@ -229,7 +229,7 @@ library.config = {
 ### Custom table header colors
 You can customize the table header background and foreground color when pasting a block, section metadata or metadata that was copied from the blocks plugin.
 
-Default styles can be set in set in `library.html` using css variables.
+Default styles can be set in `library.html` using css variables.
 
 ```html
   <style>
@@ -246,9 +246,9 @@ Default styles can be set in set in `library.html` using css variables.
   </style>
 ``` 
 
-There values can be overridden using [library metadata](#supported-library-metadata-options).
+These values can be overridden using [library metadata](#supported-library-metadata-options).
 
-> Depending on the system color scheme selected for the users computer (dark mode), Word may alter the choosen colors in an attempt to improve accessibility.
+> Depending on the system color scheme selected for the users computer (dark mode), Word may alter the chosen colors in an attempt to improve accessibility.
 
 ### Custom plugin setup
 

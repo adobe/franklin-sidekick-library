@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.4...v1.7.0) (2023-12-22)
+
+
+### Features
+
+* support for custom table header colors ([#99](https://github.com/adobe/franklin-sidekick-library/issues/99)) ([b4a2acd](https://github.com/adobe/franklin-sidekick-library/commit/b4a2acd93383362a88e508add01eb377a232e211))
+
 ## [1.6.4](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.3...v1.6.4) (2023-12-13)
 
 

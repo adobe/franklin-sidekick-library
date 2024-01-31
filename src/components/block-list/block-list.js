@@ -439,7 +439,15 @@ export class BlockList extends LitElement {
       // Wait for all block loading promises to resolve
       await Promise.all(promises);
 
-      // Sort results alphabetically
+      // Sort the templates alphabetically
+      if (templatesParentItem) {
+        const sortedTemplateChildren = Array.from(templatesParentItem.children)
+          .sort((a, b) => a.getAttribute('label').localeCompare(b.getAttribute('label')));
+
+        sortedTemplateChildren?.forEach(child => templatesParentItem.appendChild(child));
+      }
+
+      // Sort top level menu items alphabetically
       sideNav.append(...blockParentItems.sort((a, b) => {
         const labelA = a.getAttribute('label').toLowerCase();
         const labelB = b.getAttribute('label').toLowerCase();

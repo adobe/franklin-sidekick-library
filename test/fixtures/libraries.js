@@ -37,7 +37,7 @@ export const COMPOUND_BLOCK_LIBRARY_ITEM = {
 };
 
 export const TEMPLATE_LIBRARY_ITEM = {
-  name: 'Blog Post',
+  name: 'Blog Post Template',
   path: '/tools/sidekick/blocks/blog-post/blog-post',
   url: 'https://example.hlx.test/tools/sidekick/blocks/blog-post/blog-post',
 };

@@ -186,5 +186,42 @@ describe('BlockRenderer', () => {
       navItemResults = sideNav.querySelectorAll('sp-sidenav-item:not([aria-hidden])');
       expect(navItemResults.length).to.equal(2);
     });
+
+    it('templates sorted alphabetically', async () => {
+      const template1 = {
+        ...TEMPLATE_LIBRARY_ITEM,
+        name: 'A Template',
+      };
+
+      const template2 = {
+        ...TEMPLATE_LIBRARY_ITEM,
+        name: 'x Template',
+      };
+
+      const template3 = {
+        ...TEMPLATE_LIBRARY_ITEM,
+        name: '1 Template',
+      };
+
+      const template4 = {
+        ...TEMPLATE_LIBRARY_ITEM,
+        name: 'f Template',
+      };
+
+      blockList.loadBlocks([template1, template2, template3, template4], container);
+      await waitUntil(
+        () => recursiveQuery(blockList, 'sp-sidenav'),
+        'Element did not render children',
+      );
+
+      const sideNav = recursiveQuery(blockList, 'sp-sidenav');
+      const templatesSideNavItem = sideNav.querySelector('sp-sidenav-item[label="Templates"]');
+      const childTemplates = templatesSideNavItem.querySelectorAll('sp-sidenav-item');
+
+      expect(childTemplates[0].getAttribute('label')).to.equal('1 Template');
+      expect(childTemplates[1].getAttribute('label')).to.equal('A Template');
+      expect(childTemplates[2].getAttribute('label')).to.equal('f Template');
+      expect(childTemplates[3].getAttribute('label')).to.equal('x Template');
+    });
   });
 });

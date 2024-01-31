@@ -48,10 +48,6 @@ export const TEMPLATE_STUB = createTag('div', {}, /* html */`
          <div>template</div>
       </div>
       <div>
-         <div>name</div>
-         <div>Blog Post Template</div>
-      </div>
-      <div>
          <div>searchtags</div>
          <div>foo, bar</div>
       </div>

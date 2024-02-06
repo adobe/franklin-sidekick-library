@@ -52,6 +52,8 @@ export class BlockRenderer extends LitElement {
    * @param {Element} element
    */
   decorateIcons(element, origin) {
+    console.log('calling decorateIcons for block');
+
     element.querySelectorAll('span.icon').forEach(async (span) => {
       if (span.classList.length < 2 || !span.classList[1].startsWith('icon-')) {
         return;
@@ -255,6 +257,8 @@ export class BlockRenderer extends LitElement {
    */
   // eslint-disable-next-line no-unused-vars
   async loadBlock(blockName, blockData, blockWrapper, defaultLibraryMetadata, hostContainer) {
+    console.log(`Loading block - ${blockName}`);
+
     const { context } = AppModel.appStore;
     const { url: blockURL } = blockData;
     const origin = blockData.extended

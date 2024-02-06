@@ -33,6 +33,8 @@ export function mockBlock(html, variants = [], wrap = false) {
 }
 
 export function createMetadataElement(type, libraryMetadata) {
+  console.log(`creating metadata element with class '${type}'`);
+
   const libraryMetadataDiv = createTag('div', { class: type });
   Object.keys(libraryMetadata).forEach((key) => {
     const container = createTag('div');

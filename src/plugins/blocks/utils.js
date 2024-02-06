@@ -41,6 +41,8 @@ export function blockToObject(blockElement, excludes = [], convertKeys = true) {
  * @returns {Object} the library metadata
  */
 export function getLibraryMetadata(block) {
+  console.log(`calling getLibraryMetadata for: ${block.className}`);
+
   const libraryMetadata = block.querySelector('.library-metadata');
   if (libraryMetadata) {
     const metadata = blockToObject(libraryMetadata, ['style']);
@@ -56,6 +58,8 @@ export function getLibraryMetadata(block) {
  * @returns {Object} the page metadata
  */
 export function getPageMetadata(block) {
+  console.log(`calling getPageMetadata for: ${block.className}`);
+
   const pageMetadata = block.querySelector('.page-metadata');
   if (pageMetadata) {
     const metadata = blockToObject(pageMetadata, [], false);
@@ -71,6 +75,8 @@ export function getPageMetadata(block) {
  * @returns
  */
 export function getDefaultLibraryMetadata(document) {
+  console.log('calling getDefaultLibraryMetadata');
+
   // Check for a section that just contains library metadata and nothing else
   const defaultLibraryMetadataElement = document.querySelector(':scope > div > .library-metadata:only-child');
   if (defaultLibraryMetadataElement) {
@@ -392,6 +398,8 @@ async function getSectionMetadata(context, block, baseURL) {
  * @param {Function} prepare The function to prepare the block
  */
 export function copyToClipboard(context, data, prepare) {
+  console.log(`copying to clipboard: ${data}`);
+
   try {
     // Since we need may need to pontentially fetch images (if encodeImages is true),
     // we need to use the promise based API for the clipboard API.
@@ -424,6 +432,8 @@ export function copyToClipboard(context, data, prepare) {
  * @param {string} blockURL The URL of the block
  */
 export async function copyBlockToClipboard(context, wrapper, name, blockURL, tableStyle) {
+  console.log(`copying block to clipboard: ${name}`);
+
   async function prepare(ctx, data) {
     const { blockName, html } = data;
     // Get the first block element ignoring any section metadata blocks

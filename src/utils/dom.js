@@ -20,6 +20,8 @@
  * @returns The new element
  */
 export function createTag(tag, attributes, html) {
+  console.log(`calling createTag: ${tag}`);
+
   const el = document.createElement(tag);
   if (html) {
     if (
@@ -78,6 +80,8 @@ export const getMetadata = el => [...el.childNodes].reduce((rdx, row) => {
  */
 export function loadCSS(href, callback) {
   if (!document.querySelector(`head > link[href="${href}"]`)) {
+    console.log(`loading CSS from: ${href}`);
+
     const link = document.createElement('link');
     link.setAttribute('rel', 'stylesheet');
     link.setAttribute('href', href);

@@ -253,13 +253,14 @@ export class BlockRenderer extends LitElement {
    * @param {HTMLElement} blockWrapper The wrapped block, includes section metadata
    * @param {HTMLElement} hostContainer The host container to render the iframe into
    */
-  // eslint-disable-next-line no-unused-vars
+
   async loadBlock(
     blockName,
     blockData,
     blockWrapper,
     defaultLibraryMetadata,
     sectionLibraryMetadata,
+    // eslint-disable-next-line no-unused-vars
     hostContainer,
   ) {
     const { context } = AppModel.appStore;

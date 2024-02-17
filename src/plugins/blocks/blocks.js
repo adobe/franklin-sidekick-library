@@ -295,6 +295,7 @@ function loadBlock(context, event, container) {
     blockData,
     blockWrapper,
     defaultLibraryMetadata,
+    sectionLibraryMetadata,
     container,
   );
 
@@ -346,6 +347,7 @@ function loadTemplate(context, event, container) {
     blockData,
     blockWrapper,
     defaultLibraryMetadata,
+    sectionLibraryMetadata,
     container,
   );
 

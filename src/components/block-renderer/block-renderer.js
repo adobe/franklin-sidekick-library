@@ -254,7 +254,14 @@ export class BlockRenderer extends LitElement {
    * @param {HTMLElement} hostContainer The host container to render the iframe into
    */
   // eslint-disable-next-line no-unused-vars
-  async loadBlock(blockName, blockData, blockWrapper, defaultLibraryMetadata, hostContainer) {
+  async loadBlock(
+    blockName,
+    blockData,
+    blockWrapper,
+    defaultLibraryMetadata,
+    sectionLibraryMetadata,
+    hostContainer,
+  ) {
     const { context } = AppModel.appStore;
     const { url: blockURL } = blockData;
     const origin = blockData.extended
@@ -291,8 +298,16 @@ export class BlockRenderer extends LitElement {
     const sidekickLibraryClass = 'sidekick-library';
     content?.classList.add(sidekickLibraryClass);
 
-    // Decorate the block with ids
-    this.decorateEditableElements(content);
+    // Should the content be editable?
+    const editable = sectionLibraryMetadata.contenteditable
+      ?? defaultLibraryMetadata.contenteditable
+      ?? context.contentEditable
+      ?? true;
+
+    // Editable can be a boolean or a string
+    if (editable.toString() === 'true') {
+      this.decorateEditableElements(content);
+    }
 
     // Clone the block and decorate it
     const blockClone = blockWrapper.cloneNode(true);

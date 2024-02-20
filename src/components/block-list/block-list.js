@@ -310,6 +310,11 @@ export class BlockList extends LitElement {
                 itemName = 'Unnamed Item';
               }
 
+              // Check if the copy button should be disabled
+              const disableCopy = sectionLibraryMetadata.disablecopy
+              ?? defaultLibraryMetadata.disablecopy
+              ?? false;
+
               // Create the sidenav item for the variant
               const blockVariantItem = createSideNavItem(
                 itemName,
@@ -317,6 +322,7 @@ export class BlockList extends LitElement {
                 false,
                 true,
                 'sp-icon-copy',
+                disableCopy,
               );
 
               // Add search tags to the sidenav item

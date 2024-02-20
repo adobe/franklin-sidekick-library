@@ -1,3 +1,15 @@
+# [1.8.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.7.0...v1.8.0) (2024-02-20)
+
+
+### Bug Fixes
+
+* sort templates alphabetically ([#101](https://github.com/adobe/franklin-sidekick-library/issues/101)) ([d7b6940](https://github.com/adobe/franklin-sidekick-library/commit/d7b694052bca517c2c3148b5e70be6664be6a9e3))
+
+
+### Features
+
+* allow content editable, copy button and details view to be disabled/hidden ([#107](https://github.com/adobe/franklin-sidekick-library/issues/107)) ([368537a](https://github.com/adobe/franklin-sidekick-library/commit/368537a68951105037c79ed95ae1b05a90fae2c6))
+
 # [1.7.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.6.4...v1.7.0) (2023-12-22)
 
 

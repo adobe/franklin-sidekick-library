@@ -114,6 +114,7 @@ function renderFrame(contextViewPorts, container) {
       <sp-split-view
         vertical
         resizable
+        collapsible
         primary-size="2600"
         secondary-min="200"
         splitter-pos="250"
@@ -286,6 +287,24 @@ function loadBlock(context, event, container) {
 
   // Set block title & description in UI
   updateDetailsContainer(content, authoredBlockName, blockDescription);
+
+  const disableCopyButton = sectionLibraryMetadata.disablecopy
+    ?? defaultLibraryMetadata.disablecopy
+    ?? false;
+
+  const copyButton = container.querySelector('.content .copy-button');
+  copyButton.removeAttribute('disabled');
+  if (disableCopyButton) {
+    copyButton.setAttribute('disabled', 'true');
+  }
+
+  const hideDetailsView = sectionLibraryMetadata.hidedetailsview
+  ?? defaultLibraryMetadata.hidedetailsview
+  ?? context.hidedetailsview
+  ?? false;
+
+  const splitView = container.querySelector('.content sp-split-view');
+  splitView.primarySize = hideDetailsView ? '100%' : '75%';
 
   const blockRenderer = content.querySelector('block-renderer');
 

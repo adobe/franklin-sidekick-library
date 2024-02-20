@@ -300,9 +300,9 @@ export class BlockRenderer extends LitElement {
     content?.classList.add(sidekickLibraryClass);
 
     // Should the content be editable?
-    const editable = sectionLibraryMetadata.contenteditable
-      ?? defaultLibraryMetadata.contenteditable
-      ?? context.contentEditable
+    const editable = sectionLibraryMetadata?.contenteditable
+      ?? defaultLibraryMetadata?.contenteditable
+      ?? context?.contentEditable
       ?? true;
 
     // Editable can be a boolean or a string

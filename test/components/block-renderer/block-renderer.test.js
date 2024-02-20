@@ -195,6 +195,35 @@ describe('BlockRenderer', () => {
     });
   });
 
+  describe('disable contentEditable', async () => {
+    it('should be disabled', async () => {
+      await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB, { contenteditable: false });
+
+      const iframe = blockRenderer.shadowRoot.querySelector('iframe');
+      await waitUntil(
+        () => recursiveQuery(iframe.contentDocument, '.cards'),
+        'Element did not render children',
+      );
+
+      const { contentDocument } = iframe;
+      const cardsBlock = contentDocument.querySelector('.cards');
+      cardsBlock.querySelectorAll('li, a, h1, h2, h3, h4, h5, h6').forEach((el) => {
+        expect(el.getAttribute('contenteditable')).to.be.null;
+        expect(el.getAttribute('data-library-id')).to.be.null;
+      });
+
+      cardsBlock.querySelectorAll('p').forEach((el) => {
+        expect(el.getAttribute('contenteditable')).to.be.null;
+        expect(el.getAttribute('data-library-id')).to.be.null;
+      });
+
+      cardsBlock.querySelectorAll('strong').forEach((el) => {
+        expect(el.getAttribute('contenteditable')).to.be.null;
+        expect(el.getAttribute('data-library-id')).to.be.null;
+      });
+    });
+  });
+
   describe('loadBlock', () => {
     it('should load a block page', async () => {
       await renderContent('cards', cardsPageUrl, CARDS_DEFAULT_STUB);

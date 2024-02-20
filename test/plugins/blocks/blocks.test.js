@@ -313,7 +313,7 @@ describe('Blocks Plugin', () => {
       const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
       mockFetchCardsPlainHTMLSuccess();
       mockFetchColumnsPlainHTMLSuccess();
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
 
       const blockLibrary = container.querySelector('.block-library');
       const blocks = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelectorAll('sp-sidenav-item');
@@ -331,7 +331,7 @@ describe('Blocks Plugin', () => {
         CARDS_BLOCK_LIBRARY_ITEM,
         COLUMNS_BLOCK_LIBRARY_ITEM,
       ];
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
 
       const blockLibrary = container.querySelector('.block-library');
       const blocks = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelectorAll('sp-sidenav-item');
@@ -345,7 +345,7 @@ describe('Blocks Plugin', () => {
       const mockData = [NON_EXISTENT_BLOCK_LIBRARY_ITEM];
 
       container.addEventListener(PLUGIN_EVENTS.TOAST, eventSpy);
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
 
       const blockLibrary = container.querySelector('.block-library');
       const blocks = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelectorAll('sp-sidenav-item');
@@ -359,7 +359,7 @@ describe('Blocks Plugin', () => {
       mockFetchColumnsPlainHTMLSuccess();
       const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
 
       const spSearch = blockLibrary.querySelector('sp-split-view .menu .search sp-search');
@@ -380,7 +380,7 @@ describe('Blocks Plugin', () => {
       mockFetchColumnsPlainHTMLSuccess();
       const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
 
       const blockLibrary = container.querySelector('.block-library');
       const spSearch = blockLibrary.querySelector('sp-split-view .menu .search sp-search');
@@ -402,7 +402,7 @@ describe('Blocks Plugin', () => {
       const copyBlockSpy = sinon.spy();
       const mockData = [CARDS_BLOCK_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('CopyBlock', copyBlockSpy);
@@ -430,7 +430,7 @@ describe('Blocks Plugin', () => {
       const copyBlockSpy = sinon.spy();
       const mockData = [DEFAULT_CONTENT_LIBRARY_ITEM];
 
-      await decorate(container, mockData);
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
       const blockLibrary = container.querySelector('.block-library');
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('CopyBlock', copyBlockSpy);
@@ -921,6 +921,30 @@ describe('Blocks Plugin', () => {
       desktopViewButton.dispatchEvent(new Event('click'));
 
       expect(frameView.style.width).to.eq('100%');
+    });
+
+    it('disable copy button', async () => {
+      mockFetchCardsPlainHTMLSuccess({ disablecopy: 'true' });
+      mockFetchColumnsPlainHTMLSuccess();
+      const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
+
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
+      const blockLibrary = container.querySelector('.block-library');
+
+      const copyButton = blockLibrary.querySelector('sp-split-view .content .details-container .copy-button');
+      expect(copyButton.getAttribute('disabled')).to.eq('true');
+    });
+
+    it('hide details view', async () => {
+      mockFetchCardsPlainHTMLSuccess({ hideDetailsView: 'true' });
+      mockFetchColumnsPlainHTMLSuccess();
+      const mockData = [CARDS_BLOCK_LIBRARY_ITEM, COLUMNS_BLOCK_LIBRARY_ITEM];
+
+      await decorate(container, mockData, undefined, AppModel.appStore.context);
+      const blockLibrary = container.querySelector('.block-library');
+
+      const splitView = blockLibrary.querySelector('sp-split-view');
+      expect(splitView.getAttribute('splitter-pos')).to.eq('-2');
     });
   });
 });

@@ -58,6 +58,9 @@ The blocks plugins supports a special type of block called `library metadata` wh
 | searchtags            | A comma seperated list of search terms         | Allows you to define other terms that could be used when searching for this block in the blocks plugin                                                            | false    |
 | tableHeaderBackgroundColor            | A hex color (ex #ff3300)         | Overrides the table header background color for any blocks in the section or page.                                                            | false    |
 | tableHeaderForegroundColor            | A hex color (ex #ffffff)         | Overrides the table header foreground color for any blocks in the section or page.                                                            | false    |
+| contentEditable            | A boolean value (default: true)         | Set to false to disable content editing in the preview window.                                                            | false    |
+| disableCopy            | A boolean value (default: false)         | Set to true to disable the copy button in the preview window.                                                            | false    |
+| hideDetailsView            | A boolean value (default: false)         | Hide the block details panel inside the preview window.                                                            | false    |
 
 ### Default Library metadata vs Library metadata
 
@@ -170,6 +173,7 @@ The blocks plugin supports the following configuration properties that can be se
 |----------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|----------|
 | encodeImages    | A boolean value that indicates if images should be encoded during copy operations               | If your site has a Zero trust network access (ZTNA) service enabled such as Cloudflare Access then images should be encoded for copy/paste operations to work correctly with images. | false     |
 | viewPorts      | Full or simplified configuration object, see examples below.                                    | Configuration to overwrite the default viewport sizes. The default is 480px fo mobile, 768px for tablet and 100% of the current window for desktop.                                  | false     |
+| contentEditable      | A boolean value to disable content editing in all block previews.                                    | Set to false to disable content editing.                                  | false     |
 
 #### Examples
 

@@ -35,7 +35,7 @@ https://github.com/adobe/franklin-sidekick-library/assets/3231084/648b36b9-c74e-
 To generate content for the blocks plugin, you need to prepare a separate Word document for each block you want to include.
 
 1. Create a directory inside the `/tools/sidekick` directory where you will store all the block variations. For example, you could create a directory called `blocks` inside `/tools/sidekick`.
-2. For this example, let's assume we want to define all the variations of a block called `columns`. First create a Word document called `columns` inside the `blocks` directory and provide examples of all the variations of the `columns` block. After each variation of the block add in a [section delimiter](https://www.hlx.live/docs/authoring#sections). ([Example](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/columns?view-doc-source=true)).
+2. For this example, let's assume we want to define all the variations of a block called `columns`. First create a Word document called `columns` inside the `blocks` directory and provide examples of all the variations of the `columns` block. After each variation of the block add in a [section delimiter](https://www.aem.live/docs/authoring#sections). ([Example](https://main--helix-test-content-onedrive--adobe.hlx.page/block-library-tests/blocks/columns/columns?view-doc-source=true)).
 3. Preview and publish the `columns` document.
 4. Open the library workbook created in the last section, inside the `helix-blocks` sheet, create two columns named `name` and `path`.
 6. Next we need to add a row for our `columns` block. Add the name of the block in the first column and the url to the document that defines the block variations in the second column. For instance, if you want to add the `columns` block, you could create a row with the name `Columns` and the path `/tools/sidekick/blocks/columns`. In order for the library to work across enviroments (page, live, prod) you should not use an absolute url for the path column.
@@ -84,11 +84,11 @@ Example block with custom name and description
 
 ### Autoblocks and Default Content
 
-The blocks plugin is capable of rendering [default content](https://www.hlx.live/developer/markup-sections-blocks#default-content) and [autoblocks](https://www.hlx.live/developer/markup-sections-blocks#auto-blocking). In order to achieve this, it is necessary to place your `default content` or `autoblock` within a dedicated section, which should include a `library metadata` table defining a `name` property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
+The blocks plugin is capable of rendering [default content](https://www.aem.live/developer/markup-sections-blocks#default-content) and [autoblocks](https://www.aem.live/developer/markup-sections-blocks#auto-blocking). In order to achieve this, it is necessary to place your `default content` or `autoblock` within a dedicated section, which should include a `library metadata` table defining a `name` property, as previously described. If no name is specified in the library metadata, the item will be labeled as "Unnamed Item."
 
 ### Blocks composed of content in subsequent sections
 
-There are situations where developers may want a block to consist of content from subsequent sections. This pattern is discouraged for reasons stated [here](https://www.hlx.live/docs/davidsmodel#rule-3-limit-row-and-column-spans), but if you choose to use it the blocks plugin can render these items using the `include next sections` property in `library metadata`.
+There are situations where developers may want a block to consist of content from subsequent sections. This pattern is discouraged for reasons stated [here](https://www.aem.live/docs/davidsmodel#rule-3-limit-row-and-column-spans), but if you choose to use it the blocks plugin can render these items using the `include next sections` property in `library metadata`.
 
 ![Screenshot 2023-09-07 at 2 42 13 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/32442f30-5147-4997-9048-cef9180c4ec2)
 
@@ -143,7 +143,7 @@ Since the sidekick library is hosted on the same origin as the content, a static
   <body>
     <script
       type="module"
-      src="https://www.hlx.live/tools/sidekick/library/index.js"
+      src="https://www.aem.live/tools/sidekick/library/index.js"
     ></script>
     <script>
       const library = document.createElement('sidekick-library')
@@ -157,7 +157,7 @@ Since the sidekick library is hosted on the same origin as the content, a static
 </html>
 ```
 
-In the code above we load the sidekick library from `hlx.live` and then create a custom `sidekick-library` element and add it to the page. The `sidekick-library` element accepts a `config` object that is required to configure the sidekick library.
+In the code above we load the sidekick library from `aem.live` and then create a custom `sidekick-library` element and add it to the page. The `sidekick-library` element accepts a `config` object that is required to configure the sidekick library.
 
 ### Supported configuration parameters
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
@@ -286,7 +286,7 @@ library.config = {
 }
 ```
 
-> The `Access-Control-Allow-Origin` headers will need to be set on the `library.json` and blocks of the extended library in order for them to load in the sidekick library. See [Custom HTTP Response Headers](https://www.hlx.live/docs/custom-headers) for more info.
+> The `Access-Control-Allow-Origin` headers will need to be set on the `library.json` and blocks of the extended library in order for them to load in the sidekick library. See [Custom HTTP Response Headers](https://www.aem.live/docs/custom-headers) for more info.
 
 > Due to same-origin policies enforced by browsers on iframes a preview of an extended block cannot be loaded at this time. 
 
@@ -303,7 +303,8 @@ Next, in order for the sidekick library to appear in the sidekick a config file 
       "title": "Library",
       "environments": ["edit"],
       "url": "/tools/sidekick/library.html",
-      "includePaths": ["**.docx**"]
+      "excludePaths": ["**"],
+      "includePaths": ["**.docx**", "/document/**"]
     }
   ]
 }
@@ -459,7 +460,7 @@ Plugin authors can dispatch events from their plugin to the parent sidekick libr
 #### Toast Messages
 
 ```js
-import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/events/events.js';
+import { PLUGIN_EVENTS } from 'https://www.aem.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show a toast message
@@ -470,7 +471,7 @@ export async function decorate(container, data, query) {
 #### Show and Hide Loader
 
 ```js
-import { PLUGIN_EVENTS } from 'https://hlx.live/tools/sidekick/library/events/events.js';
+import { PLUGIN_EVENTS } from 'https://www.aem.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show loader

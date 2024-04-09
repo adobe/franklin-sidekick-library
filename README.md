@@ -42,6 +42,8 @@ To generate content for the blocks plugin, you need to prepare a separate Word d
 7. Preview and publish the `library` workbook.
 
 > Since the are publishing the example blocks you should use [bulk metadata](https://www.aem.live/docs/bulk-metadata) to exclude the content inside of `/tools/**` from being indexed using `metadata.json`.
+> ![Screenshot 2024-04-09 at 2 54 19 PM](https://github.com/adobe/franklin-sidekick-library/assets/3231084/90781787-6837-46ea-9d5f-d49f336c4925)
+
 
 ### Example `library.xlsx`
 

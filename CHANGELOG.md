@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.8.0...v1.8.1) (2024-04-09)
+
+
+### Bug Fixes
+
+* revert to hlx.live in app-model ([#108](https://github.com/adobe/franklin-sidekick-library/issues/108)) ([1a3974d](https://github.com/adobe/franklin-sidekick-library/commit/1a3974d36696915c77ed68402b667c25829956fc))
+
 # [1.8.0](https://github.com/adobe/franklin-sidekick-library/compare/v1.7.0...v1.8.0) (2024-02-20)
 
 

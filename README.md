@@ -41,6 +41,8 @@ To generate content for the blocks plugin, you need to prepare a separate Word d
 6. Next we need to add a row for our `columns` block. Add the name of the block in the first column and the url to the document that defines the block variations in the second column. For instance, if you want to add the `columns` block, you could create a row with the name `Columns` and the path `/tools/sidekick/blocks/columns`. In order for the library to work across enviroments (page, live, prod) you should not use an absolute url for the path column.
 7. Preview and publish the `library` workbook.
 
+> Since the are publishing the example blocks you should use [bulk metadata](https://www.aem.live/docs/bulk-metadata) to exclude the content inside of `/tools/**` from being indexed using `metadata.json`.
+
 ### Example `library.xlsx`
 
 ![Library.xlsx](https://github.com/adobe/franklin-sidekick-library/assets/3231084/5f645ab8-cc30-4cd6-932b-94024d01713b)

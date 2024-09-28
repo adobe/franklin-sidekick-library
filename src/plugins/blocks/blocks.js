@@ -288,8 +288,8 @@ function loadBlock(context, event, container) {
   // Set block title & description in UI
   updateDetailsContainer(content, authoredBlockName, blockDescription);
 
-  const disableCopyButton = sectionLibraryMetadata.disablecopy
-    ?? defaultLibraryMetadata.disablecopy
+  const disableCopyButton = sectionLibraryMetadata?.disablecopy
+    ?? defaultLibraryMetadata?.disablecopy
     ?? false;
 
   const copyButton = container.querySelector('.content .copy-button');
@@ -298,9 +298,9 @@ function loadBlock(context, event, container) {
     copyButton.setAttribute('disabled', 'true');
   }
 
-  const hideDetailsView = sectionLibraryMetadata.hidedetailsview
-  ?? defaultLibraryMetadata.hidedetailsview
-  ?? context.hidedetailsview
+  const hideDetailsView = sectionLibraryMetadata?.hidedetailsview
+  ?? defaultLibraryMetadata?.hidedetailsview
+  ?? context?.hidedetailsview
   ?? false;
 
   const splitView = container.querySelector('.content sp-split-view');
@@ -357,6 +357,24 @@ function loadTemplate(context, event, container) {
 
   // Set template title & description in UI
   updateDetailsContainer(content, authoredTemplateName, templateDescription);
+
+  const disableCopyButton = sectionLibraryMetadata?.disablecopy
+    ?? defaultLibraryMetadata?.disablecopy
+    ?? false;
+
+  const copyButton = container.querySelector('.content .copy-button');
+  copyButton.removeAttribute('disabled');
+  if (disableCopyButton) {
+    copyButton.setAttribute('disabled', 'true');
+  }
+
+  const hideDetailsView = sectionLibraryMetadata?.hidedetailsview
+  ?? defaultLibraryMetadata?.hidedetailsview
+  ?? context?.hidedetailsview
+  ?? false;
+
+  const splitView = container.querySelector('.content sp-split-view');
+  splitView.primarySize = hideDetailsView ? '100%' : '75%';
 
   const blockRenderer = content.querySelector('block-renderer');
 

@@ -1,3 +1,10 @@
+## [1.8.3](https://github.com/adobe/franklin-sidekick-library/compare/v1.8.2...v1.8.3) (2024-10-07)
+
+
+### Bug Fixes
+
+* update create pr version ([#118](https://github.com/adobe/franklin-sidekick-library/issues/118)) ([bbee366](https://github.com/adobe/franklin-sidekick-library/commit/bbee366eca2e8fc6a9322f856fde71d162380631))
+
 ## [1.8.2](https://github.com/adobe/franklin-sidekick-library/compare/v1.8.1...v1.8.2) (2024-10-07)
 
 

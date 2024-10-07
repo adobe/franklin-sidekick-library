@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/adobe/franklin-sidekick-library/compare/v1.8.1...v1.8.2) (2024-10-07)
+
+
+### Bug Fixes
+
+* flaky test ([#117](https://github.com/adobe/franklin-sidekick-library/issues/117)) ([9562d99](https://github.com/adobe/franklin-sidekick-library/commit/9562d993a875cc339114c22696bea9fc5ccd4f60))
+
 ## [1.8.1](https://github.com/adobe/franklin-sidekick-library/compare/v1.8.0...v1.8.1) (2024-04-09)
 
 

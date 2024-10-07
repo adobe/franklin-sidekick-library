@@ -58,7 +58,7 @@ jobs:
         run: |
           cp -r dist/* _target/tools/sidekick/library/
       - name: Create branch commit and pull request in target repo
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           commit-message: "chore(sidekick library): new release candidate [skip ci]"
           token: ${{ secrets.PAT }}

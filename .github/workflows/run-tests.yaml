@@ -1,5 +1,8 @@
 name: Tests and Linting
 
+orbs:
+  codecov: codecov/codecov@4.2.0
+
 on:
   push:
   pull_request:
@@ -18,7 +21,4 @@ jobs:
     - run: npm test
       env:
         CI: true
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
-      with: 
-        files: ./coverage/lcov.info
+    - codecov/upload

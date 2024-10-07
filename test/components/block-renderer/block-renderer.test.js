@@ -402,9 +402,7 @@ describe('BlockRenderer', () => {
       const img = cardsBlock.querySelector('img');
       img.src = IMAGE;
       await aTimeout(1000);
-      const wrapper = blockRenderer.getBlockWrapper();
-      const modifiedBlock = wrapper.querySelector('.cards');
-      expect(modifiedBlock.querySelector('img').src).to.equal(IMAGE);
+      expect(cardsBlock.querySelector('img').src).to.equal(IMAGE);
     });
 
     describe('enableImageDragDrop', () => {
@@ -420,6 +418,7 @@ describe('BlockRenderer', () => {
         const cardsBlock = recursiveQuery(iframe.contentDocument, '.cards');
         expect(cardsBlock).to.exist;
 
+        await aTimeout(1000);
         const img = cardsBlock.querySelector('img');
         img.dispatchEvent(new Event('dragover', { target: img }));
         expect(img.style.outline).to.equal('rgb(84, 163, 246) solid 4px');

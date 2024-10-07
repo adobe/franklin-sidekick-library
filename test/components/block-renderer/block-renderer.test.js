@@ -403,7 +403,7 @@ describe('BlockRenderer', () => {
       img.src = IMAGE;
       await aTimeout(1000);
       expect(cardsBlock.querySelector('img').src).to.equal(IMAGE);
-    }).time;
+    });
 
     describe('enableImageDragDrop', () => {
       it('drag events', async () => {

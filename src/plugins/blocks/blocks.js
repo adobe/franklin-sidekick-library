@@ -23,9 +23,14 @@ import {
   copyPageToClipboard,
   copyDefaultContentToClipboard,
   getBlockTableStyle,
+  preparePageForCopy,
+  prepareBlockForCopy,
+  prepareDefaultContentForCopy,
 } from './utils.js';
 import {
-  createTag, removeAllEventListeners, setURLParams,
+  createTag,
+  removeAllEventListeners,
+  setURLParams,
 } from '../../utils/dom.js';
 import { sampleRUM } from '../../utils/rum.js';
 
@@ -83,7 +88,7 @@ function getViewPorts(contextViewPorts) {
   ];
   if (contextViewPorts && contextViewPorts.length > 0) {
     if (contextViewPorts.length === 2
-        && contextViewPorts.every(breakpoint => Number.isInteger(breakpoint))) {
+      && contextViewPorts.every(breakpoint => Number.isInteger(breakpoint))) {
       for (let i = 0; i < 2; i += 1) {
         viewPorts[i].width = `${contextViewPorts[i] - 1}px`;
       }
@@ -136,9 +141,14 @@ function renderFrame(contextViewPorts, container) {
             <div class="actions">
                 <sp-button class="copy-button">Copy</sp-button>
             </div>
-          </div>
+          </div> 
           <sp-divider size="s"></sp-divider>
-          <div class="details"></div>
+          <sp-tabs size="m" selected="details" class="tabs">
+            <sp-tab label="Details" value="details"></sp-tab>
+            <sp-tab label="Table" value="table"></sp-tab>
+            <sp-tab-panel value="details" class="details-tab"></sp-tab-panel>
+            <sp-tab-panel value="table" class="table-tab"></sp-tab-panel>
+          </sp-tabs>
         </div>
       </sp-split-view>
     `;
@@ -179,12 +189,25 @@ function updateDetailsContainer(container, title, description) {
   blockTitle.textContent = title;
 
   // Set block description
-  const details = container.querySelector('.details');
+  const details = container.querySelector('.details-tab');
+  // Clear existing content
   details.innerHTML = '';
+  // Create a new paragraph element for the description
   if (description) {
-    const descriptionElement = createTag('p', {}, description);
-    details.append(descriptionElement);
+    const descriptionElement = document.createElement('p');
+    descriptionElement.textContent = description;
+    details.appendChild(descriptionElement);
   }
+
+  // Listen for the table-ready event
+  document.addEventListener('table-ready', (event) => {
+    const { table } = event.detail;
+    const tableTab = container.querySelector('.table-tab');
+    // Clear existing content
+    tableTab.innerHTML = '';
+    // Append the new table to the table tab
+    tableTab.appendChild(table);
+  });
 }
 
 /**
@@ -234,6 +257,52 @@ function attachCopyButtonEventListener(
   });
 }
 
+function getTable(
+  context,
+  blockRenderer,
+  defaultLibraryMetadata,
+  sectionLibraryMetadata,
+  pageMetadata,
+) {
+  const copyWrapper = blockRenderer.getBlockWrapper();
+  const copyBlockData = blockRenderer.getBlockData();
+
+  // Are we trying to copy a block, a page or default content?
+  // The copy operation is slightly different depending on which
+  if (
+    defaultLibraryMetadata.type === 'template'
+    || sectionLibraryMetadata.multiSectionBlock
+    || sectionLibraryMetadata.compoundBlock
+  ) {
+    return preparePageForCopy(
+      context,
+      {
+        html: copyWrapper,
+        pageMeta: pageMetadata,
+        url: copyBlockData.url,
+      },
+      copyBlockData.url,
+    );
+  }
+  if (blockRenderer.isBlock) {
+    const tableStyle = getBlockTableStyle(
+      defaultLibraryMetadata,
+      sectionLibraryMetadata,
+    );
+    return prepareBlockForCopy(
+      context,
+      {
+        html: copyWrapper,
+        pageMeta: pageMetadata,
+        url: copyBlockData.url,
+      },
+      copyBlockData.url,
+      tableStyle,
+    );
+  }
+  return prepareDefaultContentForCopy(context, copyWrapper, copyBlockData.url);
+}
+
 async function onBlockListCopyButtonClicked(context, event, container) {
   const {
     blockWrapper: wrapper,
@@ -256,6 +325,27 @@ async function onBlockListCopyButtonClicked(context, event, container) {
     await copyDefaultContentToClipboard(context, wrapper, blockURL);
   }
   container.dispatchEvent(new CustomEvent('Toast', { detail: { message: 'Copied Block', target: wrapper } }));
+}
+
+async function triggerTableReady(
+  context,
+  blockRenderer,
+  defaultLibraryMetadata,
+  sectionLibraryMetadata,
+  pageMetadata,
+) {
+  const table = await getTable(
+    context,
+    blockRenderer,
+    defaultLibraryMetadata,
+    sectionLibraryMetadata,
+    pageMetadata,
+  );
+  document.dispatchEvent(
+    new CustomEvent('table-ready', {
+      detail: { table },
+    }),
+  );
 }
 
 function loadBlock(context, event, container) {
@@ -316,6 +406,8 @@ function loadBlock(context, event, container) {
     undefined,
   );
 
+  triggerTableReady(context, blockRenderer, defaultLibraryMetadata, sectionLibraryMetadata, undefined);
+
   // Track block view
   sampleRUM('library:blockviewed', { target: blockData.url });
 }
@@ -339,6 +431,7 @@ function loadTemplate(context, event, container) {
 
   // Pull the description for this page from default metadata.
   const templateDescription = parseDescription(defaultLibraryMetadata.description);
+
 
   // Set template title & description in UI
   updateDetailsContainer(content, authoredTemplateName, templateDescription);

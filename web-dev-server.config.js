@@ -13,10 +13,8 @@
 /** Use Hot Module replacement by adding --hmr to the start command */
 import copy from 'rollup-plugin-copy';
 
-const hmr = process.argv.includes('--hmr');
-
 export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
-  watch: !hmr,
+  watch: true, // Always enable watching
   /** Resolve bare module imports */
   nodeResolve: {
     exportConditions: ['browser', 'development'],
@@ -32,9 +30,11 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
     /** Use Hot Module Replacement by uncommenting. Requires @open-wc/dev-server-hmr plugin */
     // hmr && hmrPlugin({ exclude: ['**/*/node_modules/**/*'], presets: [presets.litElement] }),
     copy({
-      targets: [{ src: 'src/plugins/**/*', dest: './' },
+      targets: [
+        { src: 'src/plugins/**/*', dest: './' },
         { src: 'src/utils/dom.js', dest: './' },
-        { src: 'src/locales', dest: './' }],
+        { src: 'src/locales', dest: './' },
+      ],
       // set flatten to false to preserve folder structure
       flatten: false,
     }),

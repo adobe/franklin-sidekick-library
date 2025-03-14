@@ -13,7 +13,10 @@
 /* eslint-disable consistent-return, no-param-reassign */
 
 import {
-  createTag, readBlockConfig, toCamelCase, isPath,
+  createTag,
+  readBlockConfig,
+  toCamelCase,
+  isPath,
 } from '../../utils/dom.js';
 import { sampleRUM } from '../../utils/rum.js';
 
@@ -72,11 +75,15 @@ export function getPageMetadata(block) {
  */
 export function getDefaultLibraryMetadata(document) {
   // Check for a section that just contains library metadata and nothing else
-  const defaultLibraryMetadataElement = document.querySelector(':scope > div > .library-metadata:only-child');
+  const defaultLibraryMetadataElement = document.querySelector(
+    ':scope > div > .library-metadata:only-child',
+  );
   if (defaultLibraryMetadataElement) {
     // We found some default library metadata, store the parent element
     const parent = defaultLibraryMetadataElement.parentElement;
-    const defaultLibraryMetadata = getLibraryMetadata(defaultLibraryMetadataElement.parentElement);
+    const defaultLibraryMetadata = getLibraryMetadata(
+      defaultLibraryMetadataElement.parentElement,
+    );
 
     // Remove the parent
     parent.remove();
@@ -96,48 +103,78 @@ export function getBlockName(block, includeVariants = true) {
   }
 
   // Remove the "sidekick-library" class or any empty classes
-  const filteredClasses = classes.filter(blockClass => blockClass !== 'sidekick-library' && blockClass !== '');
-  return filteredClasses.length > 0 ? `${name} (${filteredClasses.join(', ')})` : name;
+  const filteredClasses = classes.filter(
+    blockClass => blockClass !== 'sidekick-library' && blockClass !== '',
+  );
+  return filteredClasses.length > 0
+    ? `${name} (${filteredClasses.join(', ')})`
+    : name;
 }
 
 export function getPreferedBackgroundColor(blockName) {
   const defaultBackgroundColor = '#ff8012';
   if (blockName === 'Section Metadata') {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue('--sk-section-metadata-table-background-color') || defaultBackgroundColor;
+    return (
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--sk-section-metadata-table-background-color',
+      ) || defaultBackgroundColor
+    );
   }
 
   if (blockName === 'Metadata') {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue('--sk-metadata-table-background-color') || defaultBackgroundColor;
+    return (
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--sk-metadata-table-background-color',
+      ) || defaultBackgroundColor
+    );
   }
 
-  return getComputedStyle(document.documentElement)
-    .getPropertyValue('--sk-block-table-background-color') || defaultBackgroundColor;
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--sk-block-table-background-color',
+    ) || defaultBackgroundColor
+  );
 }
 
 export function getPreferedForegroundColor(blockName) {
   const defaultForegroundColor = '#ffffff';
   if (blockName === 'Section Metadata') {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue('--sk-section-metadata-table-foreground-color') || defaultForegroundColor;
+    return (
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--sk-section-metadata-table-foreground-color',
+      ) || defaultForegroundColor
+    );
   }
 
   if (blockName === 'Metadata') {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue('--sk-metadata-table-foreground-color') || defaultForegroundColor;
+    return (
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--sk-metadata-table-foreground-color',
+      ) || defaultForegroundColor
+    );
   }
 
-  return getComputedStyle(document.documentElement)
-    .getPropertyValue('--sk-block-table-foreground-color') || defaultForegroundColor;
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue(
+      '--sk-block-table-foreground-color',
+    ) || defaultForegroundColor
+  );
 }
 
 export function normalizeBlockName(name) {
   // eslint-disable-next-line no-confusing-arrow
-  return name.replace(/-/g, ' ').replace(/(\b\w+)|(?:\([^)]*\))/g, (match, p1) => p1 ? p1.charAt(0).toUpperCase() + p1.slice(1) : match);
+  return name
+    .replace(/-/g, ' ')
+    .replace(/(\b\w+)|(?:\([^)]*\))/g, (match, p1) => (p1 ? p1.charAt(0).toUpperCase() + p1.slice(1) : match));
 }
 
-export async function convertBlockToTable(context, block, name, path, tableStyle) {
+export async function convertBlockToTable(
+  context,
+  block,
+  name,
+  path,
+  tableStyle,
+) {
   const url = new URL(path);
 
   prepareIconsForCopy(block);
@@ -154,7 +191,22 @@ export async function convertBlockToTable(context, block, name, path, tableStyle
 
   const headerRow = document.createElement('tr');
   const blockName = normalizeBlockName(name);
-  headerRow.append(createTag('td', { colspan: maxCols, style: `background-color: ${tableStyle?.tableHeaderBackgroundColor || getPreferedBackgroundColor(blockName)}; color: ${tableStyle?.tableHeaderForegroundColor || getPreferedForegroundColor(blockName)};` }, blockName));
+  headerRow.append(
+    createTag(
+      'td',
+      {
+        colspan: maxCols,
+        style: `background-color: ${
+          tableStyle?.tableHeaderBackgroundColor
+          || getPreferedBackgroundColor(blockName)
+        }; color: ${
+          tableStyle?.tableHeaderForegroundColor
+          || getPreferedForegroundColor(blockName)
+        };`,
+      },
+      blockName,
+    ),
+  );
   table.append(headerRow);
   for (const row of rows) {
     const columns = [...row.children];
@@ -195,7 +247,18 @@ export function convertObjectToTable(name, object) {
 
   const headerRow = document.createElement('tr');
   const blockName = normalizeBlockName(name);
-  headerRow.append(createTag('td', { colspan: 2, style: `background-color: ${getPreferedBackgroundColor(blockName)}; color: ${getPreferedForegroundColor(blockName)};` }, blockName));
+  headerRow.append(
+    createTag(
+      'td',
+      {
+        colspan: 2,
+        style: `background-color: ${getPreferedBackgroundColor(
+          blockName,
+        )}; color: ${getPreferedForegroundColor(blockName)};`,
+      },
+      blockName,
+    ),
+  );
   table.append(headerRow);
 
   for (const [key, value] of Object.entries(object)) {
@@ -245,7 +308,12 @@ async function imageUrlToBase64(url) {
  * @param {*} url The URL of the block
  * @param {*} columnWidthPercentage The column width percentage
  */
-export async function prepareImagesForCopy(context, element, url, columnWidthPercentage) {
+export async function prepareImagesForCopy(
+  context,
+  element,
+  url,
+  columnWidthPercentage,
+) {
   const blockURL = typeof url === 'string' ? new URL(url) : url;
   const images = element.querySelectorAll('img');
   for (const img of images) {
@@ -317,7 +385,10 @@ export function prepareIconsForCopy(element) {
         // Remove the "icon-" prefix
         const iconName = className.replace('icon-', '');
         // eslint-disable-next-line no-param-reassign
-        icon.parentElement.innerHTML = icon.parentElement.innerHTML.replace(/<span\b[^>]*>(.*?)<\/span>/, `:${iconName}:`);
+        icon.parentElement.innerHTML = icon.parentElement.innerHTML.replace(
+          /<span\b[^>]*>(.*?)<\/span>/,
+          `:${iconName}:`,
+        );
         break;
       }
     }
@@ -395,25 +466,56 @@ export function copyToClipboard(context, data, prepare) {
   try {
     // Since we need may need to pontentially fetch images (if encodeImages is true),
     // we need to use the promise based API for the clipboard API.
-    const clipboardData = [new ClipboardItem({
-      'text/html': new Promise((resolve, reject) => {
-        prepare(context, data).then((html) => {
-          try {
-            const blob = new Blob([html.outerHTML], { type: 'text/html' });
-            resolve(blob);
-          } catch (e) {
-            /* c8 ignore next 2 */
-            reject(e);
-          }
-        });
+    const clipboardData = [
+      new ClipboardItem({
+        'text/html': new Promise((resolve, reject) => {
+          prepare(context, data).then((html) => {
+            try {
+              const blob = new Blob([html.outerHTML], { type: 'text/html' });
+              resolve(blob);
+            } catch (e) {
+              /* c8 ignore next 2 */
+              reject(e);
+            }
+          });
+        }),
       }),
-    })];
+    ];
     navigator.clipboard.write(clipboardData);
     /* c8 ignore next 4 */
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Unable to write to clipboard', error);
   }
+}
+
+export async function prepareBlockForCopy(ctx, data, blockURL, tableStyle) {
+  const { blockName, html } = data;
+  // Get the first block element ignoring any section metadata blocks
+  const element = html.querySelector(':scope > div:not(.section-metadata)');
+  let blockTable = '';
+
+  prepareAnchorsForCopy(element);
+
+  // If the wrapper has no block, leave block table empty
+  if (element) {
+    blockTable = await convertBlockToTable(
+      ctx,
+      element,
+      blockName,
+      blockURL,
+      tableStyle,
+    );
+  }
+
+  // Does the block have section metadata?
+  const sectionMetadataTable = await getSectionMetadata(ctx, html, blockURL);
+  if (sectionMetadataTable) {
+    sectionMetadataTable.prepend(createTag('br'));
+    blockTable.append(sectionMetadataTable);
+  }
+
+  return blockTable;
 }
 
 /**
@@ -423,34 +525,15 @@ export function copyToClipboard(context, data, prepare) {
  * @param {string} name The name of the block
  * @param {string} blockURL The URL of the block
  */
-export async function copyBlockToClipboard(context, wrapper, name, blockURL, tableStyle) {
+export async function copyBlockToClipboard(
+  context,
+  wrapper,
+  name,
+  blockURL,
+  tableStyle,
+) {
   async function prepare(ctx, data) {
-    const { blockName, html } = data;
-    // Get the first block element ignoring any section metadata blocks
-    const element = html.querySelector(':scope > div:not(.section-metadata)');
-    let blockTable = '';
-
-    prepareAnchorsForCopy(element);
-
-    // If the wrapper has no block, leave block table empty
-    if (element) {
-      blockTable = await convertBlockToTable(
-        ctx,
-        element,
-        blockName,
-        blockURL,
-        tableStyle,
-      );
-    }
-
-    // Does the block have section metadata?
-    const sectionMetadataTable = await getSectionMetadata(ctx, html, blockURL);
-    if (sectionMetadataTable) {
-      sectionMetadataTable.prepend(createTag('br'));
-      blockTable.append(sectionMetadataTable);
-    }
-
-    return blockTable;
+    return prepareBlockForCopy(ctx, data, blockURL, tableStyle);
   }
 
   const data = {
@@ -466,6 +549,26 @@ export async function copyBlockToClipboard(context, wrapper, name, blockURL, tab
   return copied;
 }
 
+export async function prepareDefaultContentForCopy(ctx, data, blockURL) {
+  const { html, url } = data;
+  const wrapperClone = html.cloneNode(true);
+  prepareAnchorsForCopy(wrapperClone);
+  prepareIconsForCopy(wrapperClone);
+  await prepareImagesForCopy(ctx, wrapperClone, blockURL, 100);
+
+  const sectionMetadataTable = await getSectionMetadata(ctx, wrapperClone, url);
+  if (sectionMetadataTable) {
+    wrapperClone.append(sectionMetadataTable);
+
+    const sectionMetadata = wrapperClone.querySelector(
+      ':scope > .section-metadata',
+    );
+    sectionMetadata.remove();
+  }
+
+  return wrapperClone;
+}
+
 /**
  * Copies default content to the clipboard
  * @param {Object} context The library context
@@ -473,23 +576,13 @@ export async function copyBlockToClipboard(context, wrapper, name, blockURL, tab
  * @param {string} blockURL The URL of the block
  * @returns {HTMLElement} The cloned wrapper
  */
-export async function copyDefaultContentToClipboard(context, wrapper, blockURL) {
+export async function copyDefaultContentToClipboard(
+  context,
+  wrapper,
+  blockURL,
+) {
   async function prepare(ctx, data) {
-    const { html, url } = data;
-    const wrapperClone = html.cloneNode(true);
-    prepareAnchorsForCopy(wrapperClone);
-    prepareIconsForCopy(wrapperClone);
-    await prepareImagesForCopy(ctx, wrapperClone, blockURL, 100);
-
-    const sectionMetadataTable = await getSectionMetadata(ctx, wrapperClone, url);
-    if (sectionMetadataTable) {
-      wrapperClone.append(sectionMetadataTable);
-
-      const sectionMetadata = wrapperClone.querySelector(':scope > .section-metadata');
-      sectionMetadata.remove();
-    }
-
-    return wrapperClone;
+    return prepareDefaultContentForCopy(ctx, data, blockURL);
   }
 
   const data = {
@@ -505,6 +598,70 @@ export async function copyDefaultContentToClipboard(context, wrapper, blockURL) 
   return copied;
 }
 
+export async function preparePageForCopy(ctx, data, blockURL) {
+  const { html, pageMeta, url } = data;
+  const wrapperClone = html.cloneNode(true);
+  prepareAnchorsForCopy(wrapperClone);
+  prepareIconsForCopy(wrapperClone);
+  await prepareImagesForCopy(ctx, wrapperClone, url, 100);
+
+  const sectionBreak = createTag('p', undefined, '---');
+
+  // Get all section on page
+  const sections = wrapperClone.querySelectorAll(':scope > div');
+  let index = 0;
+  for (const section of sections) {
+    // If not the last section, add a section delimeter
+    if (index < sections.length - 1) {
+      section.insertAdjacentElement('beforeend', sectionBreak.cloneNode(true));
+    }
+
+    // Create a br element to space out tables
+    const br = createTag('br');
+
+    // Does the current section have any blocks?
+    const blocks = section.querySelectorAll(
+      ':scope > div:not(.section-metadata)',
+    );
+    for (const block of blocks) {
+      // Convert the block to a table
+      const blockTable = await convertBlockToTable(
+        ctx,
+        block,
+        getBlockName(block, true),
+        blockURL,
+      );
+
+      // Insert a br after every table to add some spacing in the document
+      block.parentNode.insertBefore(br.cloneNode(), block.nextSibling);
+
+      // Replace the block with the table
+      block.replaceWith(blockTable);
+    }
+
+    const sectionMetadata = section.querySelector(
+      ':scope > div.section-metadata',
+    );
+    const sectionMetadataTable = await getSectionMetadata(
+      ctx,
+      section,
+      blockURL,
+    );
+    if (sectionMetadataTable) {
+      sectionMetadata.replaceWith(createTag('br'), sectionMetadataTable);
+    }
+
+    index += 1;
+  }
+
+  if (pageMeta) {
+    const pageMetadataTable = convertObjectToTable('metadata', pageMeta);
+    wrapperClone.append(pageMetadataTable);
+  }
+
+  return wrapperClone;
+}
+
 /**
  * Copies a page to the clipboard, pages can consist of multiple blocks,
  * default content, section metadata and metadata
@@ -513,63 +670,15 @@ export async function copyDefaultContentToClipboard(context, wrapper, blockURL) 
  * @param {string} blockURL The URL of the block
  * @returns {HTMLElement} The cloned wrapper
  */
-export async function copyPageToClipboard(context, wrapper, blockURL, pageMetadata) {
+export async function copyPageToClipboard(
+  context,
+  wrapper,
+  blockURL,
+  pageMetadata,
+) {
   async function prepare(ctx, data) {
-    const { html, pageMeta, url } = data;
-    const wrapperClone = html.cloneNode(true);
-    prepareAnchorsForCopy(wrapperClone);
-    prepareIconsForCopy(wrapperClone);
-    await prepareImagesForCopy(ctx, wrapperClone, url, 100);
-
-    const sectionBreak = createTag('p', undefined, '---');
-
-    // Get all section on page
-    const sections = wrapperClone.querySelectorAll(':scope > div');
-    let index = 0;
-    for (const section of sections) {
-      // If not the last section, add a section delimeter
-      if (index < sections.length - 1) {
-        section.insertAdjacentElement('beforeend', sectionBreak.cloneNode(true));
-      }
-
-      // Create a br element to space out tables
-      const br = createTag('br');
-
-      // Does the current section have any blocks?
-      const blocks = section.querySelectorAll(':scope > div:not(.section-metadata)');
-      for (const block of blocks) {
-        // Convert the block to a table
-        const blockTable = await convertBlockToTable(
-          ctx,
-          block,
-          getBlockName(block, true),
-          blockURL,
-        );
-
-        // Insert a br after every table to add some spacing in the document
-        block.parentNode.insertBefore(br.cloneNode(), block.nextSibling);
-
-        // Replace the block with the table
-        block.replaceWith(blockTable);
-      }
-
-      const sectionMetadata = section.querySelector(':scope > div.section-metadata');
-      const sectionMetadataTable = await getSectionMetadata(ctx, section, blockURL);
-      if (sectionMetadataTable) {
-        sectionMetadata.replaceWith(createTag('br'), sectionMetadataTable);
-      }
-
-      index += 1;
-    }
-
-    if (pageMeta) {
-      const pageMetadataTable = convertObjectToTable('metadata', pageMeta);
-      wrapperClone.append(pageMetadataTable);
-    }
-
-    return wrapperClone;
+    return preparePageForCopy(ctx, data, blockURL);
   }
-
   const data = {
     html: wrapper,
     pageMeta: pageMetadata,
@@ -588,7 +697,10 @@ export async function copyPageToClipboard(context, wrapper, blockURL, pageMetada
  * @param {Object} sectionLibraryMetadata
  * @returns
  */
-export function getBlockTableStyle(defaultLibraryMetadata, sectionLibraryMetadata) {
+export function getBlockTableStyle(
+  defaultLibraryMetadata,
+  sectionLibraryMetadata,
+) {
   const tableStyle = {};
 
   if (sectionLibraryMetadata.tableheaderbackgroundcolor) {

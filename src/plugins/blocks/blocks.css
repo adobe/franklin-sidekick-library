@@ -42,10 +42,24 @@ sp-split-view {
     overflow: hidden;
 }
 
-.details-container .details {
+.details-container .tabs {
     height: 100%;
-    padding: 0 16px 0 16px;
+    padding: 10px;
     overflow-y: auto;
+}
+
+.details-container .tabs sp-tab {
+    padding: 10px;
+}
+
+.details-container .tabs sp-tab[selected] {
+    border-bottom: 1px solid var(--spectrum-gray-800);
+    margin-bottom: -1px;
+}
+
+.details-container .tabs sp-tab-panel {
+    padding: 10px;
+    border-top: 1px solid var(--spectrum-gray-400);
 }
 
 .details-container .actions {

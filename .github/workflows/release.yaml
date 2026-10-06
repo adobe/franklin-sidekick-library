@@ -51,11 +51,12 @@ jobs:
       - name: Checkout target repo
         uses: actions/checkout@v3
         with:
-          repository: adobe/helix-website
+          repository: adobe/helix-tools-website
           ref: main
           path: _target
       - name: Copy files from source to target repo
         run: |
+          mkdir -p _target/tools/sidekick/library
           cp -r dist/* _target/tools/sidekick/library/
       - name: Create branch commit and pull request in target repo
         uses: peter-evans/create-pull-request@v7

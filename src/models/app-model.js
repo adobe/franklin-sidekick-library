@@ -21,7 +21,11 @@ const defaultState = {
 };
 
 export default class AppModel {
-  static libraryHost = 'https://www.hlx.live/tools/sidekick/library';
+  /**
+   * The location the library is hosted at, the plugins and locales are loaded from here.
+   * It's derived from the location of the library itself so that it can be hosted anywhere.
+   */
+  static libraryHost = import.meta.url.substring(0, import.meta.url.lastIndexOf('/'));
 
   static appStore;
 

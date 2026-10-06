@@ -23,6 +23,7 @@ import {
 import { DEFAULT_CONTENT_STUB } from './stubs/default-content.js';
 import { COMPOUND_BLOCK_STUB } from './stubs/compound-block.js';
 import { TEMPLATE_STUB } from './stubs/template.js';
+import { TESTIMONIAL_CAROUSEL_PLAIN_HTML } from './stubs/testimonial-carousel.js';
 
 export function mockBlock(html, variants = [], wrap = false) {
   const clone = html.cloneNode(true);
@@ -142,3 +143,9 @@ export const mockFetchTabsPlainHTMLSuccess = () => fetchMock.get(tabsBlockUrl, {
     mockBlock(TABS_DEFAULT_STUB_SECTION_3, [], false).outerHTML,
     mockBlock(TABS_DEFAULT_STUB_SECTION_4, [], false).outerHTML].join('\n'),
 });
+
+export const testimonialCarouselBlockUrl = 'https://example.hlx.test/tools/sidekick/blocks/testimonial-carousel/testimonial-carousel.plain.html';
+export const mockFetchTestimonialCarouselPlainHTMLSuccess = () => fetchMock.get(
+  testimonialCarouselBlockUrl,
+  { status: 200, body: TESTIMONIAL_CAROUSEL_PLAIN_HTML },
+);

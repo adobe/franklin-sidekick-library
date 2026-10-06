@@ -366,14 +366,68 @@ export function parseDescription(description) {
 }
 
 /**
- * Fetches the section metadata for a block and returns it as a table
+ * Classes that the library adds to a section while rendering it. They are never
+ * part of the authored section metadata.
+ */
+const LIBRARY_CLASSES = ['sidekick-library'];
+
+/**
+ * Rebuilds a section metadata block from the attributes of a section element.
+ *
+ * When section metadata is processed on the server (rendering version 2), the
+ * `section-metadata` block is no longer part of the markup. Instead its rows are
+ * applied to the section itself: `Style` becomes classes, `Id` becomes the id and
+ * every other row becomes a `data-*` attribute.
+ * @param {HTMLElement} section The section element
+ * @returns {HTMLElement|undefined} A `section-metadata` block or undefined if the
+ * section has no section metadata attributes.
+ */
+export function getSectionMetadataFromAttributes(section) {
+  const rows = [];
+
+  const styles = [...section.classList].filter(name => !LIBRARY_CLASSES.includes(name));
+  if (styles.length > 0) {
+    rows.push(['Style', styles.join(', ')]);
+  }
+
+  if (section.id) {
+    rows.push(['Id', section.id]);
+  }
+
+  [...section.attributes]
+    .filter(({ name }) => name.startsWith('data-') && name.length > 'data-'.length)
+    .forEach(({ name, value }) => rows.push([name.substring('data-'.length), value]));
+
+  if (rows.length === 0) {
+    return undefined;
+  }
+
+  const sectionMetadata = createTag('div', { class: 'section-metadata' });
+  rows.forEach(([key, value]) => {
+    const row = createTag('div');
+    [key, value].forEach((text) => {
+      const cell = createTag('div');
+      cell.textContent = text;
+      row.append(cell);
+    });
+    sectionMetadata.append(row);
+  });
+
+  return sectionMetadata;
+}
+
+/**
+ * Fetches the section metadata for a section and returns it as a table.
+ * Supports both the `section-metadata` block that is part of the markup and
+ * section metadata that has been applied to the section's attributes by the server.
  * @param {Object} context The library context
- * @param {HTMLElement} block The block element
+ * @param {HTMLElement} section The section element
  * @param {String} baseURL The base URL of the block
  * @returns
  */
-async function getSectionMetadata(context, block, baseURL) {
-  const sectionMetadata = block.querySelector(':scope > .section-metadata');
+async function getSectionMetadata(context, section, baseURL) {
+  const sectionMetadata = section.querySelector(':scope > .section-metadata')
+    ?? getSectionMetadataFromAttributes(section);
   if (sectionMetadata) {
     // Create a table for the section metadata
     return convertBlockToTable(
@@ -485,8 +539,9 @@ export async function copyDefaultContentToClipboard(context, wrapper, blockURL) 
     if (sectionMetadataTable) {
       wrapperClone.append(sectionMetadataTable);
 
-      const sectionMetadata = wrapperClone.querySelector(':scope > .section-metadata');
-      sectionMetadata.remove();
+      // Remove the section metadata block (if there is one, it's not there when
+      // the section metadata has been applied to the section's attributes)
+      wrapperClone.querySelector(':scope > .section-metadata')?.remove();
     }
 
     return wrapperClone;
@@ -528,8 +583,10 @@ export async function copyPageToClipboard(context, wrapper, blockURL, pageMetada
     let index = 0;
     for (const section of sections) {
       // If not the last section, add a section delimeter
+      let sectionDelimiter;
       if (index < sections.length - 1) {
-        section.insertAdjacentElement('beforeend', sectionBreak.cloneNode(true));
+        sectionDelimiter = sectionBreak.cloneNode(true);
+        section.insertAdjacentElement('beforeend', sectionDelimiter);
       }
 
       // Create a br element to space out tables
@@ -556,7 +613,14 @@ export async function copyPageToClipboard(context, wrapper, blockURL, pageMetada
       const sectionMetadata = section.querySelector(':scope > div.section-metadata');
       const sectionMetadataTable = await getSectionMetadata(ctx, section, blockURL);
       if (sectionMetadataTable) {
-        sectionMetadata.replaceWith(createTag('br'), sectionMetadataTable);
+        if (sectionMetadata) {
+          sectionMetadata.replaceWith(createTag('br'), sectionMetadataTable);
+        } else if (sectionDelimiter) {
+          // Section metadata applied to the section's attributes goes at the end of the section
+          sectionDelimiter.before(createTag('br'), sectionMetadataTable);
+        } else {
+          section.append(createTag('br'), sectionMetadataTable);
+        }
       }
 
       index += 1;

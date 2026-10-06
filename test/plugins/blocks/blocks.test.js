@@ -79,7 +79,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       const firstCardChild = cardsItem.querySelector(':scope > sp-sidenav-item');
@@ -121,7 +121,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Default Content"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -167,7 +167,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Tabs"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -206,7 +206,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Compound Block"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -245,7 +245,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Templates"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -369,7 +369,7 @@ describe('Blocks Plugin', () => {
       await simulateTyping(spSearch, 'Cards');
       spSearch.dispatchEvent(new Event('input'));
 
-      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector('sp-sidenav');
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       expect(cardsItem.getAttribute('expanded')).to.exist;
 
@@ -390,7 +390,7 @@ describe('Blocks Plugin', () => {
       await simulateTyping(spSearch, 'foobar');
       spSearch.dispatchEvent(new Event('input'));
 
-      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector('sp-sidenav');
 
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       expect(cardsItem.getAttribute('aria-hidden')).to.eq('true');
@@ -411,7 +411,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       const firstCardChild = cardsItem.querySelector(':scope > sp-sidenav-item');
@@ -439,7 +439,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Default Content"]');
       const firstCardChild = cardsItem.querySelector(':scope > sp-sidenav-item');
       firstCardChild.dispatchEvent(new Event('OnAction'));
@@ -467,7 +467,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const tabsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Tabs"]');
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');
@@ -516,7 +516,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const tabsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Compound Block"]');
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');
@@ -566,7 +566,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const tabsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Templates"]');
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');

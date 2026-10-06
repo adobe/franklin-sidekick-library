@@ -299,7 +299,7 @@ describe('FranklinLibrary', () => {
     const library = document.createElement('sidekick-library');
     library.config = {
       base: multiSheetUrl,
-      tags: 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library/plugins/tags/tags.js',
+      tags: 'https://main--franklin-library-host--dylandepass.aem.live/tools/sidekick/library/plugins/tags/tags.js',
     };
 
     await fixture(library);
@@ -320,12 +320,12 @@ describe('FranklinLibrary', () => {
   });
 
   it('custom plugin search should work', async () => {
-    AppModel.libraryHost = 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library';
+    AppModel.libraryHost = 'https://main--franklin-library-host--dylandepass.aem.live/tools/sidekick/library';
 
     const library = document.createElement('sidekick-library');
     library.config = {
       base: multiSheetUrl,
-      tags: 'https://main--franklin-library-host--dylandepass.hlx.live/tools/sidekick/library/plugins/tags/tags.js',
+      tags: 'https://main--franklin-library-host--dylandepass.aem.live/tools/sidekick/library/plugins/tags/tags.js',
     };
 
     await fixture(library);

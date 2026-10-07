@@ -42,6 +42,12 @@ export const TEMPLATE_LIBRARY_ITEM = {
   url: 'https://example.hlx.test/tools/sidekick/blocks/blog-post/blog-post',
 };
 
+export const TESTIMONIAL_CAROUSEL_LIBRARY_ITEM = {
+  name: 'Testimonial Carousel',
+  path: '/tools/sidekick/blocks/testimonial-carousel/testimonial-carousel',
+  url: 'https://example.hlx.test/tools/sidekick/blocks/testimonial-carousel/testimonial-carousel',
+};
+
 export const MIXED_LIBRARY_ITEM = {
   name: 'Mixed item with both compound and regular blocks',
   path: '/tools/sidekick/blocks/mixed/mixed',

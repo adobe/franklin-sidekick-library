@@ -148,7 +148,7 @@ Since the sidekick library is hosted on the same origin as the content, a static
   <body>
     <script
       type="module"
-      src="https://www.aem.live/tools/sidekick/library/index.js"
+      src="https://tools.aem.live/tools/sidekick/library/index.js"
     ></script>
     <script>
       const library = document.createElement('sidekick-library')
@@ -162,7 +162,9 @@ Since the sidekick library is hosted on the same origin as the content, a static
 </html>
 ```
 
-In the code above we load the sidekick library from `aem.live` and then create a custom `sidekick-library` element and add it to the page. The `sidekick-library` element accepts a `config` object that is required to configure the sidekick library.
+In the code above we load the sidekick library from `tools.aem.live` and then create a custom `sidekick-library` element and add it to the page. The `sidekick-library` element accepts a `config` object that is required to configure the sidekick library.
+
+> If your `library.html` loads the library from `www.aem.live`, update the host to `tools.aem.live` to receive new releases. The path is the same.
 
 ### Supported configuration parameters
 | Parameter Name | Value                                     | Description                                                                                                                     | Required |
@@ -465,7 +467,7 @@ Plugin authors can dispatch events from their plugin to the parent sidekick libr
 #### Toast Messages
 
 ```js
-import { PLUGIN_EVENTS } from 'https://www.aem.live/tools/sidekick/library/events/events.js';
+import { PLUGIN_EVENTS } from 'https://tools.aem.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show a toast message
@@ -476,7 +478,7 @@ export async function decorate(container, data, query) {
 #### Show and Hide Loader
 
 ```js
-import { PLUGIN_EVENTS } from 'https://www.aem.live/tools/sidekick/library/events/events.js';
+import { PLUGIN_EVENTS } from 'https://tools.aem.live/tools/sidekick/library/events/events.js';
 
 export async function decorate(container, data, query) {
   // Show loader

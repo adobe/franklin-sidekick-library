@@ -38,6 +38,7 @@ import {
   mockFetchCompoundBlockPlainHTMLSuccess,
   mockFetchTemplatePlainHTMLSuccess,
   mockFetchDefaultContentPlainHTMLWithMetadataSuccess,
+  mockFetchTestimonialCarouselPlainHTMLSuccess,
 } from '../../fixtures/blocks.js';
 import {
   CARDS_BLOCK_LIBRARY_ITEM,
@@ -47,6 +48,7 @@ import {
   NON_EXISTENT_BLOCK_LIBRARY_ITEM,
   TABS_LIBRARY_ITEM,
   TEMPLATE_LIBRARY_ITEM,
+  TESTIMONIAL_CAROUSEL_LIBRARY_ITEM,
 } from '../../fixtures/libraries.js';
 import {
   mockFetchCardsDocumentSuccess,
@@ -55,6 +57,7 @@ import {
   mockFetchInlinePageDependenciesSuccess,
   mockFetchTabsDocumentSuccess,
   mockFetchTemplateDocumentSuccess,
+  mockFetchTestimonialCarouselDocumentSuccess,
 } from '../../fixtures/pages.js';
 import { createTag } from '../../../src/utils/dom.js';
 
@@ -76,7 +79,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       const firstCardChild = cardsItem.querySelector(':scope > sp-sidenav-item');
@@ -118,7 +121,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Default Content"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -164,7 +167,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Tabs"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -203,7 +206,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Compound Block"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -242,7 +245,7 @@ describe('Blocks Plugin', () => {
       const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
       blockList.addEventListener('LoadBlock', loadBlockSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const item = sidenav.querySelector(':scope > sp-sidenav-item[label="Templates"]');
       const firstCardChild = item.querySelector(':scope > sp-sidenav-item');
@@ -366,7 +369,7 @@ describe('Blocks Plugin', () => {
       await simulateTyping(spSearch, 'Cards');
       spSearch.dispatchEvent(new Event('input'));
 
-      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector('sp-sidenav');
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       expect(cardsItem.getAttribute('expanded')).to.exist;
 
@@ -387,7 +390,7 @@ describe('Blocks Plugin', () => {
       await simulateTyping(spSearch, 'foobar');
       spSearch.dispatchEvent(new Event('input'));
 
-      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockLibrary.querySelector('sp-split-view .menu .list-container block-list').shadowRoot.querySelector('sp-sidenav');
 
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       expect(cardsItem.getAttribute('aria-hidden')).to.eq('true');
@@ -408,7 +411,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Cards"]');
       const firstCardChild = cardsItem.querySelector(':scope > sp-sidenav-item');
@@ -436,7 +439,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
       const cardsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Default Content"]');
       const firstCardChild = cardsItem.querySelector(':scope > sp-sidenav-item');
       firstCardChild.dispatchEvent(new Event('OnAction'));
@@ -464,7 +467,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const tabsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Tabs"]');
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');
@@ -513,7 +516,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const tabsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Compound Block"]');
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');
@@ -563,7 +566,7 @@ describe('Blocks Plugin', () => {
       blockList.addEventListener('CopyBlock', copyBlockSpy);
       container.addEventListener('Toast', toastSpy);
 
-      const sidenav = blockList.shadowRoot.querySelector(':scope sp-sidenav');
+      const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
 
       const tabsItem = sidenav.querySelector(':scope > sp-sidenav-item[label="Templates"]');
       const firstCardChild = tabsItem.querySelector(':scope > sp-sidenav-item');
@@ -839,6 +842,106 @@ describe('Blocks Plugin', () => {
 
       const firstImage = copiedHTML.querySelector('img');
       expect(firstImage.src).to.eq(ENCODED_IMAGE);
+    });
+
+    describe('section metadata applied by the server', () => {
+      // The blocks of the library document have their section metadata applied to the section
+      // (class="bg-color-brand-dark") instead of in a section-metadata block. See
+      // TESTIMONIAL_CAROUSEL_PLAIN_HTML.
+      const SECTION_METADATA = [['Section Metadata'], ['Style', 'bg-color-brand-dark']];
+      const VARIANTS = [
+        { name: 'Testimonial Carousel' },
+        { name: 'Testimonial Carousel (dark)', sectionMetadata: SECTION_METADATA },
+        { name: 'Testimonial Carousel (round image)' },
+        { name: 'Testimonial Carousel (round image, dark)', sectionMetadata: SECTION_METADATA },
+      ];
+
+      const getRows = table => [...table.querySelectorAll('tr')]
+        .map(tr => [...tr.querySelectorAll('td')].map(td => td.textContent.trim()));
+
+      async function loadLibrary() {
+        mockFetchTestimonialCarouselPlainHTMLSuccess();
+        mockFetchTestimonialCarouselDocumentSuccess();
+        mockFetchInlinePageDependenciesSuccess('testimonial-carousel');
+
+        const mockData = [TESTIMONIAL_CAROUSEL_LIBRARY_ITEM];
+        await decorate(container, mockData, undefined, AppModel.appStore.context);
+
+        const blockLibrary = container.querySelector('.block-library');
+        const blockList = blockLibrary.querySelector('sp-split-view .menu .list-container block-list');
+        const sidenav = blockList.shadowRoot.querySelector('sp-sidenav');
+        const variants = [...sidenav.querySelectorAll(':scope > sp-sidenav-item > sp-sidenav-item')];
+        return { blockLibrary, variants };
+      }
+
+      async function getCopiedTables(toastSpy) {
+        await waitUntil(() => toastSpy.calledOnce, 'Wait for toast');
+        const copiedHTML = createTag('div', undefined, await getClipboardHTML());
+        return copiedHTML.querySelectorAll('table');
+      }
+
+      it('should list every variant of the block', async () => {
+        const { variants } = await loadLibrary();
+        expect(variants.map(variant => variant.getAttribute('label')))
+          .to.deep.equal(VARIANTS.map(({ name }) => name));
+      });
+
+      it('should copy the section metadata of every variant from block-list', async () => {
+        const { variants } = await loadLibrary();
+        const toastSpy = sinon.spy();
+        container.addEventListener('Toast', toastSpy);
+
+        for (const [index, { name, sectionMetadata }] of VARIANTS.entries()) {
+          clipboardStub.write.resetHistory();
+          toastSpy.resetHistory();
+          variants[index].dispatchEvent(new Event('OnAction'));
+
+          const tables = await getCopiedTables(toastSpy);
+          expect(getRows(tables[0])[0], name).to.deep.equal([name]);
+
+          if (sectionMetadata) {
+            expect(tables.length, name).to.equal(2);
+            expect(getRows(tables[1]), name).to.deep.equal(sectionMetadata);
+          } else {
+            expect(tables.length, name).to.equal(1);
+          }
+        }
+      });
+
+      async function copyViaDetailsPanel(index) {
+        const { blockLibrary, variants } = await loadLibrary();
+        const toastSpy = sinon.spy();
+        container.addEventListener('Toast', toastSpy);
+
+        variants[index].dispatchEvent(new Event('click'));
+
+        const blockRenderer = blockLibrary.querySelector('sp-split-view .content .view .frame-view block-renderer');
+        await waitUntil(() => blockRenderer.shadowRoot.querySelector('iframe'), 'Element did not render children');
+        const iframe = blockRenderer.shadowRoot.querySelector('iframe');
+        await waitUntil(() => iframe.contentDocument.querySelector('main .testimonial-carousel'), 'Element did not render children');
+
+        // The preview keeps the section styling
+        const section = iframe.contentDocument.querySelector('main > div');
+        expect(section.classList.contains('bg-color-brand-dark')).to.eq(!!VARIANTS[index].sectionMetadata);
+
+        const actionBar = blockLibrary.querySelector('sp-split-view .content .details-container .action-bar');
+        actionBar.querySelector('sp-button').dispatchEvent(new Event('click'));
+
+        return getCopiedTables(toastSpy);
+      }
+
+      it('should copy the section metadata via the details panel', async () => {
+        const tables = await copyViaDetailsPanel(1);
+        expect(tables.length).to.equal(2);
+        expect(getRows(tables[0])[0]).to.deep.equal(['Testimonial Carousel (dark)']);
+        expect(getRows(tables[1])).to.deep.equal(SECTION_METADATA);
+      });
+
+      it('should not copy section metadata via the details panel if there is none', async () => {
+        const tables = await copyViaDetailsPanel(0);
+        expect(tables.length).to.equal(1);
+        expect(getRows(tables[0])[0]).to.deep.equal(['Testimonial Carousel']);
+      });
     });
 
     it('switch iframe view sizes', async () => {

@@ -25,6 +25,7 @@ import {
 } from './stubs/tabs.js';
 import { COMPOUND_BLOCK_STUB } from './stubs/compound-block.js';
 import { TEMPLATE_STUB } from './stubs/template.js';
+import { TESTIMONIAL_CAROUSEL_SECTIONS } from './stubs/testimonial-carousel.js';
 
 export function mockBlock(html, variants = [], wrap = false) {
   const clone = html.cloneNode(true);
@@ -97,3 +98,12 @@ export const mockFetchInlinePageDependenciesSuccess = (blockName = 'cards') => {
   fetchMock.get('path:/media_4.jpeg', { status: 200, body: 'foobar', headers: { 'content-type': 'image/jpeg' } }, { overwriteRoutes: true });
   fetchMock.get('path:/media_5.jpeg', { status: 200, body: 'foobar', headers: { 'content-type': 'image/jpeg' } }, { overwriteRoutes: true });
 };
+
+export const testimonialCarouselPageUrl = 'https://example.hlx.test/tools/sidekick/blocks/testimonial-carousel/testimonial-carousel';
+export const mockFetchTestimonialCarouselDocumentSuccess = () => fetchMock.get(
+  testimonialCarouselPageUrl,
+  {
+    status: 200,
+    body: stubPage(stubHead('testimonial-carousel'), TESTIMONIAL_CAROUSEL_SECTIONS()),
+  },
+);
